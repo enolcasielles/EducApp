@@ -3,17 +3,13 @@ package com.enolcasielles.educados.niveles;
 import java.io.IOException;
 
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.LoopEntityModifier;
-import org.andengine.entity.modifier.ScaleModifier;
-import org.andengine.entity.sprite.Sprite;
-import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.SAXUtils;
 import org.andengine.util.level.EntityLoader;
-import org.andengine.util.level.constants.LevelConstants;
 import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
+import com.enolcasielles.educados.objetos.NivelObjeto;
+import com.enolcasielles.educados.objetos.TextoObjeto;
 import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.scenes.GameScene;
 import com.enolcasielles.educados.scenes.WorldScene;
@@ -30,17 +26,22 @@ import com.enolcasielles.educados.scenes.WorldScene;
 public class ParseadorXML {
 	
 	//CONSTANTS
-	private final String TAG_NIVEL = "nivel";
 	
+	//Etiqueta nivel, las que apareceran en los archivos que definen un mundo
+	private final String TAG_NIVEL = "nivel";
 	private final String TAG_ATRIBUTO_ID = "id";
 	private final String TAG_ATRIBUTO_X = "x";
 	private final String TAG_ATRIBUTO_Y = "y";
 	
+	//Etiquetas texto
+	private final String TAG_TEXTO = "texto";
 	
 	private BaseScene scene;
 
 	
 	/**
+	 * Recibe una escena de tipo Game y efectua todo el proceso de parseo, dejando la escena totalmente configurada
+	 * en cuanto a sus elementos dinamicos
 	 * 
 	 * @param scene La escena de juego que se quiere formar
 	 */
@@ -52,13 +53,15 @@ public class ParseadorXML {
 	
 	
 	/**
-	 * 
+	 *  Recibe una escena de tipo World y efectua todo el proceso de parseo, dejando la escena totalmente configurada
+	 *  en cuanto a sus elementos dinamicos
+	 *  
 	 * @param scene La escena del mundo que se quiere formar
 	 */
 	public ParseadorXML(WorldScene scene) {
 		this.scene = scene;
 		//Parseo el xml con el mundo
-		parseWorld(InfoNiveles.getMundo(scene.getMundo()));
+		parseWorld(scene.getMundo());
 	}
 	
 	
@@ -66,7 +69,7 @@ public class ParseadorXML {
 	
 	
 	
-	private void parseWorld(String xml) {
+	private void parseWorld(final int mundo) {
 	    //Objeto para realizar el parseado
 		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(scene.vbom);
 
@@ -74,39 +77,29 @@ public class ParseadorXML {
 	    levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_NIVEL) {
 	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
 	        {
-	            //Recupero los atributos de la etiqueta
-	        	final int x = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ATRIBUTO_X);
-	            final int y = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ATRIBUTO_Y);
-	            final int nivel = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ATRIBUTO_ID);
-	            
-	            //Configuro el sprite
-	            final Sprite levelObject = new Sprite(x, y, scene.resourcesManager.texturaBotonAccesoNivel, scene.vbom)
-                {
-                    @Override
-                    public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
-                    		float pTouchAreaLocalX, float pTouchAreaLocalY) {
-                    	// TODO Auto-generated method stub
-                    	return super
-                    			.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
-                    }
-                };
-                //levelObject.registerEntityModifier(new LoopEntityModifier(new ScaleModifier(1, 1, 1.3f)));
-
-	            //levelObject.setCullingEnabled(true);
-
-                //Y lo devuelvo
-	            return levelObject;
+	        	return new NivelObjeto(pAttributes,scene,mundo).getEntidad();
 	        }
 	    });
 
 	    //Cargo el nivel
+	    String xml = InfoNiveles.getMundo(mundo);
 	    levelLoader.loadLevelFromAsset(scene.activity.getAssets(), xml);
 	}
 	
 	
 	
 	private void parseNivel(String xml) {
+		//Objeto para realizar el parseado
+		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(scene.vbom);
 		
+		//Preparo el objeto para responder a cada tipo de dato recibido
+		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_TEXTO) {
+	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
+	        {
+	        	return new TextoObjeto(pAttributes,scene).getEntidad();
+	        }
+	    });
+
 	}
 	
 
