@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mundo id="1">    
+    <nivel id="1" x="100" y="100" />
+	<nivel id="2" x="100" y="100" />
+	<nivel id="3" x="100" y="100" />
+	
+</mundo>
