@@ -36,7 +36,7 @@ public class MainMenuScene extends BaseScene {
 		@Override
 		public void createScene() {
 			iniatalizeVariables();
-			createBackground();
+			createBackground(); 
 		}
 
 
