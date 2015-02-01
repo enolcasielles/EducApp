@@ -2,6 +2,8 @@ package com.enolcasielles.educados.niveles;
 
 import java.io.IOException;
 
+import org.andengine.engine.handler.timer.ITimerCallback;
+import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.util.level.EntityLoader;
 import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
@@ -9,6 +11,8 @@ import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
 import com.enolcasielles.educados.objetos.NivelObjeto;
+import com.enolcasielles.educados.objetos.Objeto;
+import com.enolcasielles.educados.objetos.ObjetosManager;
 import com.enolcasielles.educados.objetos.TextoObjeto;
 import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.scenes.GameScene;
@@ -92,13 +96,31 @@ public class ParseadorXML {
 		//Objeto para realizar el parseado
 		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(scene.vbom);
 		
+		//Inicio el manejador de objetos
+		final ObjetosManager om = new ObjetosManager(scene);
+		
 		//Preparo el objeto para responder a cada tipo de dato recibido
 		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_TEXTO) {
 	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
 	        {
-	        	return new TextoObjeto(pAttributes,scene).getEntidad();
+	        	final Objeto o = new TextoObjeto(pAttributes,scene);
+	        	om.addObjeto(o);
+	        	return o.getEntidad();
 	        }
 	    });
+		
+		
+		//Inicio el manejador de objetos apuntando a su primer objeto
+		om.init();
+		
+		//Preparo la escena para realizar la actualizacion, actualizara 10 veces por segundo
+		scene.registerUpdateHandler(new TimerHandler(1f / 10.0f, true, new ITimerCallback() {
+            @Override
+            public void onTimePassed(final TimerHandler pTimerHandler) {
+            	om.update();
+            }
+
+        }));
 
 	}
 	

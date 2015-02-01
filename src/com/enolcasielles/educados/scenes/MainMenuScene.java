@@ -63,7 +63,7 @@ public class MainMenuScene extends BaseScene {
 		//CLASS METHODS
 		//----------------------------
 		private void iniatalizeVariables() {
-
+			
 		}
 		
 

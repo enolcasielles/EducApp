@@ -9,6 +9,7 @@ import android.R.integer;
 
 import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
+import com.enolcasielles.educados.niveles.ParseadorXML;
 
 
 /**
@@ -33,20 +34,33 @@ public class GameScene extends BaseScene {
         // ===========================================================
         // Fields
         // ===========================================================
-        private int mundo;
-        private int nivel;
+        private static int mundo;
+        private static int nivel;
         
+        
+        /**
+         * Configura el nivle a generar
+         * Llamar a este metodo siempre antes de iniciar el objeto para que sepa que nivel generar
+         * Esta implementacion se efectua porque el constructor no puede definir el nivel y mundo antes de
+         * llamar a super y al llamar a super se llevaran a cabo operaciones que precisan de esta informacion
+         * Para este caso nos sirve hacerlo de este modo ya que nunca se crearan dos objetos GameScene a la vez.
+         * Por tanto el flujo de trabajo sera ir cambiando el valor de estas variables de clase y luego generar el objeto.
+         * @param mundo El mundo al que pertence el nivel
+         * @param nivel El nivel a generar
+         */
+        public static void setNivel(int mundo, int nivel) {
+        	GameScene.mundo = mundo;
+        	GameScene.nivel = nivel;
+        }
         
 	    
 		/**
 		 *  
-		 * @param mundo El mundo correspondiente a la escena a formar
-		 * @param nivel El nivel dentro del mundo de esta escena
+		 *Forma el objeto correspondiente al nivel especificado previemente
+		 *No construir el objeto sin haber llamado previemente a setNivel
 		 */
-		public GameScene(int mundo, int nivel) {
+		public GameScene() {
 			super();
-			this.nivel = nivel;
-			this.mundo = mundo;
 		}
    
         
@@ -85,7 +99,8 @@ public class GameScene extends BaseScene {
 		//CLASS METHODS
 		//----------------------------
 		private void iniatalizeVariables() {
-
+			//Parseo el nivel
+			ParseadorXML parser = new ParseadorXML(this);
 		}
 		
 
@@ -100,7 +115,7 @@ public class GameScene extends BaseScene {
 		 * @return El nivel asociado a esta escena
 		 */
 		public int getNivel() {
-			return nivel;
+			return GameScene.nivel;
 		}
 		
 		
@@ -111,6 +126,6 @@ public class GameScene extends BaseScene {
 		 * @return El mundo de esta escena
 		 */
 		public int getMundo() {
-			return mundo;
+			return GameScene.mundo;
 		}
 }

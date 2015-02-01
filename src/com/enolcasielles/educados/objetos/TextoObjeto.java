@@ -12,6 +12,9 @@ public class TextoObjeto extends Objeto {
 	
 	//CONSTANTES. ATRIBUTOS PARA UN OBJETO DE ESTE TIPO
 	private String TAG_ATRIBUTO_TEXTO = "texto";
+	private String texto;
+	private Text entidad;
+	private int contador;
 	
 	/**
 	 * Construye un objeto de tipo texto
@@ -30,11 +33,40 @@ public class TextoObjeto extends Objeto {
 	public IEntity setEntidad() {
 		
 		//Recuperacion de los atributos 
-		String texto = SAXUtils.getAttributeOrThrow(attributes, TAG_ATRIBUTO_TEXTO);
+		texto = SAXUtils.getAttributeOrThrow(attributes, TAG_ATRIBUTO_TEXTO);
+		
+		contador = 1;
 		
 		//Formo la entidad y la devuelvo
-		return new Text(x, y, rm.fuenteGame, texto,scene.vbom);
+		entidad =  new Text(x, y, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
+		return entidad;
 		
+	}
+	
+	
+	/**
+	 * Actualiza los objetos de tipo texto. Elimina el anterior texto de la escena, genera el nuevo añadiendo un
+	 * caracter y se lo agrega a la escena. Si ya se han mostrado todos los caracteres devuelve true, sino false.
+	 * 
+	 * COSAS A ARREGLAR: Controlar el tiempo de actualizacion y el salto de linea cuando se ocupe el ancho
+	 */
+	@Override
+	public boolean update() {
+		
+		//Elimino el texto anterior
+		scene.detachChild(entidad);
+		entidad.dispose();
+		
+		//Genero el nuevo texto
+		contador++;
+		entidad = new Text(x, y, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
+		
+		//Lo añado a a escena
+		scene.attachChild(entidad);
+		
+		//Si he acabado de mostrar el texto devuelvo true
+		if (contador == texto.length()) return true;
+		return false;
 	}
 
 }

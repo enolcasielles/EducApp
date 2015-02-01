@@ -18,6 +18,8 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
 
+import com.enolcasielles.educados.niveles.InfoNiveles;
+
 
 
 public class ResourcesManager{
@@ -124,8 +126,9 @@ public class ResourcesManager{
     
     
     public void loadGameResources() {
+    	InfoNiveles.init();     //TEST!!!! NO CREAR QUE SEA EL MEJOR LUGAR PARA INICIAR LA INFO DE LOS NIVELES
     	//loadGameGraphics();
-    	//loadGameFonts();
+    	loadGameFonts();
     	//loadGameAudio();
     }
     
@@ -154,6 +157,7 @@ public class ResourcesManager{
     
     public void loadWorldResources() {
     	
+    	/*
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
     	mAtlasWorldScene = new BitmapTextureAtlas(actividad.getTextureManager(), 1440, 800, TextureOptions.BILINEAR);
     	
@@ -161,6 +165,7 @@ public class ResourcesManager{
     	texturaBotonAccesoNivel = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "nivel.png", 0, 787);  //32x32
     	
     	mAtlasWorldScene.load();
+    	*/
    
     }
     
@@ -200,7 +205,8 @@ public class ResourcesManager{
 	
 	
 	private void loadGameFonts() {
-    	//Cargamos la fuente del game
+		FontFactory.setAssetBasePath("fuentes/");  //Indicamos donde se encuentran
+		//Cargamos la fuente del game
     	final ITexture fontTextureGame = new BitmapTextureAtlas(actividad.getTextureManager(),
     			256,256,TextureOptions.BILINEAR);  //Textura en donde cargaremos fuente
     	fuenteGame = FontFactory.createFromAsset(actividad.getFontManager(), fontTextureGame,

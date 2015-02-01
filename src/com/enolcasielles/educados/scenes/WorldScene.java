@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 
+import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
 
 public class WorldScene extends BaseScene {
@@ -70,15 +71,15 @@ public class WorldScene extends BaseScene {
 		//CLASS METHODS
 		//----------------------------
 		private void iniatalizeVariables() {
-			background = new Sprite(0, 0, resourcesManager.texturaBackground, vbom);
-			puertasNivel = new ArrayList<Sprite>();
-			
+			//background = new Sprite(0, 0, resourcesManager.texturaBackground, vbom);
+			//puertasNivel = new ArrayList<Sprite>();
+			SceneManager.getInstance().worldScene_to_gameScene(0, 0);   //TEST!!!!!!!!!
 		}
 		
 
 		private void createBackground() {
 		   
-		   this.setBackground(new SpriteBackground(background));
+		   //this.setBackground(new SpriteBackground(background));
 		}
 
 

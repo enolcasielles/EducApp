@@ -85,5 +85,11 @@ public abstract class Objeto {
 	 * @return
 	 */
 	public abstract IEntity setEntidad();
+	
+	/**
+	 * Actualiza el objeto. El manejador de objetos llamara sucesivamente a este metodo para actualizar el objeto
+	 * @return false si el objeto aun no ha finalizado o true cuando ya lo ha hecho y se puede pasar al siguiente
+	 */
+	public abstract boolean update();
 
 }

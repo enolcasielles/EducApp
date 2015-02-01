@@ -135,7 +135,8 @@ public class SceneManager
      */
     public void worldScene_to_gameScene(int mundo, int nivel) {
     	ResourcesManager.getInstance().loadGameResources();
-    	gameScene = new GameScene(mundo,nivel);
+    	GameScene.setNivel(mundo, nivel);
+    	gameScene = new GameScene();
     	cambiar_a_escena(gameScene);
     	ResourcesManager.getInstance().unloadWorldResources();
     	worldScene.disposeScene();

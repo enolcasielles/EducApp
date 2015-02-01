@@ -97,7 +97,8 @@ public class GameActivity extends BaseGameActivity {
 	
 	@Override
 	public void onPopulateScene(Scene pScene, OnPopulateSceneCallback pOnPopulateSceneCallback) throws IOException {
-	    pOnPopulateSceneCallback.onPopulateSceneFinished();
+		SceneManager.getInstance().menuScene_to_worldScene(1);   //TEST!!!!!!!!!
+		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
 	
 	

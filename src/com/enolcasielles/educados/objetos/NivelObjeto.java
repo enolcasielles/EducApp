@@ -51,5 +51,13 @@ public class NivelObjeto extends Objeto {
 		return entidad;
 	}
 	
+	
+	
+	@Override
+	public boolean update() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 
 }
