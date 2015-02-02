@@ -9,7 +9,7 @@ import android.R.integer;
 
 import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
-import com.enolcasielles.educados.niveles.ParseadorXML;
+import com.enolcasielles.educados.niveles.ParseadorNivelXML;
 
 
 /**
@@ -73,6 +73,7 @@ public class GameScene extends BaseScene {
 		public void createScene() {
 			iniatalizeVariables();
 			createBackground();
+			ParseadorNivelXML parser = new ParseadorNivelXML(this);   //Configuro la parte dinamica definida en su XML
 		}
 
 
@@ -99,13 +100,12 @@ public class GameScene extends BaseScene {
 		//CLASS METHODS
 		//----------------------------
 		private void iniatalizeVariables() {
-			//Parseo el nivel
-			ParseadorXML parser = new ParseadorXML(this);
+
 		}
 		
 
 		private void createBackground() {
-		  
+		   
 		}
 		
 		

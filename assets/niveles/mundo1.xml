@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mundo id="1">    
-    <nivel id="1" x="100" y="100" />
-	<nivel id="2" x="100" y="100" />
-	<nivel id="3" x="100" y="100" />
-	
-</mundo>
+<level width="1000" height="780">    
+    <nivel id="1" x="200" y="100" />
+	<nivel id="2" x="450" y="80" />
+	<nivel id="3" x="650" y="100" />
+	<nivel id="4" x="650" y="450" />
+	<nivel id="5" x="200" y="450" />
+	<nivel id="6" x="100" y="300" />
+</level>

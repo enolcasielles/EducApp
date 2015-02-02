@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 
+import com.enolcasielles.educados.GameActivity;
 import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
+import com.enolcasielles.educados.niveles.ParseadoMundoXML;
 
 public class WorldScene extends BaseScene {
           
@@ -21,9 +23,21 @@ public class WorldScene extends BaseScene {
         // Fields
         // ===========================================================
 		private Sprite background;
-		private ArrayList<Sprite> puertasNivel;
-		private int mundo;
+		private static int mundo;
 		
+		
+		/**
+         * Configura el mundo a generar
+         * Llamar a este metodo siempre antes de iniciar el objeto para que sepa que mundo generar
+         * Esta implementacion se efectua porque el constructor no puede definir el mundo antes de
+         * llamar a super y al llamar a super se llevaran a cabo operaciones que precisan de esta informacion
+         * Para este caso nos sirve hacerlo de este modo ya que nunca se crearan dos objetos GameScene a la vez.
+         * Por tanto el flujo de trabajo sera ir cambiando el valor de esta variable de clase y luego generar el objeto.
+         * @param mundo El mundo al que pertence el nivel
+         */
+        public static void setMundo(int mundo) {
+        	WorldScene.mundo = mundo;
+        }
 		
 		
 		/**
@@ -32,7 +46,6 @@ public class WorldScene extends BaseScene {
 		 */
 		public WorldScene(int mundo) {
 			super();
-			this.mundo = mundo;
 		}
 		
         
@@ -45,6 +58,7 @@ public class WorldScene extends BaseScene {
 		public void createScene() {
 			iniatalizeVariables();
 			createBackground();
+			ParseadoMundoXML parser = new ParseadoMundoXML(this);   //Configuro la parte dinamica guaradada en su xml
 		}
 
 
@@ -71,14 +85,14 @@ public class WorldScene extends BaseScene {
 		//CLASS METHODS
 		//----------------------------
 		private void iniatalizeVariables() {
-			//background = new Sprite(0, 0, resourcesManager.texturaBackground, vbom);
-			//puertasNivel = new ArrayList<Sprite>();
+			background = new Sprite(GameActivity.ANCHO_CAMARA/2, GameActivity.ALTO_CAMARA/2,
+					GameActivity.ANCHO_CAMARA,GameActivity.ALTO_CAMARA, resourcesManager.texturaBackground, vbom);
+			//background.setPosition(getWidth()/2, getHeight()/2);
 		}
 		
 
 		private void createBackground() {
-		   
-		   //this.setBackground(new SpriteBackground(background));
+		   this.attachChild(background);
 		}
 
 
@@ -87,7 +101,7 @@ public class WorldScene extends BaseScene {
 		 * 
 		 * @return El mundo de esta escena
 		 */
-		public int getMundo() {
+		public int getMundo() { 
 			return mundo;
 		}
 		

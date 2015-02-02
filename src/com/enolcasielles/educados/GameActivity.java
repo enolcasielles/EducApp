@@ -13,6 +13,8 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import android.app.ProgressDialog;
+import android.graphics.Point;
+import android.view.Display;
 import android.view.KeyEvent;
 
 public class GameActivity extends BaseGameActivity {
@@ -23,8 +25,8 @@ public class GameActivity extends BaseGameActivity {
 	//===================================================
 	//CONSTANTES
 	//===================================================
-    static final int ANCHO_CAMARA = 720;
-    static final int ALTO_CAMARA = 480; 
+    public static int ANCHO_CAMARA;
+    public static int ALTO_CAMARA; 
 		
 		
 	//===================================================
@@ -46,7 +48,13 @@ public class GameActivity extends BaseGameActivity {
 	public EngineOptions onCreateEngineOptions() {
 		
 		//Inicio la camara
-		this.mCamera = new Camera(0,0, ANCHO_CAMARA,ALTO_CAMARA);
+		final Display display = getWindowManager().getDefaultDisplay(); 
+		Point size = new Point();
+		display.getSize(size);
+		GameActivity.ANCHO_CAMARA = size.x;
+		GameActivity.ALTO_CAMARA = size.y;
+		this.mCamera = new Camera(0,0, size.x,size.y);
+		//this.mCamera = new Camera(0,0, ANCHO_CAMARA,ALTO_CAMARA);
 		
 		/* Definimos las opciones del Engine:
 			1. Pantalla completa (true)
@@ -57,7 +65,7 @@ public class GameActivity extends BaseGameActivity {
 	    	4. La camara que se usara */
 		
 		EngineOptions eo = new EngineOptions (true,ScreenOrientation.LANDSCAPE_FIXED,
-				new RatioResolutionPolicy(ANCHO_CAMARA,ALTO_CAMARA),this.mCamera);
+				new RatioResolutionPolicy(size.x,size.y),this.mCamera);
 		
 		//Habilitamos sonidos y musica en el motor
 		eo.getAudioOptions().setNeedsMusic(true);

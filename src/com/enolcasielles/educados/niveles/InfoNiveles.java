@@ -14,9 +14,9 @@ import java.util.ArrayList;
 public class InfoNiveles {
 	
 	public static final int NUMERO_MUNDOS = 3;
-	public static final int MUNDO_1 = 0;
-	public static final int MUNDO_2 = 1;
-	public static final int MUNDO_3 = 2;
+	public static final int MUNDO_1 = 1;
+	public static final int MUNDO_2 = 2;
+	public static final int MUNDO_3 = 3;
 	
 	
 	//Constructor privado
@@ -59,16 +59,16 @@ public class InfoNiveles {
 	 * @return La ruta del archivo correspondiente al nivel especificado
 	 */
 	public static String getNivel(int mundo, int nivel) {
-		return archivosDefinicionNiveles.get(mundo).get(nivel);
+		return archivosDefinicionNiveles.get(mundo-1).get(nivel-1);
 	}
 	
 	
 	/**
 	 * Obtiene la ruta del archivo que define al mundo pasado por parametro
 	 * @param mundo El mundo del que se quiere recuperar el archivo
-	 * @return
+	 * @return El string con la ruta del archivo que define el mundo pasado
 	 */
 	public static String getMundo(int mundo) {
-		return archivosDefincionMundos.get(mundo);
+		return archivosDefincionMundos.get(mundo-1);
 	}
 }

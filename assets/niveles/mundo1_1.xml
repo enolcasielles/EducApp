@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<level width="500" height="780">    
-   <texto x="360" y="240" valor="Probando los objetos de 
-					tipo texto" />
+<level width="1000" height="780"> 
+	<texto x="360" y="240" valor="Probando los objetos de tipo texto" />
 </level>
-

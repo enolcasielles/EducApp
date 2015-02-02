@@ -54,6 +54,7 @@ public class ResourcesManager{
     private BitmapTextureAtlas mAtlasWorldScene;     
 	public ITextureRegion texturaBackground; 
 	public ITextureRegion texturaBotonAccesoNivel; 
+	public ITextureRegion texturaJugador;
 	
 	
 	//---------------------------------------------
@@ -126,7 +127,6 @@ public class ResourcesManager{
     
     
     public void loadGameResources() {
-    	InfoNiveles.init();     //TEST!!!! NO CREAR QUE SEA EL MEJOR LUGAR PARA INICIAR LA INFO DE LOS NIVELES
     	//loadGameGraphics();
     	loadGameFonts();
     	//loadGameAudio();
@@ -157,19 +157,22 @@ public class ResourcesManager{
     
     public void loadWorldResources() {
     	
-    	/*
-    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-    	mAtlasWorldScene = new BitmapTextureAtlas(actividad.getTextureManager(), 1440, 800, TextureOptions.BILINEAR);
     	
-    	texturaBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "world.png", 0, 0);  //1440x787
-    	texturaBotonAccesoNivel = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "nivel.png", 0, 787);  //32x32
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+    	mAtlasWorldScene = new BitmapTextureAtlas(actividad.getTextureManager(), 1440, 900, TextureOptions.BILINEAR);
+    	
+    	texturaBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "world.png", 0, 0);  //1024x704
+    	texturaBotonAccesoNivel = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "nivel.png", 0, 787);  //64x64
+    	texturaJugador = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "barco.png", 64, 787);  //32x32
     	
     	mAtlasWorldScene.load();
-    	*/
+    	
    
     }
     
     public void unloadWorldResources() {
+    	
+    	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!IMPORTATNE!!!!!!!!!!!!!!!!!!!! DESCARGAR RECURSOS
     }
     
     

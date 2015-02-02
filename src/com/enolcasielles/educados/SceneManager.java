@@ -5,6 +5,7 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import android.R.integer;
 
+import com.enolcasielles.educados.niveles.InfoNiveles;
 import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.scenes.GameScene;
 import com.enolcasielles.educados.scenes.MainMenuScene;
@@ -95,24 +96,25 @@ public class SceneManager
     public void init_to_menuScene(OnCreateSceneCallback pOnCreateSceneCallback)
     {
         ResourcesManager.getInstance().loadMenuResources();
+        InfoNiveles.init();
         menuScene = new MainMenuScene();
         escenaActual = menuScene;
         pOnCreateSceneCallback.onCreateSceneFinished(menuScene);
     }
     
-    
+     
     /**
      * Efectua el cambio de escena de menu a world
      * @param mundo El mundo que ha de cargar
      */
     public void menuScene_to_worldScene(int mundo) {
     	ResourcesManager.getInstance().loadWorldResources();
+    	WorldScene.setMundo(InfoNiveles.MUNDO_1);
     	worldScene = new WorldScene(mundo);
     	cambiar_a_escena(worldScene);
     	ResourcesManager.getInstance().unloadMenuResources();
     	menuScene.disposeScene();
     	menuScene = null;
-    	SceneManager.getInstance().worldScene_to_gameScene(0, 0);   //TEST!!!!!!!!!
     }
     
     
