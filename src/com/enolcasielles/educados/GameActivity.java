@@ -35,7 +35,7 @@ public class GameActivity extends BaseGameActivity {
 	
 	public ProgressDialog progressDialog = null;
 		
-
+ 
 	
 
 	//===================================================
@@ -56,7 +56,7 @@ public class GameActivity extends BaseGameActivity {
 	       	   terminal
 	    	4. La camara que se usara */
 		
-		EngineOptions eo = new EngineOptions (true,ScreenOrientation.PORTRAIT_FIXED,
+		EngineOptions eo = new EngineOptions (true,ScreenOrientation.LANDSCAPE_FIXED,
 				new RatioResolutionPolicy(ANCHO_CAMARA,ALTO_CAMARA),this.mCamera);
 		
 		//Habilitamos sonidos y musica en el motor

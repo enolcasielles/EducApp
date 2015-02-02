@@ -33,6 +33,7 @@ public class InfoNiveles {
 	 * Inicia los objetos de la clase. Será necesario llamarla antes de empezar a utilizar los objetos
 	 */
 	public static void init() {
+		archivosDefinicionNiveles = new ArrayList<ArrayList<String>>();
 		//Archivos del mundo 1
 		ArrayList<String> mundo1 = new ArrayList<String>();
 		mundo1.add("niveles/mundo1_1.xml");
@@ -43,7 +44,8 @@ public class InfoNiveles {
 		//Archivos del mundo 2
 		//   ...
 		
-		//Archivo mundo 1
+		//Archivos  definicion de mundos
+		archivosDefincionMundos = new ArrayList<String>();
 		archivosDefincionMundos.add("niveles/mundo1.xml");
 		archivosDefincionMundos.add("niveles/mundo2.xml");
 		archivosDefincionMundos.add("niveles/mundo3.xml");

@@ -5,10 +5,14 @@ import java.io.IOException;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
+import org.andengine.util.SAXUtils;
 import org.andengine.util.level.EntityLoader;
+import org.andengine.util.level.constants.LevelConstants;
 import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
+
+import android.util.Log;
 
 import com.enolcasielles.educados.objetos.NivelObjeto;
 import com.enolcasielles.educados.objetos.Objeto;
@@ -99,6 +103,24 @@ public class ParseadorXML {
 		//Inicio el manejador de objetos
 		final ObjetosManager om = new ObjetosManager(scene);
 		
+		
+		//Configuracion global del nivel
+		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(LevelConstants.TAG_LEVEL)
+		{
+		        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException 
+		        {
+		            final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
+		            final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
+			            
+		            // TODO later we will specify camera BOUNDS and create invisible walls
+		            // on the beginning and on the end of the level.
+
+		            return scene;
+		        }
+		});
+		
+		
+		
 		//Preparo el objeto para responder a cada tipo de dato recibido
 		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_TEXTO) {
 	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
@@ -110,9 +132,6 @@ public class ParseadorXML {
 	    });
 		
 		
-		//Inicio el manejador de objetos apuntando a su primer objeto
-		om.init();
-		
 		//Preparo la escena para realizar la actualizacion, actualizara 10 veces por segundo
 		scene.registerUpdateHandler(new TimerHandler(1f / 10.0f, true, new ITimerCallback() {
             @Override
@@ -121,6 +140,12 @@ public class ParseadorXML {
             }
 
         }));
+		
+		//Cargo el nivel
+	    levelLoader.loadLevelFromAsset(scene.activity.getAssets(), xml);
+	    
+	    //Inicio el manejador de objetos apuntando a su primer objeto
+	  	om.init();
 
 	}
 	

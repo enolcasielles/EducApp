@@ -5,13 +5,15 @@ import org.andengine.entity.text.Text;
 import org.andengine.util.SAXUtils;
 import org.xml.sax.Attributes;
 
+import android.util.Log;
+
 import com.enolcasielles.educados.ResourcesManager;
 import com.enolcasielles.educados.scenes.BaseScene;
 
 public class TextoObjeto extends Objeto {
 	
 	//CONSTANTES. ATRIBUTOS PARA UN OBJETO DE ESTE TIPO
-	private String TAG_ATRIBUTO_TEXTO = "texto";
+	private final String TAG_ATRIBUTO_VALOR = "valor";
 	private String texto;
 	private Text entidad;
 	private int contador;
@@ -33,12 +35,13 @@ public class TextoObjeto extends Objeto {
 	public IEntity setEntidad() {
 		
 		//Recuperacion de los atributos 
-		texto = SAXUtils.getAttributeOrThrow(attributes, TAG_ATRIBUTO_TEXTO);
-		
+		texto = SAXUtils.getAttributeOrThrow(attributes, TAG_ATRIBUTO_VALOR);
 		contador = 1;
 		
 		//Formo la entidad y la devuelvo
-		entidad =  new Text(x, y, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
+		Text t = new Text(0, 0, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
+		t.setPosition(x+t.getWidth()/2, y+t.getHeight()/2);
+		entidad = t;
 		return entidad;
 		
 	}
@@ -55,11 +58,13 @@ public class TextoObjeto extends Objeto {
 		
 		//Elimino el texto anterior
 		scene.detachChild(entidad);
-		entidad.dispose();
+		entidad.dispose(); 
 		
-		//Genero el nuevo texto
+		//Genero el nuevo texto 
 		contador++;
-		entidad = new Text(x, y, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
+		Text t = new Text(0, 0, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
+		t.setPosition(x+t.getWidth()/2, y+t.getHeight()/2);
+		entidad = t;
 		
 		//Lo añado a a escena
 		scene.attachChild(entidad);

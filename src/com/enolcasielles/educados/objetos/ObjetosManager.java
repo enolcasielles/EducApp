@@ -49,7 +49,7 @@ public class ObjetosManager {
 	 * Apunta el objeto actual al primero del contenedor
 	 */
 	public void init() {
-		objetoActual = iterador.next();  //Marco el primero objeto como el actual
+		objetoActual = contenedor.get(0);  //Marco el primero objeto como el actual
 		puedeActualizar = true;
 	}
 	

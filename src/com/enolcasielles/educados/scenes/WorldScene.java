@@ -64,16 +64,15 @@ public class WorldScene extends BaseScene {
 			return SceneType.SCENE_MENU;
 		}
 		
-	
+	  
 		
-		
+		 
 		//----------------------------
 		//CLASS METHODS
 		//----------------------------
 		private void iniatalizeVariables() {
 			//background = new Sprite(0, 0, resourcesManager.texturaBackground, vbom);
 			//puertasNivel = new ArrayList<Sprite>();
-			SceneManager.getInstance().worldScene_to_gameScene(0, 0);   //TEST!!!!!!!!!
 		}
 		
 

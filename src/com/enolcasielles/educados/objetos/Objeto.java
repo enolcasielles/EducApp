@@ -7,6 +7,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.SAXUtils;
 import org.xml.sax.Attributes;
 
+import android.util.Log;
+
 import com.enolcasielles.educados.ResourcesManager;
 import com.enolcasielles.educados.scenes.BaseScene;
 
@@ -34,12 +36,12 @@ public abstract class Objeto {
 	//VARIABLES
 	//-----------------------------------------------------------------
 	private IEntity entidad;
-	protected int x,y;   //La posicion de este objeto en la escena
-	protected Attributes attributes;
+	protected float x,y;   //La posicion de este objeto en la escena
+	protected final Attributes attributes;
 	protected ResourcesManager rm;
 	protected BaseScene scene;
 	
-	
+	protected String texto;
 	
 	/**
 	 * Constructor base para cualquier objeto
@@ -69,8 +71,8 @@ public abstract class Objeto {
 	
 	private void setAtributosComunes() {
 		//Recuperacion de los atributos comunes 
-		x = SAXUtils.getIntAttributeOrThrow(this.attributes, TAG_ATRIBUTO_X);
-        y = SAXUtils.getIntAttributeOrThrow(this.attributes, TAG_ATRIBUTO_Y);
+		x = SAXUtils.getFloatAttributeOrThrow(this.attributes, TAG_ATRIBUTO_X);
+        y = SAXUtils.getFloatAttributeOrThrow(this.attributes, TAG_ATRIBUTO_Y);
 	}
 	
 	

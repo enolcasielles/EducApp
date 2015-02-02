@@ -112,6 +112,7 @@ public class SceneManager
     	ResourcesManager.getInstance().unloadMenuResources();
     	menuScene.disposeScene();
     	menuScene = null;
+    	SceneManager.getInstance().worldScene_to_gameScene(0, 0);   //TEST!!!!!!!!!
     }
     
     
