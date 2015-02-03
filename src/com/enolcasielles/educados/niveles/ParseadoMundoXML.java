@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.level.EntityLoader;
 import org.andengine.util.level.constants.LevelConstants;
@@ -14,6 +15,7 @@ import org.xml.sax.Attributes;
 
 import android.util.Log;
 
+import com.enolcasielles.educados.GameActivity;
 import com.enolcasielles.educados.objetos.NivelObjeto;
 import com.enolcasielles.educados.objetos.NivelesManager;
 import com.enolcasielles.educados.objetos.Objeto;
@@ -75,9 +77,9 @@ public class ParseadoMundoXML {
 		        {
 		            final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
 		            final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
-					            
-		            // TODO later we will specify camera BOUNDS and create invisible walls
-		            // on the beginning and on the end of the level.
+		            
+		            scene.camera.setBounds(0, 0, width, height);
+		            scene.camera.setBoundsEnabled(true);
 
 		            return scene;
 		        }

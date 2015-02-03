@@ -38,8 +38,8 @@ public abstract class Objeto {
 	private IEntity entidad;
 	protected float x,y;   //La posicion de este objeto en la escena
 	protected final Attributes attributes;
-	protected ResourcesManager rm;
-	protected BaseScene scene;
+	protected final ResourcesManager rm;
+	protected final BaseScene scene;
 	
 	protected String texto;
 	
@@ -49,7 +49,7 @@ public abstract class Objeto {
 	 * @param rm El objeto Manejador de recursos para poder acceder a los recursos
 	 * @param scene La escena a la que hay que añadir este objeto
 	 */
-	public Objeto(final Attributes pAttributes, BaseScene scene) {
+	public Objeto(final Attributes pAttributes, final BaseScene scene) {
 		this.attributes = pAttributes;
 		this.rm = scene.resourcesManager;
 		this.scene = scene;

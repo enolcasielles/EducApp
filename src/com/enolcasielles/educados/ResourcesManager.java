@@ -7,7 +7,8 @@ import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.Camera;
+import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
@@ -17,8 +18,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegion
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.adt.color.Color;
-
-import com.enolcasielles.educados.niveles.InfoNiveles;
 
 
 
@@ -41,7 +40,7 @@ public class ResourcesManager{
     
     public Engine engine;
     public GameActivity actividad;
-    public Camera camara;
+    public ZoomCamera camara;
     public VertexBufferObjectManager vbom;
     
     //---------------------------------------------
@@ -156,14 +155,14 @@ public class ResourcesManager{
     
     
     public void loadWorldResources() {
-    	
+    	 
     	
     	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-    	mAtlasWorldScene = new BitmapTextureAtlas(actividad.getTextureManager(), 1440, 900, TextureOptions.BILINEAR);
+    	mAtlasWorldScene = new BitmapTextureAtlas(actividad.getTextureManager(),800, 500, TextureOptions.BILINEAR);
     	
-    	texturaBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "world.png", 0, 0);  //1024x704
-    	texturaBotonAccesoNivel = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "nivel.png", 0, 787);  //64x64
-    	texturaJugador = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "barco.png", 64, 787);  //32x32
+    	texturaBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "world.png", 0, 0);  //720x480
+    	texturaBotonAccesoNivel = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "nivel.png", 720, 0);  //32x32
+    	texturaJugador = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "barco.png", 720, 32);  //16x16
     	
     	mAtlasWorldScene.load();
     	
@@ -254,7 +253,7 @@ public class ResourcesManager{
      * We use this method at beginning of game loading, to prepare Resources Manager properly,
      * setting all needed parameters, so we can latter access them from different classes (eg. scenes)
      */
-    public static void iniciar(Engine engine, GameActivity activity, Camera camera, VertexBufferObjectManager vbom)
+    public static void iniciar(Engine engine, GameActivity activity, ZoomCamera camera, VertexBufferObjectManager vbom)
     {
         getInstance().engine = engine;
         getInstance().actividad = activity;

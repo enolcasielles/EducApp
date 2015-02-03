@@ -85,9 +85,9 @@ public class WorldScene extends BaseScene {
 		//CLASS METHODS
 		//----------------------------
 		private void iniatalizeVariables() {
-			background = new Sprite(GameActivity.ANCHO_CAMARA/2, GameActivity.ALTO_CAMARA/2,
-					GameActivity.ANCHO_CAMARA,GameActivity.ALTO_CAMARA, resourcesManager.texturaBackground, vbom);
-			//background.setPosition(getWidth()/2, getHeight()/2);
+			//background = new Sprite(GameActivity.ANCHO_CAMARA/2, GameActivity.ALTO_CAMARA/2,GameActivity.ANCHO_CAMARA,GameActivity.ALTO_CAMARA, resourcesManager.texturaBackground, vbom);
+			background = new Sprite(0,0, resourcesManager.texturaBackground, vbom);
+			background.setPosition(GameActivity.ANCHO_CAMARA/2,GameActivity.ALTO_CAMARA/2);
 		}
 		
 

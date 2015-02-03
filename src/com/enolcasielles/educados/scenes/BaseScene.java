@@ -1,7 +1,7 @@
 package com.enolcasielles.educados.scenes;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.Camera;
+import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -21,7 +21,7 @@ public abstract class BaseScene extends Scene
     public Activity activity;
     public ResourcesManager resourcesManager;
     public VertexBufferObjectManager vbom;
-    public Camera camera;
+    public ZoomCamera camera;
     
     
     //---------------------------------------------

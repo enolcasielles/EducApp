@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
-import org.andengine.engine.camera.Camera;
+import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.WakeLockOptions;
@@ -13,8 +14,6 @@ import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import android.app.ProgressDialog;
-import android.graphics.Point;
-import android.view.Display;
 import android.view.KeyEvent;
 
 public class GameActivity extends BaseGameActivity {
@@ -25,15 +24,15 @@ public class GameActivity extends BaseGameActivity {
 	//===================================================
 	//CONSTANTES
 	//===================================================
-    public static int ANCHO_CAMARA;
-    public static int ALTO_CAMARA; 
+    public static int ANCHO_CAMARA = 720;
+    public static int ALTO_CAMARA = 480; 
 		
 		
 	//===================================================
 	//VARIABLES
 	//===================================================
 		
-	private Camera mCamera;  //Camara
+	private ZoomCamera mCamera;  //Camara
 	
 	public ProgressDialog progressDialog = null;
 		
@@ -48,13 +47,7 @@ public class GameActivity extends BaseGameActivity {
 	public EngineOptions onCreateEngineOptions() {
 		
 		//Inicio la camara
-		final Display display = getWindowManager().getDefaultDisplay(); 
-		Point size = new Point();
-		display.getSize(size);
-		GameActivity.ANCHO_CAMARA = size.x;
-		GameActivity.ALTO_CAMARA = size.y;
-		this.mCamera = new Camera(0,0, size.x,size.y);
-		//this.mCamera = new Camera(0,0, ANCHO_CAMARA,ALTO_CAMARA);
+		this.mCamera = new ZoomCamera(0,0, ANCHO_CAMARA,ALTO_CAMARA);
 		
 		/* Definimos las opciones del Engine:
 			1. Pantalla completa (true)
@@ -65,7 +58,7 @@ public class GameActivity extends BaseGameActivity {
 	    	4. La camara que se usara */
 		
 		EngineOptions eo = new EngineOptions (true,ScreenOrientation.LANDSCAPE_FIXED,
-				new RatioResolutionPolicy(size.x,size.y),this.mCamera);
+				new RatioResolutionPolicy(ANCHO_CAMARA,ALTO_CAMARA),this.mCamera);
 		
 		//Habilitamos sonidos y musica en el motor
 		eo.getAudioOptions().setNeedsMusic(true);
