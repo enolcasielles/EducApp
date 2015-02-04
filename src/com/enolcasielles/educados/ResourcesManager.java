@@ -47,9 +47,13 @@ public class ResourcesManager{
     // TEXTURES & TEXTURE REGIONS
     //---------------------------------------------
     
-    private BitmapTextureAtlas mAtlasSplash;
-    public ITextureRegion texturaSplash;
+    //Menu
+    private BitmapTextureAtlas mAtlasMenuScene;     
+	public ITextureRegion texturaMundo1; 
+	public ITextureRegion texturaMundo2; 
+	public ITextureRegion texturaMundo3;
     
+	//World
     private BitmapTextureAtlas mAtlasWorldScene;     
 	public ITextureRegion texturaBackground; 
 	public ITextureRegion texturaBotonAccesoNivel; 
@@ -79,26 +83,6 @@ public class ResourcesManager{
     //---------------------------------------------
 	
 	
-	public void loadGlobalResources() {
-    	FontFactory.setAssetBasePath("fuentes/");  //Indicamos donde se encuentran
-    	final ITexture fontTextureMenu = new BitmapTextureAtlas(actividad.getTextureManager(),
-    			256,256,TextureOptions.BILINEAR);  //Textura en donde cargaremos fuente
-    	fuenteLoading = FontFactory.createFromAsset(actividad.getFontManager(), fontTextureMenu,
-    				actividad.getAssets(), "Droid.ttf", 25, true, Color.WHITE_ABGR_PACKED_INT); //Definimos fuente
-    	fuenteLoading.load();  //La cargamos
-    	
-    	//Cargamos los sonidos
-    	try {
-    		sonidoBoton = SoundFactory.createSoundFromAsset(actividad.getEngine().getSoundManager(), 
-    				actividad, RUTA_SONIDO_BOTON);
-    		sonidoBoton.setLooping(false);
-    	} catch (IOException e) {
-    		e.printStackTrace();
-    	}
-    	
-	}
-	
-	
 	public void unloadGlobalResources() {
 		fuenteLoading.unload();
 		fuenteLoading = null;
@@ -108,7 +92,7 @@ public class ResourcesManager{
     
     
     public void loadMenuResources() {
-    	//loadMenuGraphics();
+    	loadMenuGraphics();
     	//loadMenuFonts();
     	//loadMenuAudio();
     }
@@ -180,7 +164,14 @@ public class ResourcesManager{
     //PRIVATE METHODS
     //-----------------------------------------------------
     private void loadMenuGraphics() {
-		
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
+    	mAtlasMenuScene = new BitmapTextureAtlas(actividad.getTextureManager(),192, 64, TextureOptions.BILINEAR);
+    	
+    	texturaMundo1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasMenuScene, actividad, "mundo1.png", 0, 0);  //64x64
+    	texturaMundo2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasMenuScene, actividad, "mundo2.png", 64, 0);  //64x64
+    	texturaMundo3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasMenuScene, actividad, "mundo3.png", 128, 0);  //64x64
+    	
+    	mAtlasMenuScene.load();
     }
     
     private void loadMenuFonts() {

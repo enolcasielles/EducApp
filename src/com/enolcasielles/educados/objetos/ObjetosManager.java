@@ -18,7 +18,7 @@ import com.enolcasielles.educados.scenes.BaseScene;
 public class ObjetosManager {
 	
 	private ArrayList<Objeto> contenedor;
-	private Iterator<Objeto> iterador;
+	private int iterador;
 	private Objeto objetoActual;
 	private BaseScene scene;
 	private boolean puedeActualizar;
@@ -31,7 +31,7 @@ public class ObjetosManager {
 	public ObjetosManager(BaseScene scene) {
 		this.scene = scene;
 		this.contenedor = new ArrayList<Objeto>();
-		iterador = contenedor.iterator();
+		iterador = 0;
 		puedeActualizar = false;
 	}
 	
@@ -49,7 +49,7 @@ public class ObjetosManager {
 	 * Apunta el objeto actual al primero del contenedor
 	 */
 	public void init() {
-		objetoActual = contenedor.get(0);  //Marco el primero objeto como el actual
+		objetoActual = contenedor.get(iterador);  //Marco el primero objeto como el actual
 		puedeActualizar = true;
 	}
 	
@@ -64,7 +64,8 @@ public class ObjetosManager {
 		if (puedeActualizar) {
 			//Actualizo el objeto y devuelve si se ha de pasar al siguiente
 			if (objetoActual.update()) {
-				if (iterador.hasNext()) objetoActual = iterador.next();
+				iterador++;
+				if(iterador < contenedor.size()) objetoActual = contenedor.get(iterador);
 				else puedeActualizar = false;  //Ya no hay mas objetos que actualizar
 			}
 		}

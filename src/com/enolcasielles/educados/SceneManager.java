@@ -109,7 +109,7 @@ public class SceneManager
      */
     public void menuScene_to_worldScene(int mundo) {
     	ResourcesManager.getInstance().loadWorldResources();
-    	WorldScene.setMundo(InfoNiveles.MUNDO_1);
+    	WorldScene.setMundo(mundo);
     	worldScene = new WorldScene(mundo);
     	cambiar_a_escena(worldScene);
     	ResourcesManager.getInstance().unloadMenuResources();

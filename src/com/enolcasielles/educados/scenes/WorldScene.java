@@ -64,12 +64,14 @@ public class WorldScene extends BaseScene {
 
 		@Override
 		public void onBackKeyPressed() {
-			//SceneManager.getInstance().menuScene_to_exit();
+			this.camera.setZoomFactor(1.0f);    //Quito zoom y cambio de escena
+			SceneManager.getInstance().worldScene_to_menuScene();
 		}
 
 		@Override
 		public void disposeScene() {
-			// TODO Auto-generated method stub
+			this.detachChild(background);
+			background.dispose();
 			
 		}
 
@@ -88,6 +90,7 @@ public class WorldScene extends BaseScene {
 			//background = new Sprite(GameActivity.ANCHO_CAMARA/2, GameActivity.ALTO_CAMARA/2,GameActivity.ANCHO_CAMARA,GameActivity.ALTO_CAMARA, resourcesManager.texturaBackground, vbom);
 			background = new Sprite(0,0, resourcesManager.texturaBackground, vbom);
 			background.setPosition(GameActivity.ANCHO_CAMARA/2,GameActivity.ALTO_CAMARA/2);
+			this.camera.setZoomFactor(2.0f);   //Hago zoom
 		}
 		
 

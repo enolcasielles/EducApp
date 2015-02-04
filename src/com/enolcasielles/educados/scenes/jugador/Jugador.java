@@ -37,7 +37,6 @@ public class Jugador extends Sprite {
 		this.setPosition(posicionActual.getEntidad().getX(), posicionActual.getEntidad().getY());
 		this.posicionActual = posicionActual;
 		scene.camera.setChaseEntity(this);   //Indico a la camara que ha de seguir al jugador
-		scene.camera.setZoomFactor(2.0f);
 		scene.attachChild(this);
 	}
 	
