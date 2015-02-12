@@ -41,7 +41,6 @@ public abstract class Objeto {
 	protected final ResourcesManager rm;
 	protected final BaseScene scene;
 	
-	protected String texto;
 	
 	/**
 	 * Constructor base para cualquier objeto
@@ -93,5 +92,15 @@ public abstract class Objeto {
 	 * @return false si el objeto aun no ha finalizado o true cuando ya lo ha hecho y se puede pasar al siguiente
 	 */
 	public abstract boolean update();
+	
+	
+	/**
+	 * Libera la carga de recursos de este objeto
+	 */
+	public void dispose() {
+		scene.detachChild(entidad);
+		entidad.dispose();
+		entidad = null;
+	}
 
 }

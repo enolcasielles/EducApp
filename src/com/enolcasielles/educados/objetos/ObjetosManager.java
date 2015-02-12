@@ -41,6 +41,7 @@ public class ObjetosManager {
 	 * @param o El objeto a añadir
 	 */
 	public void addObjeto(Objeto o) {
+		o.getEntidad().setVisible(false);   //De momento la entidad no sera visible
 		contenedor.add(o);
 	}
 	
@@ -65,7 +66,10 @@ public class ObjetosManager {
 			//Actualizo el objeto y devuelve si se ha de pasar al siguiente
 			if (objetoActual.update()) {
 				iterador++;
-				if(iterador < contenedor.size()) objetoActual = contenedor.get(iterador);
+				if(iterador < contenedor.size()) {
+					objetoActual = contenedor.get(iterador);
+					objetoActual.getEntidad().setVisible(true);   //Hago visible la nueva entidad
+				}
 				else puedeActualizar = false;  //Ya no hay mas objetos que actualizar
 			}
 		}

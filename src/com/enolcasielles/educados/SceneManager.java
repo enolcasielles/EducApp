@@ -7,14 +7,14 @@ import android.R.integer;
 
 import com.enolcasielles.educados.niveles.InfoNiveles;
 import com.enolcasielles.educados.scenes.BaseScene;
+import com.enolcasielles.educados.scenes.EvaluacionScene;
 import com.enolcasielles.educados.scenes.GameScene;
 import com.enolcasielles.educados.scenes.MainMenuScene;
 import com.enolcasielles.educados.scenes.WorldScene;
 
 
 
-public class SceneManager
-{
+public class SceneManager {
 	
     //---------------------------------------------
     // SCENES
@@ -22,7 +22,7 @@ public class SceneManager
     private BaseScene menuScene;
     private BaseScene gameScene;
     public BaseScene worldScene;
-
+    public BaseScene evaluacionScene;
     
     //---------------------------------------------
     // VARIABLES
@@ -40,7 +40,8 @@ public class SceneManager
     {
         SCENE_MENU,
         SCENE_GAME,
-        SCENE_WORLD
+        SCENE_WORLD,
+        SCENE_EVALUACION
     }
     
     
@@ -80,6 +81,9 @@ public class SceneManager
                 break;
             case SCENE_WORLD:
             	cambiar_a_escena(worldScene);
+                break;
+            case SCENE_EVALUACION:
+            	cambiar_a_escena(evaluacionScene);
                 break;
             default:
                 break;
@@ -155,6 +159,21 @@ public class SceneManager
     	ResourcesManager.getInstance().loadWorldResources();
     	worldScene = new WorldScene(mundo);
     	cambiar_a_escena(worldScene);
+    	ResourcesManager.getInstance().unloadGameResources();
+    	gameScene.disposeScene();
+    	gameScene = null;
+    }
+    
+    
+    /**
+     * Efectua el cambio de escena de game a evaluacion
+     * @param mundo El mundo en el que se esta para poder formarlo
+     * @param nivel El nivel que se quiere formar su evaluacion dentro del mundo
+     */
+    public void gameScene_to_evaluacionScene(int mundo, int nivel) {
+    	ResourcesManager.getInstance().loadEvaluacionResources();
+    	evaluacionScene = new EvaluacionScene(mundo, nivel);
+    	cambiar_a_escena(evaluacionScene);
     	ResourcesManager.getInstance().unloadGameResources();
     	gameScene.disposeScene();
     	gameScene = null;

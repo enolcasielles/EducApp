@@ -34,7 +34,7 @@ public class NivelesManager {
 	 * @param o El objeto a añadir
 	 */
 	public void addNivel(NivelObjeto o) {
-		objetos.add(o);
+		objetos.add(o);			
 		if (o.getId() == 1) jugador = new Jugador(o, this.scene);   //!!!!CAMBIAR ESTO!!!! NO TIENE POR QUE IR AL PRIMERO
 	}
 

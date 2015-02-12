@@ -12,16 +12,13 @@ import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
 import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
-import android.util.Log;
-
-import com.enolcasielles.educados.objetos.NivelObjeto;
+import com.enolcasielles.educados.objetos.ImagenObjeto;
 import com.enolcasielles.educados.objetos.Objeto;
 import com.enolcasielles.educados.objetos.ObjetosManager;
 import com.enolcasielles.educados.objetos.OperacionFraccionObjeto;
 import com.enolcasielles.educados.objetos.TextoObjeto;
 import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.scenes.GameScene;
-import com.enolcasielles.educados.scenes.WorldScene;
 
 
 /**
@@ -38,6 +35,7 @@ public class ParseadorNivelXML {
 	//Etiquetas texto
 	private final String TAG_TEXTO = "texto";
 	private final String TAG_OPERACION_FRACCION = "operacionfraccion";
+	private final String TAG_IMAGEN = "imagen";
 	
 	private BaseScene scene;
 
@@ -100,6 +98,17 @@ public class ParseadorNivelXML {
 	        	return o.getEntidad();
 	        }
 	    });
+		
+		/*
+		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_IMAGEN) {
+	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
+	        {
+	        	final Objeto o = new ImagenObjeto(pAttributes,scene);
+	        	om.addObjeto(o);
+	        	return o.getEntidad();
+	        }
+	    });
+	    */
 		
 		
 		//Preparo la escena para realizar la actualizacion, actualizara 10 veces por segundo

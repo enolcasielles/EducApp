@@ -82,15 +82,6 @@ public class ResourcesManager{
     // CLASS LOGIC
     //---------------------------------------------
 	
-	
-	public void unloadGlobalResources() {
-		fuenteLoading.unload();
-		fuenteLoading = null;
-		sonidoBoton = null;
-	}
-	
-    
-    
     public void loadMenuResources() {
     	loadMenuGraphics();
     	//loadMenuFonts();
@@ -158,6 +149,15 @@ public class ResourcesManager{
     	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!IMPORTATNE!!!!!!!!!!!!!!!!!!!! DESCARGAR RECURSOS
     }
     
+    
+    public void loadEvaluacionResources() {
+    	
+    }
+    
+    
+    public void unloadEvaluacionResources() {
+    	
+    }
     
     
     //-----------------------------------------------------

@@ -79,16 +79,11 @@ public class OperacionFraccionObjeto extends Objeto {
 		tmp.attachChild(den2);
 		tmp.attachChild(num3);
 		tmp.attachChild(den3);
-		tmp.setVisible(false);
-		Log.i("OperacionFraccionObjeto","Objeto construido");
 		return tmp;
 	}
 
 	@Override
 	public boolean update() {
-		//Hago la entidad visible e indico que ha finalizado
-		this.getEntidad().setVisible(true);
-		Log.i("OperacionFraccionObjeto","Objeto visualizado");
 		return true;
 	}
 }
