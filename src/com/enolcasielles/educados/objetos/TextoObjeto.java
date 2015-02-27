@@ -1,29 +1,22 @@
 package com.enolcasielles.educados.objetos;
 
-import java.util.ArrayList;
-
 import org.andengine.entity.IEntity;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.text.Text;
 import org.andengine.util.SAXUtils;
 import org.xml.sax.Attributes;
 
-import android.R.integer;
-import android.util.Log;
-
-import com.enolcasielles.educados.ResourcesManager;
 import com.enolcasielles.educados.scenes.BaseScene;
 
 public class TextoObjeto extends Objeto {
 	
 	//CONSTANTES. ATRIBUTOS PARA UN OBJETO DE ESTE TIPO
 	private final String TAG_ATRIBUTO_VALOR = "valor";
-	private Text entidad;
+	private String texto;
 	private int contador;
 	
-	//Array almacenando todos los objetos Text que precise 
-	private ArrayList<Text> textos;
-	private ArrayList<String> trozosTexto;
-	private Text textoActual;
+	private Scene sceneChild;
+	private Text t;
 	
 	/**
 	 * Construye un objeto de tipo texto
@@ -34,8 +27,6 @@ public class TextoObjeto extends Objeto {
 	 */
 	public TextoObjeto(final Attributes pAttributes,  BaseScene scene) {
 		super (pAttributes, scene);
-		textos = new ArrayList<Text>();
-		trozosTexto = new ArrayList<String>();
 	}
 	
 	
@@ -44,22 +35,18 @@ public class TextoObjeto extends Objeto {
 	public IEntity setEntidad() {
 		
 		//Recuperacion de los atributos 
-		String texto = SAXUtils.getAttributeOrThrow(attributes, TAG_ATRIBUTO_VALOR);
+		texto = SAXUtils.getAttributeOrThrow(attributes, TAG_ATRIBUTO_VALOR);
 		contador = 1;
 		
-		//Separo el string en los correspondientes 
-		String trozos[] = texto.split("\n");  //Rompo por el salto de linea
-		for (int i=0 ; i<trozos.length ; i++) {
-			trozosTexto.add(trozos[i]);
-		}
-		
+		//sceneChild = new Scene();
+		//sceneChild.setPosition(x, y);
 		
 		//Formo la entidad y la devuelvo
-		textoActual = new Text(0, 0, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
-		textoActual.setPosition(x+textoActual.getWidth()/2, y+textoActual.getHeight()/2);
-		entidad = textoActual;
-		return entidad;
-		
+		t = new Text(0, 0, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
+		t.setPosition(0+t.getWidth()/2, 0+t.getHeight()/2);
+		//sceneChild.attachChild(t);
+		//return sceneChild;
+		return t;
 	}
 	
 	
@@ -73,29 +60,20 @@ public class TextoObjeto extends Objeto {
 	public boolean update() {
 		
 		//Elimino el texto anterior
-		if (contador!=0) {
-			scene.detachChild(textoActual);
-			textoActual.dispose(); 
-		}
-		
+		//sceneChild.detachChild(t);
+		//scene.det
+		t.dispose(); 
 		
 		//Genero el nuevo texto 
-		String txt = trozosTexto.get(textos.size());
-		contador++; 
-		textoActual = new Text(0, 0, rm.fuenteGame,
-				txt.substring(0, contador),scene.vbom);
-		textoActual.setPosition(x+textoActual.getWidth()/2, y+textoActual.getHeight()/2);
-		entidad = textoActual;
+		contador++;
+		t = new Text(0, 0, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
+		t.setPosition(0+t.getWidth()/2, 0+t.getHeight()/2);
 		
-		//Lo añado a a escena
-		scene.attachChild(textoActual);
+		//Lo añado a la escena
+		sceneChild.attachChild(t);
 		
-		
-		if (contador == txt.length()) { //Empiezo nueva linea
-			contador=0;  //Reinicio el contador
-			textos.add(textoActual);   //Añado el texto ya pintado al array
-			y = y-textoActual.getHeight()*2;   //Actualizo la posicion vertical
-		}
+		//Si he acabado de mostrar el texto devuelvo true
+		if (contador == texto.length()) return true;
 		return false;
 		
 	}

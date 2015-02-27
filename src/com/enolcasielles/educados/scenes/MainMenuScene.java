@@ -75,6 +75,8 @@ public class MainMenuScene extends BaseScene {
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
 			};
+			botonMundo2.setPosition(GameActivity.ANCHO_CAMARA/2 - botonMundo2.getWidth()/2, GameActivity.ALTO_CAMARA/2-botonMundo2.getHeight()/2);
+			
 			botonMundo1 = new Sprite(GameActivity.ANCHO_CAMARA/2-botonMundo2.getWidth()-10, GameActivity.ALTO_CAMARA/2, resourcesManager.texturaMundo1, vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -84,6 +86,8 @@ public class MainMenuScene extends BaseScene {
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
 			};
+			botonMundo1.setPosition(botonMundo1.getX() - botonMundo1.getWidth()/2, GameActivity.ALTO_CAMARA/2-botonMundo1.getHeight()/2);
+			
 			botonMundo3 = new Sprite(GameActivity.ANCHO_CAMARA/2+botonMundo2.getWidth()+10, GameActivity.ALTO_CAMARA/2, resourcesManager.texturaMundo3, vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -93,6 +97,8 @@ public class MainMenuScene extends BaseScene {
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
 			};
+			botonMundo3.setPosition(botonMundo3.getX() + botonMundo3.getWidth()/2, GameActivity.ALTO_CAMARA/2-botonMundo3.getHeight()/2);
+
 		}
 		
 

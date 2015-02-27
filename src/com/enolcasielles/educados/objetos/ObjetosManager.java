@@ -51,6 +51,7 @@ public class ObjetosManager {
 	 */
 	public void init() {
 		objetoActual = contenedor.get(iterador);  //Marco el primero objeto como el actual
+		objetoActual.getEntidad().setVisible(true);  //Hago el primero visible
 		puedeActualizar = true;
 	}
 	

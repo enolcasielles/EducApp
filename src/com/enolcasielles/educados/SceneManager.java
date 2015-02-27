@@ -23,6 +23,7 @@ public class SceneManager {
     private BaseScene gameScene;
     public BaseScene worldScene;
     public BaseScene evaluacionScene;
+    public BaseScene resultadoScene;
     
     //---------------------------------------------
     // VARIABLES
@@ -41,7 +42,8 @@ public class SceneManager {
         SCENE_MENU,
         SCENE_GAME,
         SCENE_WORLD,
-        SCENE_EVALUACION
+        SCENE_EVALUACION,
+        SCENE_RESULTADO
     }
     
     
@@ -85,6 +87,9 @@ public class SceneManager {
             case SCENE_EVALUACION:
             	cambiar_a_escena(evaluacionScene);
                 break;
+            case SCENE_RESULTADO:
+            	cambiar_a_escena(resultadoScene);
+            	break;
             default:
                 break;
         }
@@ -114,7 +119,7 @@ public class SceneManager {
     public void menuScene_to_worldScene(int mundo) {
     	ResourcesManager.getInstance().loadWorldResources();
     	WorldScene.setMundo(mundo);
-    	worldScene = new WorldScene(mundo);
+    	worldScene = new WorldScene();
     	cambiar_a_escena(worldScene);
     	ResourcesManager.getInstance().unloadMenuResources();
     	menuScene.disposeScene();
@@ -157,7 +162,8 @@ public class SceneManager {
      */
     public void gameScene_to_worldScene(int mundo) {
     	ResourcesManager.getInstance().loadWorldResources();
-    	worldScene = new WorldScene(mundo);
+    	WorldScene.setMundo(mundo);
+    	worldScene = new WorldScene();
     	cambiar_a_escena(worldScene);
     	ResourcesManager.getInstance().unloadGameResources();
     	gameScene.disposeScene();
@@ -177,6 +183,31 @@ public class SceneManager {
     	ResourcesManager.getInstance().unloadGameResources();
     	gameScene.disposeScene();
     	gameScene = null;
+    }
+    
+    
+    /**
+     * Efectual el cambio desde evaluacion a world
+     * @param mundo El mundo que ha de cargar
+     */
+    public void evluacionScene_to_worldScene(int mundo) {
+    	
+    }
+    
+    
+    /**
+     * Efectual el cambio entre evaluacion y resultado
+     */
+    public void evaluacionScene_to_resultadoScene() {
+    	
+    }
+    
+    
+    /**
+     * Efectua el cambio entre resultado y world
+     */
+    public void resultadoScene_to_worldScene() {
+    	
     }
     
 

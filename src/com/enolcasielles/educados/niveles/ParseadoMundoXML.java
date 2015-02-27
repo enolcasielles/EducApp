@@ -2,27 +2,17 @@ package com.enolcasielles.educados.niveles;
 
 import java.io.IOException;
 
-import org.andengine.engine.handler.timer.ITimerCallback;
-import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.util.SAXUtils;
-import org.andengine.util.level.EntityLoader;
 import org.andengine.util.level.constants.LevelConstants;
-import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
-import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
-import android.util.Log;
-
-import com.enolcasielles.educados.GameActivity;
+import com.enolcasielles.educados.loaderdata.EntityLoader;
+import com.enolcasielles.educados.loaderdata.SimpleLevelEntityLoaderData;
+import com.enolcasielles.educados.loaderdata.SimpleLevelLoader;
 import com.enolcasielles.educados.objetos.NivelObjeto;
 import com.enolcasielles.educados.objetos.NivelesManager;
-import com.enolcasielles.educados.objetos.Objeto;
-import com.enolcasielles.educados.objetos.ObjetosManager;
-import com.enolcasielles.educados.objetos.TextoObjeto;
 import com.enolcasielles.educados.scenes.BaseScene;
-import com.enolcasielles.educados.scenes.GameScene;
 import com.enolcasielles.educados.scenes.WorldScene;
 
 

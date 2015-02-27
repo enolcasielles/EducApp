@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <level width="720" height="480">    
-    <nivel id="1" x="256" y="386" />
-	<nivel id="2" x="408" y="364" />
-	<nivel id="3" x="516" y="264" />
-	<nivel id="4" x="500" y="146" />
-	<nivel id="5" x="356" y="54" />
-	<nivel id="6" x="276" y="106" />
-	<nivel id="7" x="166" y="152" />
-	<nivel id="8" x="150" y="200" />
+    <nivel id="1" x="256" y="94" />
+	<nivel id="2" x="408" y="116" />
+	<nivel id="3" x="516" y="216" />
+	<nivel id="4" x="500" y="334" />
+	<nivel id="5" x="356" y="426" />
+	<nivel id="6" x="276" y="374" />
+	<nivel id="7" x="166" y="328" />
 </level>

@@ -7,7 +7,6 @@ import org.andengine.audio.music.MusicFactory;
 import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -16,8 +15,9 @@ import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-import org.andengine.util.adt.color.Color;
+import org.andengine.util.color.Color;
 
 
 
@@ -58,6 +58,11 @@ public class ResourcesManager{
 	public ITextureRegion texturaBackground; 
 	public ITextureRegion texturaBotonAccesoNivel; 
 	public ITextureRegion texturaJugador;
+	
+	//Game
+	private BitmapTextureAtlas mAtlasGameScene;
+	public ITextureRegion texturaBackgroundGame, texturaTituloGame, texturaIndicadorGame, texturaContenidoGame;
+	public ITiledTextureRegion texturaBotonMenuGame, texturaBotonJugarGame, texturaBotonSiguienteGame, texturaBotonAtrasGame,texturaLoroGame;
 	
 	
 	//---------------------------------------------
@@ -101,7 +106,7 @@ public class ResourcesManager{
     
     
     public void loadGameResources() {
-    	//loadGameGraphics();
+    	loadGameGraphics();
     	loadGameFonts();
     	//loadGameAudio();
     }
@@ -192,7 +197,21 @@ public class ResourcesManager{
     
     
 	private void loadGameGraphics() {
-    
+		
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+    	mAtlasGameScene = new BitmapTextureAtlas(actividad.getTextureManager(),1024, 1024, TextureOptions.BILINEAR);
+		
+    	texturaLoroGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "loro.png", 720, 0,2,1);  //300x230
+    	texturaBotonAtrasGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "botonAtras.png", 720, 230,1,2);  //165x110
+    	texturaBotonMenuGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "botonMenu.png", 720, 340,1,2);  //165x110
+    	texturaBotonJugarGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "botonJugar.png", 519, 480,1,2);  //165x110
+    	texturaBotonSiguienteGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "botonSiguiente.png", 519, 590,1,2);  //165x110
+    	texturaIndicadorGame = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasGameScene, actividad, "indicador.png", 519,700);  //165x91
+    	texturaBackgroundGame = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasGameScene, actividad, "background.png", 0, 0);  //720x480
+    	texturaContenidoGame = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasGameScene, actividad, "contenido.png", 0, 480);  //519x286
+    	texturaTituloGame = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasGameScene, actividad, "titulo.png", 0, 766);  //519x91
+	
+    	mAtlasGameScene.load();
     	
 	}
 	

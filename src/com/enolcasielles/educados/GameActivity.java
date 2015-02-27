@@ -13,6 +13,7 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import android.R.integer;
 import android.app.ProgressDialog;
 import android.view.KeyEvent;
 
@@ -26,6 +27,7 @@ public class GameActivity extends BaseGameActivity {
 	//===================================================
     public static int ANCHO_CAMARA = 720;
     public static int ALTO_CAMARA = 480; 
+    
 		
 		
 	//===================================================

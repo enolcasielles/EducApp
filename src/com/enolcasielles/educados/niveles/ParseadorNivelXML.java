@@ -6,16 +6,14 @@ import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.util.SAXUtils;
-import org.andengine.util.level.EntityLoader;
 import org.andengine.util.level.constants.LevelConstants;
-import org.andengine.util.level.simple.SimpleLevelEntityLoaderData;
-import org.andengine.util.level.simple.SimpleLevelLoader;
 import org.xml.sax.Attributes;
 
-import com.enolcasielles.educados.objetos.ImagenObjeto;
+import com.enolcasielles.educados.loaderdata.EntityLoader;
+import com.enolcasielles.educados.loaderdata.SimpleLevelEntityLoaderData;
+import com.enolcasielles.educados.loaderdata.SimpleLevelLoader;
 import com.enolcasielles.educados.objetos.Objeto;
 import com.enolcasielles.educados.objetos.ObjetosManager;
-import com.enolcasielles.educados.objetos.OperacionFraccionObjeto;
 import com.enolcasielles.educados.objetos.TextoObjeto;
 import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.scenes.GameScene;
@@ -34,8 +32,8 @@ public class ParseadorNivelXML {
 	
 	//Etiquetas texto
 	private final String TAG_TEXTO = "texto";
-	private final String TAG_OPERACION_FRACCION = "operacionfraccion";
 	private final String TAG_IMAGEN = "imagen";
+	private final String tAG_CONSEJOS = "consejo";
 	
 	private BaseScene scene;
 
@@ -90,14 +88,6 @@ public class ParseadorNivelXML {
 	        }
 	    });
 		
-		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_OPERACION_FRACCION) {
-	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
-	        {
-	        	final Objeto o = new OperacionFraccionObjeto(pAttributes,scene);
-	        	om.addObjeto(o);
-	        	return o.getEntidad();
-	        }
-	    });
 		
 		/*
 		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_IMAGEN) {
@@ -109,6 +99,18 @@ public class ParseadorNivelXML {
 	        }
 	    });
 	    */
+		
+		//Preparo el objeto para responder a cada tipo de dato recibido
+		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_TEXTO) {
+		       public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
+		       {
+		    	   /*final Objeto o = new TextoObjeto(pAttributes,scene);
+			       om.addObjeto(o);
+			       return o.getEntidad();
+			   		*/
+		    	   return null;
+			   }
+		});
 		
 		
 		//Preparo la escena para realizar la actualizacion, actualizara 10 veces por segundo

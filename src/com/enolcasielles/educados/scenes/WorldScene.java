@@ -40,13 +40,6 @@ public class WorldScene extends BaseScene {
         }
 		
 		
-		/**
-		 *  
-		 * @param mundo El mundo correspondiente a la escena a formar
-		 */
-		public WorldScene(int mundo) {
-			super();
-		}
 		
         
         // ===========================================================
@@ -89,7 +82,6 @@ public class WorldScene extends BaseScene {
 		private void iniatalizeVariables() {
 			//background = new Sprite(GameActivity.ANCHO_CAMARA/2, GameActivity.ALTO_CAMARA/2,GameActivity.ANCHO_CAMARA,GameActivity.ALTO_CAMARA, resourcesManager.texturaBackground, vbom);
 			background = new Sprite(0,0, resourcesManager.texturaBackground, vbom);
-			background.setPosition(GameActivity.ANCHO_CAMARA/2,GameActivity.ALTO_CAMARA/2);
 			this.camera.setZoomFactor(2.0f);   //Hago zoom
 		}
 		
