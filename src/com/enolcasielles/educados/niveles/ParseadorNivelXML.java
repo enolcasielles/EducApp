@@ -10,16 +10,16 @@ import org.andengine.util.SAXUtils;
 import org.andengine.util.level.constants.LevelConstants;
 import org.xml.sax.Attributes;
 
-import android.R.integer;
 import android.util.Log;
 
 import com.enolcasielles.educados.loaderdata.EntityLoader;
 import com.enolcasielles.educados.loaderdata.SimpleLevelEntityLoaderData;
 import com.enolcasielles.educados.loaderdata.SimpleLevelLoader;
+import com.enolcasielles.educados.objetos.ImagenObjeto;
 import com.enolcasielles.educados.objetos.Objeto;
 import com.enolcasielles.educados.objetos.ObjetosManager;
-import com.enolcasielles.educados.objetos.TextoObjeto;
 import com.enolcasielles.educados.objetos.ObjetosManager.NoAtlasSizeException;
+import com.enolcasielles.educados.objetos.TextoObjeto;
 import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.scenes.TeoriaScene;
 
@@ -38,7 +38,9 @@ public class ParseadorNivelXML {
 	//Etiquetas texto
 	private final String TAG_TEXTO = "texto";
 	private final String TAG_IMAGEN = "imagen";
-	private final String tAG_CONSEJOS = "consejo";
+	private final String TAG_CONSEJOS = "consejo";
+	private final String TAG_ATRIBUTO_ANCHO_ATLAS = "ancho-atlas";
+	private final String TAG_ATRIBUTO_ALTO_ATLAS = "alto-atlas";
 	
 	private BaseScene scene;
 	
@@ -76,7 +78,12 @@ public class ParseadorNivelXML {
 		        {
 		            final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
 		            final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
-			            
+		            final int anchoAtlas = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ATRIBUTO_ANCHO_ATLAS);
+		            final int altoAtlas = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ATRIBUTO_ALTO_ATLAS);  		               
+		            
+		            //Inicio el atlas, en este punto ya se sabe las dimensiones que ha de tener, ya se ha parseado el xml
+		            om.initAtlas(anchoAtlas, altoAtlas);
+		            
 		            return scene;
 		        }
 		});
@@ -94,18 +101,16 @@ public class ParseadorNivelXML {
 	    });
 		
 		
-		/*
+		
 		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_IMAGEN) {
 	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
 	        {
-	        	final Objeto o = new ImagenObjeto(pAttributes,scene);
+	        	final Objeto o = new ImagenObjeto(pAttributes,scene,contenido);
 	        	om.addObjeto(o);
 	        	return o.getEntidad();
 	        }
 	    });
-	    */
-		
-		
+	    
 		
 		//Preparo la escena para realizar la actualizacion, actualizara 10 veces por segundo
 		scene.registerUpdateHandler(new TimerHandler(1f / 10.0f, true, new ITimerCallback() {
@@ -119,12 +124,15 @@ public class ParseadorNivelXML {
 		//Cargo el nivel
 	    levelLoader.loadLevelFromAsset(scene.activity.getAssets(), xml);
 	    
-	    //Inicio el manejador de objetos apuntando a su primer objeto
+	    //Cargo el atlas
 	  	try {
-	  		om.init();
+	  		om.loadAtlas();
 	  	} catch (NoAtlasSizeException ex) {
-	  		ex.printStackTrace();
+	  		Log.e("ParseadorNivelXML","Error: " + ex.getMessage());
 	  	}
+	    
+	    //Inicio el manejador de objetos apuntando a su primer objeto
+	    om.init();
 
 	}
 	

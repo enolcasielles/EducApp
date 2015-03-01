@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<level width="1000" height="780"> 
+<level width="1000" height="780" ancho-atlas="1024" alto-atlas="1024" rutas="prueba.png,prueba2.png"> 
 	<texto x="20" y="50" valor="Probando los objetos //nde  tipo texto" />
+	<imagen x="10" y="100" ancho="100" alto="100" ruta="1" xAtlas="0" yAtlas="0" tiempo="2000"/>
+	<imagen x="150" y="100" ancho="100" alto="100" ruta="1" xAtlas="100" yAtlas="0" tiempo="2000"/>
 </level>

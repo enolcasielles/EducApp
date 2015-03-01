@@ -1,11 +1,16 @@
 package com.enolcasielles.educados.objetos;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.util.debug.Debug;
+import org.andengine.util.texturepack.TexturePack;
+import org.andengine.util.texturepack.TexturePackLoader;
+import org.andengine.util.texturepack.TexturePackTextureRegionLibrary;
+import org.andengine.util.texturepack.exception.TexturePackParseException;
 
 import com.enolcasielles.educados.scenes.BaseScene;
 
@@ -27,8 +32,9 @@ public class ObjetosManager {
 	private BaseScene scene;
 	private boolean puedeActualizar;
 	
-	private BitmapTextureAtlas atlasImagenes;
-	private static int anchoAtlas, altoAtlas;
+	private TexturePackTextureRegionLibrary texturePackLibrary;
+	private TexturePackLoader texturePack;
+	private ITextureRegion[] texturas;
 	
 	
 	/**
@@ -40,13 +46,6 @@ public class ObjetosManager {
 		this.contenedor = new ArrayList<Objeto>();
 		iterador = 0;
 		puedeActualizar = false;
-	}
-	
-	
-	
-	public static void setAtlasDimension(final int ancho, final int alto) {
-		ObjetosManager.anchoAtlas = ancho;
-		ObjetosManager.altoAtlas = alto;
 	}
 	
 	
@@ -63,17 +62,10 @@ public class ObjetosManager {
 	/**
 	 * Apunta el objeto actual al primero del contenedor
 	 */
-	public void init() throws NoAtlasSizeException{
+	public void init() {
 		objetoActual = contenedor.get(iterador);  //Marco el primero objeto como el actual
 		objetoActual.getEntidad().setVisible(true);  //Hago el primero visible
 		puedeActualizar = true;
-		
-		//Inicio el atlas en el que se iran almacenando los objetos imagen que se van creando. Se tuvo que haber definido primero
-		//su tamaño. Lanzo una excepcion si no se ha realizado
-		if (anchoAtlas == 0 || altoAtlas == 0) throw new NoAtlasSizeException("No se ha definido las dimensiones del atlas");
-		
-		atlasImagenes = new BitmapTextureAtlas(scene.resourcesManager.actividad.getTextureManager(),anchoAtlas, altoAtlas, TextureOptions.BILINEAR);
-		
 	}
 	
 	
@@ -98,11 +90,69 @@ public class ObjetosManager {
 	}
 	
 	
+	/**
+	 * Devuelve el atlas en el que se debe almacenar las imagenes
+	 * @return El objeto que define el atlas
+	 */
+	public static BitmapTextureAtlas getAtlas() {
+		return atlasImagenes;
+	}
 	
+	
+	/**
+	 * Inicial el atlas en el que guardar las imagenes
+	 */
+	public void initAtlas(final int ancho, final int alto) {
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/imagenes/");
+		atlasImagenes = new BitmapTextureAtlas(scene.resourcesManager.actividad.getTextureManager(),ancho, alto, TextureOptions.BILINEAR);
+	}
+	
+	
+	
+	/**
+	 * Carga el atlas en memoria
+	 */
+	public void loadAtlas() throws NoAtlasSizeException{
+		if (atlasImagenes == null) throw new NoAtlasSizeException("No se ha iniciado el atlas");
+		atlasImagenes.load();
+	}
+	
+	
+	/**
+	 * Excepcion que se formara cuando se trate de iniciar este objeto sin haber definido previamente el tamaño del atlas 
+	 * que albergara las imagenes
+	 * @author Enol Casielles
+	 *
+	 */
 	public class NoAtlasSizeException extends Exception {
 		public NoAtlasSizeException(String msg) {
 			super(msg);
 		}
+	}
+	
+	
+	
+	
+	/*
+	 * Metodo privado que 
+	 */
+	private void loadGraphics()
+	{
+	    try 
+	    {
+	    	texturePack = new TexturePackLoader(scene.resourcesManager.actividad.getAssets(), scene.resourcesManager.actividad.getTextureManager());
+	        texturePack.loadTexture();
+	        texturePackLibrary = texturePack.getTexturePackTextureRegionLibrary();
+	    } 
+	    catch (final TexturePackParseException e) 
+	    {
+	        Debug.e(e);
+	    }
+	    
+	    textureRegion_0 = texturePackLibrary.get(OurTexture.SPRITE0_ID);
+	    textureRegion_1 = texturePackLibrary.get(OurTexture.SPRITE1_ID);
+	    textureRegion_2 = texturePackLibrary.get(OurTexture.SPRITE2_ID);
+	    textureRegion_3 = texturePackLibrary.get(OurTexture.SPRITE3_ID);
 	}
 	
 
