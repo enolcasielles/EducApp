@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <level width="1000" height="780"> 
-	<!-- <texto x="20" y="240" valor="Probando los  \nobjetos de  tipo texto" /> -->
-	<operacionfraccion x="100" y="50" numerador1="3" numerador2="2" denominador1="5"
-					denominador2="8" operacion="+" />
-	<texto x="20" y="50" valor="Probando los  \nobjetos de  tipo texto" /> -->
+	<texto x="20" y="50" valor="Probando los objetos //nde  tipo texto" />
 </level>

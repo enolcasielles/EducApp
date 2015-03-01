@@ -13,6 +13,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 import android.content.res.AssetManager;
+import android.util.Log;
 
 /**
  * (c) 2010 Nicolas Gramlich

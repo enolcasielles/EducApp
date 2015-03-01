@@ -1,10 +1,22 @@
 package com.enolcasielles.educados.objetos;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.modifier.ParallelEntityModifier;
+import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.ScaleModifier;
+import org.andengine.entity.modifier.SequenceEntityModifier;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TickerText;
+import org.andengine.util.HorizontalAlign;
 import org.andengine.util.SAXUtils;
 import org.xml.sax.Attributes;
+
+import android.R.integer;
 
 import com.enolcasielles.educados.scenes.BaseScene;
 
@@ -13,10 +25,7 @@ public class TextoObjeto extends Objeto {
 	//CONSTANTES. ATRIBUTOS PARA UN OBJETO DE ESTE TIPO
 	private final String TAG_ATRIBUTO_VALOR = "valor";
 	private String texto;
-	private int contador;
 	
-	private Scene sceneChild;
-	private Text t;
 	
 	/**
 	 * Construye un objeto de tipo texto
@@ -25,8 +34,8 @@ public class TextoObjeto extends Objeto {
 	 * @param rm  El manejador de recursos para acceder a ellos
 	 * @param scene  La escena en la que se establecera este obeto
 	 */
-	public TextoObjeto(final Attributes pAttributes,  BaseScene scene) {
-		super (pAttributes, scene);
+	public TextoObjeto(final Attributes pAttributes,  BaseScene scene, Sprite contenido) {
+		super (pAttributes, scene, contenido);
 	}
 	
 	
@@ -36,17 +45,23 @@ public class TextoObjeto extends Objeto {
 		
 		//Recuperacion de los atributos 
 		texto = SAXUtils.getAttributeOrThrow(attributes, TAG_ATRIBUTO_VALOR);
-		contador = 1;
+		
+		//Opero el string.
+		//Recorto por los saltos de linea
+		String[] lineas = texto.split("//n");
+		String t = "";
+		for (int i=0 ; i<lineas.length ; i++) {
+			t += lineas[i] + "\n"; 
+		}
 		
 		//sceneChild = new Scene();
 		//sceneChild.setPosition(x, y);
 		
-		//Formo la entidad y la devuelvo
-		t = new Text(0, 0, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
-		t.setPosition(0+t.getWidth()/2, 0+t.getHeight()/2);
-		//sceneChild.attachChild(t);
-		//return sceneChild;
-		return t;
+		final Text text = new TickerText(x, y, scene.resourcesManager.fuenteGame, t,
+				new TickerText.TickerTextOptions(HorizontalAlign.LEFT, 10.f),scene.vbom);
+        text.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		
+		return text;
 	}
 	
 	
@@ -58,22 +73,6 @@ public class TextoObjeto extends Objeto {
 	 */
 	@Override
 	public boolean update() {
-		
-		//Elimino el texto anterior
-		//sceneChild.detachChild(t);
-		//scene.det
-		t.dispose(); 
-		
-		//Genero el nuevo texto 
-		contador++;
-		t = new Text(0, 0, rm.fuenteGame, texto.substring(0, contador),scene.vbom);
-		t.setPosition(0+t.getWidth()/2, 0+t.getHeight()/2);
-		
-		//Lo añado a la escena
-		sceneChild.attachChild(t);
-		
-		//Si he acabado de mostrar el texto devuelvo true
-		if (contador == texto.length()) return true;
 		return false;
 		
 	}

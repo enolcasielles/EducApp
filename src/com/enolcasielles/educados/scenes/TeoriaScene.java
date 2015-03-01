@@ -1,17 +1,13 @@
 package com.enolcasielles.educados.scenes;
 
-import org.andengine.entity.scene.IOnAreaTouchListener;
-import org.andengine.entity.scene.ITouchArea;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 
-import android.R.integer;
-
 import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
+import com.enolcasielles.educados.niveles.ParseadorNivelXML;
 
 
 /**
@@ -23,7 +19,7 @@ import com.enolcasielles.educados.SceneManager.SceneType;
  *
  */
 
-public class GameScene extends BaseScene {
+public class TeoriaScene extends BaseScene {
 
           
 		// ===========================================================
@@ -105,19 +101,11 @@ public class GameScene extends BaseScene {
          * @param nivel El nivel a generar
          */
         public static void setNivel(int mundo, int nivel) {
-        	GameScene.mundo = mundo;
-        	GameScene.nivel = nivel;
+        	TeoriaScene.mundo = mundo;
+        	TeoriaScene.nivel = nivel;
         }
         
-	    
-		/**
-		 *  
-		 *Forma el objeto correspondiente al nivel especificado previemente
-		 *No construir el objeto sin haber llamado previemente a setNivel
-		 */
-		public GameScene() {
-			super();
-		}
+	   
    
         
         // ===========================================================
@@ -129,7 +117,7 @@ public class GameScene extends BaseScene {
 		public void createScene() {
 			iniatalizeVariables();
 			createBackground();
-			//ParseadorNivelXML parser = new ParseadorNivelXML(this);   //Configuro la parte dinamica definida en su XML
+			ParseadorNivelXML parser = new ParseadorNivelXML(this,contenido);   //Configuro la parte dinamica definida en su XML
 		}
 
 
@@ -255,7 +243,7 @@ public class GameScene extends BaseScene {
 		 * @return El nivel asociado a esta escena
 		 */
 		public int getNivel() {
-			return GameScene.nivel;
+			return TeoriaScene.nivel;
 		}
 		
 		
@@ -266,7 +254,7 @@ public class GameScene extends BaseScene {
 		 * @return El mundo de esta escena
 		 */
 		public int getMundo() {
-			return GameScene.mundo;
+			return TeoriaScene.mundo;
 		}
 		
 		

@@ -5,9 +5,13 @@ import java.io.IOException;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.IEntity;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.level.constants.LevelConstants;
 import org.xml.sax.Attributes;
+
+import android.R.integer;
+import android.util.Log;
 
 import com.enolcasielles.educados.loaderdata.EntityLoader;
 import com.enolcasielles.educados.loaderdata.SimpleLevelEntityLoaderData;
@@ -15,8 +19,9 @@ import com.enolcasielles.educados.loaderdata.SimpleLevelLoader;
 import com.enolcasielles.educados.objetos.Objeto;
 import com.enolcasielles.educados.objetos.ObjetosManager;
 import com.enolcasielles.educados.objetos.TextoObjeto;
+import com.enolcasielles.educados.objetos.ObjetosManager.NoAtlasSizeException;
 import com.enolcasielles.educados.scenes.BaseScene;
-import com.enolcasielles.educados.scenes.GameScene;
+import com.enolcasielles.educados.scenes.TeoriaScene;
 
 
 /**
@@ -36,6 +41,8 @@ public class ParseadorNivelXML {
 	private final String tAG_CONSEJOS = "consejo";
 	
 	private BaseScene scene;
+	
+	private Sprite contenido;
 
 	
 	/**
@@ -44,8 +51,9 @@ public class ParseadorNivelXML {
 	 * 
 	 * @param scene La escena de juego que se quiere formar
 	 */
-	public ParseadorNivelXML(GameScene scene) {
+	public ParseadorNivelXML(TeoriaScene scene,Sprite contenido) {
 		this.scene = scene;
+		this.contenido = contenido;
 		parseNivel(InfoNiveles.getNivel(scene.getMundo(), scene.getNivel()));
 	}
 	
@@ -69,9 +77,6 @@ public class ParseadorNivelXML {
 		            final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
 		            final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
 			            
-		            // TODO later we will specify camera BOUNDS and create invisible walls
-		            // on the beginning and on the end of the level.
-
 		            return scene;
 		        }
 		});
@@ -82,7 +87,7 @@ public class ParseadorNivelXML {
 		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_TEXTO) {
 	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
 	        {
-	        	final Objeto o = new TextoObjeto(pAttributes,scene);
+	        	final Objeto o = new TextoObjeto(pAttributes,scene,contenido);
 	        	om.addObjeto(o);
 	        	return o.getEntidad();
 	        }
@@ -100,17 +105,6 @@ public class ParseadorNivelXML {
 	    });
 	    */
 		
-		//Preparo el objeto para responder a cada tipo de dato recibido
-		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_TEXTO) {
-		       public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
-		       {
-		    	   /*final Objeto o = new TextoObjeto(pAttributes,scene);
-			       om.addObjeto(o);
-			       return o.getEntidad();
-			   		*/
-		    	   return null;
-			   }
-		});
 		
 		
 		//Preparo la escena para realizar la actualizacion, actualizara 10 veces por segundo
@@ -126,7 +120,11 @@ public class ParseadorNivelXML {
 	    levelLoader.loadLevelFromAsset(scene.activity.getAssets(), xml);
 	    
 	    //Inicio el manejador de objetos apuntando a su primer objeto
-	  	om.init();
+	  	try {
+	  		om.init();
+	  	} catch (NoAtlasSizeException ex) {
+	  		ex.printStackTrace();
+	  	}
 
 	}
 	

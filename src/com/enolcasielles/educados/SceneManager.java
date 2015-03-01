@@ -8,7 +8,7 @@ import android.R.integer;
 import com.enolcasielles.educados.niveles.InfoNiveles;
 import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.scenes.EvaluacionScene;
-import com.enolcasielles.educados.scenes.GameScene;
+import com.enolcasielles.educados.scenes.TeoriaScene;
 import com.enolcasielles.educados.scenes.MainMenuScene;
 import com.enolcasielles.educados.scenes.WorldScene;
 
@@ -20,7 +20,7 @@ public class SceneManager {
     // SCENES
     //---------------------------------------------
     private BaseScene menuScene;
-    private BaseScene gameScene;
+    private BaseScene teoriaScene;
     public BaseScene worldScene;
     public BaseScene evaluacionScene;
     public BaseScene resultadoScene;
@@ -40,7 +40,7 @@ public class SceneManager {
     public enum SceneType
     {
         SCENE_MENU,
-        SCENE_GAME,
+        SCENE_TEORIA,
         SCENE_WORLD,
         SCENE_EVALUACION,
         SCENE_RESULTADO
@@ -78,8 +78,8 @@ public class SceneManager {
             case SCENE_MENU:
             	cambiar_a_escena(menuScene);
                 break;
-            case SCENE_GAME:
-            	cambiar_a_escena(gameScene);
+            case SCENE_TEORIA:
+            	cambiar_a_escena(teoriaScene);
                 break;
             case SCENE_WORLD:
             	cambiar_a_escena(worldScene);
@@ -147,9 +147,9 @@ public class SceneManager {
      */
     public void worldScene_to_gameScene(int mundo, int nivel) {
     	ResourcesManager.getInstance().loadGameResources();
-    	GameScene.setNivel(mundo, nivel);
-    	gameScene = new GameScene();
-    	cambiar_a_escena(gameScene);
+    	TeoriaScene.setNivel(mundo, nivel);
+    	teoriaScene = new TeoriaScene();
+    	cambiar_a_escena(teoriaScene);
     	ResourcesManager.getInstance().unloadWorldResources();
     	worldScene.disposeScene();
     	worldScene = null;
@@ -166,8 +166,8 @@ public class SceneManager {
     	worldScene = new WorldScene();
     	cambiar_a_escena(worldScene);
     	ResourcesManager.getInstance().unloadGameResources();
-    	gameScene.disposeScene();
-    	gameScene = null;
+    	teoriaScene.disposeScene();
+    	teoriaScene = null;
     }
     
     
@@ -181,8 +181,8 @@ public class SceneManager {
     	evaluacionScene = new EvaluacionScene(mundo, nivel);
     	cambiar_a_escena(evaluacionScene);
     	ResourcesManager.getInstance().unloadGameResources();
-    	gameScene.disposeScene();
-    	gameScene = null;
+    	teoriaScene.disposeScene();
+    	teoriaScene = null;
     }
     
     

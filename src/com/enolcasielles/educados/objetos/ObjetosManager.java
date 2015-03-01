@@ -1,7 +1,11 @@
 package com.enolcasielles.educados.objetos;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 
 import com.enolcasielles.educados.scenes.BaseScene;
 
@@ -23,6 +27,9 @@ public class ObjetosManager {
 	private BaseScene scene;
 	private boolean puedeActualizar;
 	
+	private BitmapTextureAtlas atlasImagenes;
+	private static int anchoAtlas, altoAtlas;
+	
 	
 	/**
 	 * Contructor
@@ -33,6 +40,13 @@ public class ObjetosManager {
 		this.contenedor = new ArrayList<Objeto>();
 		iterador = 0;
 		puedeActualizar = false;
+	}
+	
+	
+	
+	public static void setAtlasDimension(final int ancho, final int alto) {
+		ObjetosManager.anchoAtlas = ancho;
+		ObjetosManager.altoAtlas = alto;
 	}
 	
 	
@@ -49,10 +63,17 @@ public class ObjetosManager {
 	/**
 	 * Apunta el objeto actual al primero del contenedor
 	 */
-	public void init() {
+	public void init() throws NoAtlasSizeException{
 		objetoActual = contenedor.get(iterador);  //Marco el primero objeto como el actual
 		objetoActual.getEntidad().setVisible(true);  //Hago el primero visible
 		puedeActualizar = true;
+		
+		//Inicio el atlas en el que se iran almacenando los objetos imagen que se van creando. Se tuvo que haber definido primero
+		//su tamaño. Lanzo una excepcion si no se ha realizado
+		if (anchoAtlas == 0 || altoAtlas == 0) throw new NoAtlasSizeException("No se ha definido las dimensiones del atlas");
+		
+		atlasImagenes = new BitmapTextureAtlas(scene.resourcesManager.actividad.getTextureManager(),anchoAtlas, altoAtlas, TextureOptions.BILINEAR);
+		
 	}
 	
 	
@@ -77,6 +98,12 @@ public class ObjetosManager {
 	}
 	
 	
+	
+	public class NoAtlasSizeException extends Exception {
+		public NoAtlasSizeException(String msg) {
+			super(msg);
+		}
+	}
 	
 
 }

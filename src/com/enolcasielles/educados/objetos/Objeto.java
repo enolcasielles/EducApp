@@ -2,6 +2,7 @@ package com.enolcasielles.educados.objetos;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.vbo.VertexBufferObject;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.SAXUtils;
@@ -40,10 +41,28 @@ public abstract class Objeto {
 	protected final Attributes attributes;
 	protected final ResourcesManager rm;
 	protected final BaseScene scene;
+	private final Sprite continente;
 	
 	
 	/**
-	 * Constructor base para cualquier objeto
+	 * Constructor base para cualquier objeto que se haya de colocar localmente al sprite continente que recibe
+	 * @param pAttributes Los atributos extraidos del xml para su construccion
+	 * @param rm El objeto Manejador de recursos para poder acceder a los recursos
+	 * @param scene La escena a la que hay que añadir este objeto
+	 * @param contenido El sprite sobre el que hay que posicionar el objeto, para saber su posicion y dimensiones
+	 */
+	public Objeto(final Attributes pAttributes, final BaseScene scene, Sprite continente) {
+		this.attributes = pAttributes;
+		this.rm = scene.resourcesManager;
+		this.continente = continente;
+		this.scene = scene;
+		setAtributosComunes();
+		entidad = setEntidad();
+	}
+	
+	
+	/**
+	 * Constructor base para cualquier objeto que se haya de colocar en una posicion global
 	 * @param pAttributes Los atributos extraidos del xml para su construccion
 	 * @param rm El objeto Manejador de recursos para poder acceder a los recursos
 	 * @param scene La escena a la que hay que añadir este objeto
@@ -51,6 +70,7 @@ public abstract class Objeto {
 	public Objeto(final Attributes pAttributes, final BaseScene scene) {
 		this.attributes = pAttributes;
 		this.rm = scene.resourcesManager;
+		this.continente = null;
 		this.scene = scene;
 		setAtributosComunes();
 		entidad = setEntidad();
@@ -69,9 +89,11 @@ public abstract class Objeto {
 	
 	
 	private void setAtributosComunes() {
+		float xContinente = (continente == null) ? 0 : continente.getX(); 
+		float yContinente = (continente == null) ? 0 : continente.getY(); 
 		//Recuperacion de los atributos comunes 
-		x = SAXUtils.getFloatAttributeOrThrow(this.attributes, TAG_ATRIBUTO_X);
-        y = SAXUtils.getFloatAttributeOrThrow(this.attributes, TAG_ATRIBUTO_Y);
+		x = SAXUtils.getFloatAttributeOrThrow(this.attributes, TAG_ATRIBUTO_X) + xContinente;
+        y = SAXUtils.getFloatAttributeOrThrow(this.attributes, TAG_ATRIBUTO_Y) + yContinente;
 	}
 	
 	
