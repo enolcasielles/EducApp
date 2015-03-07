@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texture version="1" file="textura_teoria.png" type="bitmap" width="1012" height="761" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+    <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker -->
+    <!-- $TexturePacker:SmartUpdate:188e1926d9cf2c4dd5d06fbc886daafe:b2a0faf90e3b60448e0ee4fb26573e4f:3657132133bc4bd6a121aeae3a329f76$ -->
+    <textureregion id="0" src="background.png" x="2" y="2" width="720" height="480" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="720" srcheight="480"/>
+    <textureregion id="1" src="botonAtras.png" x="826" y="523" width="165" height="110" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="165" srcheight="110"/>
+    <textureregion id="2" src="botonJugar.png" x="357" y="577" width="165" height="181" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="165" srcheight="181"/>
+    <textureregion id="3" src="botonMenu.png" x="190" y="577" width="165" height="182" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="165" srcheight="182"/>
+    <textureregion id="4" src="botonSiguiente.png" x="2" y="577" width="186" height="182" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="186" srcheight="182"/>
+    <textureregion id="5" src="contenido.png" x="724" y="2" width="519" height="286" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="519" srcheight="286"/>
+    <textureregion id="6" src="indicador.png" x="826" y="635" width="165" height="91" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="165" srcheight="91"/>
+    <textureregion id="7" src="loro.png" x="524" y="523" width="300" height="230" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="300" srcheight="230"/>
+    <textureregion id="8" src="titulo.png" x="2" y="484" width="519" height="91" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="519" srcheight="91"/>
+</texture>

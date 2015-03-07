@@ -145,8 +145,8 @@ public class SceneManager {
      * @param mundo El mundo desde el que se esta efectuando el cambio, el mundo que se quiere cargar
      * @param nivel El nivel a cargar
      */
-    public void worldScene_to_gameScene(int mundo, int nivel) {
-    	ResourcesManager.getInstance().loadGameResources();
+    public void worldScene_to_teoriaScene(int mundo, int nivel) {
+    	ResourcesManager.getInstance().loadTeoriaResources();
     	TeoriaScene.setNivel(mundo, nivel);
     	teoriaScene = new TeoriaScene();
     	cambiar_a_escena(teoriaScene);
@@ -160,12 +160,12 @@ public class SceneManager {
      * Efectua el cambio de escena de game a world
      * @param mundo El mundo en el que se esta para poder formarlo
      */
-    public void gameScene_to_worldScene(int mundo) {
+    public void teoriaScene_to_worldScene(int mundo) {
     	ResourcesManager.getInstance().loadWorldResources();
     	WorldScene.setMundo(mundo);
     	worldScene = new WorldScene();
     	cambiar_a_escena(worldScene);
-    	ResourcesManager.getInstance().unloadGameResources();
+    	ResourcesManager.getInstance().unloadTeoriaResources();
     	teoriaScene.disposeScene();
     	teoriaScene = null;
     }
@@ -176,11 +176,11 @@ public class SceneManager {
      * @param mundo El mundo en el que se esta para poder formarlo
      * @param nivel El nivel que se quiere formar su evaluacion dentro del mundo
      */
-    public void gameScene_to_evaluacionScene(int mundo, int nivel) {
+    public void teoriaScene_to_evaluacionScene(int mundo, int nivel) {
     	ResourcesManager.getInstance().loadEvaluacionResources();
     	evaluacionScene = new EvaluacionScene(mundo, nivel);
     	cambiar_a_escena(evaluacionScene);
-    	ResourcesManager.getInstance().unloadGameResources();
+    	ResourcesManager.getInstance().unloadTeoriaResources();
     	teoriaScene.disposeScene();
     	teoriaScene = null;
     }

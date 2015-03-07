@@ -10,16 +10,14 @@ import org.andengine.util.SAXUtils;
 import org.andengine.util.level.constants.LevelConstants;
 import org.xml.sax.Attributes;
 
-import android.util.Log;
-
 import com.enolcasielles.educados.loaderdata.EntityLoader;
 import com.enolcasielles.educados.loaderdata.SimpleLevelEntityLoaderData;
 import com.enolcasielles.educados.loaderdata.SimpleLevelLoader;
 import com.enolcasielles.educados.objetos.ImagenObjeto;
 import com.enolcasielles.educados.objetos.Objeto;
 import com.enolcasielles.educados.objetos.ObjetosManager;
-import com.enolcasielles.educados.objetos.ObjetosManager.NoAtlasSizeException;
 import com.enolcasielles.educados.objetos.TextoObjeto;
+import com.enolcasielles.educados.objetos.ObjetosManager.OnLoadFinished;
 import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.scenes.TeoriaScene;
 
@@ -39,8 +37,10 @@ public class ParseadorNivelXML {
 	private final String TAG_TEXTO = "texto";
 	private final String TAG_IMAGEN = "imagen";
 	private final String TAG_CONSEJOS = "consejo";
-	private final String TAG_ATRIBUTO_ANCHO_ATLAS = "ancho-atlas";
-	private final String TAG_ATRIBUTO_ALTO_ATLAS = "alto-atlas";
+	private final String TAG_PAGINA = "pagina";
+	private final String TAG_ATRIBUTO_TEXTURAS = "texturas";
+	private final String TAG_ATRIBUTO_PAGINAS = "paginas";
+	private final String TAG_ATRIBUTO_TITULO = "titulo";
 	
 	private BaseScene scene;
 	
@@ -56,19 +56,18 @@ public class ParseadorNivelXML {
 	public ParseadorNivelXML(TeoriaScene scene,Sprite contenido) {
 		this.scene = scene;
 		this.contenido = contenido;
-		parseNivel(InfoNiveles.getNivel(scene.getMundo(), scene.getNivel()));
 	}
 	
 
 	
 	
 	
-	private void parseNivel(String xml) {
+	public ObjetosManager parseNivel(String xml, final OnLoadFinished olf) {
 		//Objeto para realizar el parseado
 		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(scene.vbom);
 		
 		//Inicio el manejador de objetos
-		final ObjetosManager om = new ObjetosManager(scene);
+		final ObjetosManager om = new ObjetosManager(scene,olf);
 		
 		
 		//Configuracion global del nivel
@@ -78,11 +77,18 @@ public class ParseadorNivelXML {
 		        {
 		            final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
 		            final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
-		            final int anchoAtlas = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ATRIBUTO_ANCHO_ATLAS);
-		            final int altoAtlas = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ATRIBUTO_ALTO_ATLAS);  		               
+		            final String texturas = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ATRIBUTO_TEXTURAS);  	
+		            final int paginas =  SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ATRIBUTO_PAGINAS);
+		            final String titulo = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ATRIBUTO_TITULO); 
 		            
-		            //Inicio el atlas, en este punto ya se sabe las dimensiones que ha de tener, ya se ha parseado el xml
-		            om.initAtlas(anchoAtlas, altoAtlas);
+		            //Fijo el titulo de la leccion
+		            olf.setTitle(titulo);
+		            
+		            //Fijo el indicador de la pagina
+		            olf.setIndicadorPagina("1/"+paginas);
+		            
+		            //Cargo las texturas ahora que ya tengo identificados sus ids en el String texturas
+		            om.loadTexturas(texturas, "textura_1_1.xml");
 		            
 		            return scene;
 		        }
@@ -92,7 +98,7 @@ public class ParseadorNivelXML {
 		
 		//Preparo el objeto para responder a cada tipo de dato recibido
 		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_TEXTO) {
-	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
+	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException 
 	        {
 	        	final Objeto o = new TextoObjeto(pAttributes,scene,contenido);
 	        	om.addObjeto(o);
@@ -110,6 +116,14 @@ public class ParseadorNivelXML {
 	        	return o.getEntidad();
 	        }
 	    });
+		
+		
+		levelLoader.registerEntityLoader(new EntityLoader<SimpleLevelEntityLoaderData>(TAG_PAGINA) {
+	        public IEntity onLoadEntity(final String pEntityName, final IEntity pParent, final Attributes pAttributes, final SimpleLevelEntityLoaderData pSimpleLevelEntityLoaderData) throws IOException
+	        {
+	        	return om.addPagina();
+	        }
+	    });
 	    
 		
 		//Preparo la escena para realizar la actualizacion, actualizara 10 veces por segundo
@@ -124,15 +138,10 @@ public class ParseadorNivelXML {
 		//Cargo el nivel
 	    levelLoader.loadLevelFromAsset(scene.activity.getAssets(), xml);
 	    
-	    //Cargo el atlas
-	  	try {
-	  		om.loadAtlas();
-	  	} catch (NoAtlasSizeException ex) {
-	  		Log.e("ParseadorNivelXML","Error: " + ex.getMessage());
-	  	}
-	    
 	    //Inicio el manejador de objetos apuntando a su primer objeto
 	    om.init();
+	    
+	    return om;
 
 	}
 	

@@ -3,11 +3,17 @@ package com.enolcasielles.educados.scenes;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
 import org.andengine.input.touch.TouchEvent;
 
+import com.enolcasielles.educados.ResourcesManager;
 import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
+import com.enolcasielles.educados.niveles.InfoNiveles;
 import com.enolcasielles.educados.niveles.ParseadorNivelXML;
+import com.enolcasielles.educados.objetos.ObjetosManager;
+import com.enolcasielles.educados.objetos.ObjetosManager.OnLoadFinished;
 
 
 /**
@@ -88,6 +94,11 @@ public class TeoriaScene extends BaseScene {
     	private AnimatedSprite loro, botonAtras, botonMenu, botonEvaluacion, botonSiguiente;
     	
     	private boolean puedeAvanzar, puedeRetroceder, puedeEvaluar;
+    	
+    	private ObjetosManager om;
+    	private OnLoadFinished olf;
+    	
+    	private Text tituloTexto, indicadorTexto;
         
         
         /**
@@ -118,6 +129,7 @@ public class TeoriaScene extends BaseScene {
 			iniatalizeVariables();
 			createBackground();
 			ParseadorNivelXML parser = new ParseadorNivelXML(this,contenido);   //Configuro la parte dinamica definida en su XML
+			om = parser.parseNivel(InfoNiveles.getNivel(this.getMundo(), this.getNivel()),olf);
 		}
 
 
@@ -145,7 +157,7 @@ public class TeoriaScene extends BaseScene {
 		//----------------------------
 		private void iniatalizeVariables() {
 			botonAtras = new AnimatedSprite(BOTON_ATRAS_X, BOTON_ATRAS_Y,BOTON_ATRAS_ANCHO,BOTON_ATRAS_ALTO,
-					resourcesManager.texturaBotonAtrasGame, vbom) {
+					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_BOTONATRAS_ID], vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent,float pTouchAreaLocalX, float pTouchAreaLocalY) {
 					if (puedeRetroceder) {
@@ -154,14 +166,17 @@ public class TeoriaScene extends BaseScene {
 						}
 						if (pSceneTouchEvent.isActionUp()) {
 							this.setCurrentTileIndex(NO_PULSADO);
-							retrocedePagina();
+							om.disminuyePagina();
+							this.setVisible(false);
+							botonSiguiente.setVisible(false);
 						}
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
 			};
+			botonAtras.setVisible(false);
 			botonMenu = new AnimatedSprite(BOTON_MENU_X, BOTON_MENU_Y,BOTON_MENU_ANCHO,BOTON_MENU_ALTO,
-					resourcesManager.texturaBotonMenuGame, vbom) {
+					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_BOTONMENU_ID], vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent,float pTouchAreaLocalX, float pTouchAreaLocalY) {
 						if (pSceneTouchEvent.isActionDown()) {
@@ -169,13 +184,13 @@ public class TeoriaScene extends BaseScene {
 						}
 						if (pSceneTouchEvent.isActionUp()) {
 							this.setCurrentTileIndex(NO_PULSADO);
-							SceneManager.getInstance().gameScene_to_worldScene(mundo);
+							SceneManager.getInstance().teoriaScene_to_worldScene(mundo);
 						}
 						return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
 			};
 			botonEvaluacion = new AnimatedSprite(BOTON_EVALUACION_X, BOTON_EVALUACION_Y,BOTON_EVALUACION_ANCHO,BOTON_EVALUACION_ALTO,
-					resourcesManager.texturaBotonJugarGame, vbom) {
+					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_BOTONJUGAR_ID], vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent,float pTouchAreaLocalX, float pTouchAreaLocalY) {
 					if (puedeEvaluar) {
@@ -184,14 +199,15 @@ public class TeoriaScene extends BaseScene {
 						}
 						if (pSceneTouchEvent.isActionUp()) {
 							this.setCurrentTileIndex(NO_PULSADO);
-							SceneManager.getInstance().gameScene_to_evaluacionScene(mundo, nivel);
+							SceneManager.getInstance().teoriaScene_to_evaluacionScene(mundo, nivel);
 						}
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
 			};
+			botonEvaluacion.setVisible(false);
 			botonSiguiente = new AnimatedSprite(BOTON_SIGUIENTE_X, BOTON_SIGUIENTE_Y,BOTON_SIGUIENTE_ANCHO,BOTON_SIGUIENTE_ALTO,
-					resourcesManager.texturaBotonSiguienteGame, vbom) {
+					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_BOTONSIGUIENTE_ID], vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent,float pTouchAreaLocalX, float pTouchAreaLocalY) {
 					if (puedeAvanzar) {
@@ -200,23 +216,58 @@ public class TeoriaScene extends BaseScene {
 						}
 						if (pSceneTouchEvent.isActionUp()) {
 							this.setCurrentTileIndex(NO_PULSADO);
-							avanzaPagina();
+							om.aumentaPagina();
+							this.setVisible(false);
+							botonAtras.setVisible(false);
 						}
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
 			};
+			botonSiguiente.setVisible(false);
 			loro = new AnimatedSprite(LORO_X, LORO_Y,LORO_ANCHO,LORO_ALTO,
-					resourcesManager.texturaLoroGame, vbom);
+					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_LORO_ID], vbom);
 			loro.animate(200);
-			background = new Sprite(0, 0, resourcesManager.texturaBackgroundGame, vbom);
-			contenido = new Sprite(CONTENIDO_X, CONTENIDO_Y,CONTENIDO_ANCHO,CONTENIDO_ALTO, resourcesManager.texturaContenidoGame,vbom);
-			titulo = new Sprite(TITULO_X, TITULO_Y, TITULO_ANCHO, TITULO_ALTO, resourcesManager.texturaTituloGame, vbom);
-			indicador = new Sprite(INDICADOR_X, INDICADOR_Y,INDICADOR_ANCHO, INDICADOR_ALTO, resourcesManager.texturaIndicadorGame, vbom);
+			background = new Sprite(0, 0, resourcesManager.texturasTeoria[ResourcesManager.TEORIA_BACKGROUND_ID], vbom);
+			contenido = new Sprite(CONTENIDO_X, CONTENIDO_Y,CONTENIDO_ANCHO,CONTENIDO_ALTO, resourcesManager.texturasTeoria[ResourcesManager.TEORIA_CONTENIDO_ID],vbom);
+			titulo = new Sprite(TITULO_X, TITULO_Y, TITULO_ANCHO, TITULO_ALTO, resourcesManager.texturasTeoria[ResourcesManager.TEORIA_TITULO_ID], vbom);
+			indicador = new Sprite(INDICADOR_X, INDICADOR_Y,INDICADOR_ANCHO, INDICADOR_ALTO, resourcesManager.texturasTeoria[ResourcesManager.TEORIA_INDICADOR_ID], vbom);
 		
 			//Estado inicial partida
 			puedeAvanzar = true;
 			puedeRetroceder = true;
+			
+			
+			//Indicador de la pagina actual
+			indicadorTexto = new Text(0, 0, resourcesManager.fuenteGame, "0123456789/", vbom);
+			indicador.attachChild(indicadorTexto);
+			
+			//Objeto interface para la retrollamada
+			olf = new OnLoadFinished() {
+				@Override
+				public void teoriaFinalizada() {
+					botonEvaluacion.setVisible(true);	
+				}
+				@Override
+				public void paginaCargada(boolean primera, boolean ultima) {
+					botonSiguiente.setVisible(true);
+					botonAtras.setVisible(true);
+					if (primera)botonAtras.setVisible(false);
+					if (ultima) botonSiguiente.setVisible(false);
+				}
+				@Override
+				public void setTitle(String title) {
+					tituloTexto = new Text(0, 0, resourcesManager.fuenteGame, title, vbom);
+					tituloTexto.setPosition(titulo.getWidth()/2-tituloTexto.getWidth()/2, titulo.getHeight()/2-tituloTexto.getHeight()/2);
+					titulo.attachChild(tituloTexto);
+				}
+				@Override
+				public void setIndicadorPagina(String indicador) {
+					indicadorTexto.setText(indicador);
+					indicadorTexto.setPosition(TeoriaScene.this.indicador.getWidth()/2 - indicadorTexto.getWidth()/2, 
+							TeoriaScene.this.indicador.getHeight()/2 - indicadorTexto.getHeight()/2);
+				}
+			};
 		}
 		
 
@@ -257,15 +308,6 @@ public class TeoriaScene extends BaseScene {
 			return TeoriaScene.mundo;
 		}
 		
-		
-		
-		private void retrocedePagina() {
-			
-		}
-		
-		private void avanzaPagina() {
-			
-		}
 		
 		
 }

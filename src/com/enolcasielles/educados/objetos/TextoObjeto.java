@@ -32,6 +32,7 @@ public class TextoObjeto extends Objeto {
 	//VARIABLES
 	private TickerText text;
 	private int numCaracteres;
+	private float duracion;
 	
 	
 	/**
@@ -59,7 +60,13 @@ public class TextoObjeto extends Objeto {
 		String[] lineas = texto.split("//n");
 		String t = "";
 		for (int i=0 ; i<lineas.length ; i++) {
-			numCaracteres += lineas[i].length();
+			String linea = lineas[i];
+			int lengthLinea = linea.length();
+			int numCaracteresLinea = 0;
+			for (int j=0 ; j<lengthLinea ; j++) {
+				if (linea.charAt(j) != ' ') numCaracteresLinea++; 
+			}
+			numCaracteres += numCaracteresLinea;
 			t += lineas[i] + "\n"; 
 		}
 		
@@ -79,7 +86,13 @@ public class TextoObjeto extends Objeto {
 	 */
 	@Override
 	public boolean update() {
-		if (text.getCharactersVisible() >= this.numCaracteres) return true;
+		if (firstUpdate) {
+			firstUpdate = false;
+			text.reset();
+		}
+		if (text.getCharactersVisible() >= this.numCaracteres){
+			return true;
+		}
 		return false;
 	}
 

@@ -48,7 +48,7 @@ public class NivelObjeto extends Objeto {
 		this.nivel = nivel;
 		
 		//Configuro el sprite
-	    final Sprite entidad = new Sprite(x, y, rm.texturaBotonAccesoNivel, scene.vbom)
+	    final Sprite entidad = new Sprite(x, y, rm.texturasWorld[ResourcesManager.WORLD_NIVEL_ID], scene.vbom)
 	    {
 	        @Override 
 	        public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {

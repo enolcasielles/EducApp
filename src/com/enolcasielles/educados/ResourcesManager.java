@@ -8,6 +8,10 @@ import org.andengine.audio.sound.Sound;
 import org.andengine.audio.sound.SoundFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.ZoomCamera;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
@@ -18,6 +22,9 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
+import org.andengine.util.debug.Debug;
+
+import android.R.integer;
 
 
 
@@ -43,26 +50,51 @@ public class ResourcesManager{
     public ZoomCamera camara;
     public VertexBufferObjectManager vbom;
     
+    
     //---------------------------------------------
     // TEXTURES & TEXTURE REGIONS
     //---------------------------------------------
+
     
-    //Menu
-    private BitmapTextureAtlas mAtlasMenuScene;     
-	public ITextureRegion texturaMundo1; 
-	public ITextureRegion texturaMundo2; 
-	public ITextureRegion texturaMundo3;
+    //Menu   
+    private TexturePackTextureRegionLibrary texturePackLibraryMenu;
+	private TexturePack texturePackMenu;
+	public ITextureRegion[] texturasMenu;
+	public static final int MENU_BACKGROUND_ID = 0;
+	public static final int MENU_CREDITOS_ID = 1;
+	public static final int MENU_INFO_ID = 2;
+	public static final int MENU_MUNDO_MATE_ID = 4;
+	public static final int MENU_MUNDO_LENGUA_ID = 3;
+	public static final int MENU_MUNDO_NATU_ID = 5;
+	public static final int MENU_REGISTRO_ID = 6;
+	public static final int MENU_SETTINGS_ID = 7;
     
-	//World
-    private BitmapTextureAtlas mAtlasWorldScene;     
-	public ITextureRegion texturaBackground; 
-	public ITextureRegion texturaBotonAccesoNivel; 
-	public ITextureRegion texturaJugador;
+	//World 
+    private TexturePackTextureRegionLibrary texturePackLibraryWorld;
+	private TexturePack texturePackWorld;
+	public ITextureRegion[] texturasWorld;
+	public static final int WORLD_BARCO_ID = 0;
+	public static final int WORLD_NIVEL_ID = 1;
+	public static final int WORLD_WORLD_ID = 2;
 	
-	//Game
-	private BitmapTextureAtlas mAtlasGameScene;
-	public ITextureRegion texturaBackgroundGame, texturaTituloGame, texturaIndicadorGame, texturaContenidoGame;
-	public ITiledTextureRegion texturaBotonMenuGame, texturaBotonJugarGame, texturaBotonSiguienteGame, texturaBotonAtrasGame,texturaLoroGame;
+	//Teoria
+    private TexturePackTextureRegionLibrary texturePackLibraryTeoria;
+	private TexturePack texturePackTeoria;
+	public ITextureRegion[] texturasTeoria;
+	public ITiledTextureRegion[] texturasTiledTeoria;
+	public static final int TEORIA_BACKGROUND_ID = 0;
+	public static final int TEORIA_BOTONATRAS_ID = 1;
+	public static final int TEORIA_BOTONJUGAR_ID = 2;
+	public static final int TEORIA_BOTONMENU_ID = 3;
+	public static final int TEORIA_BOTONSIGUIENTE_ID = 4;
+	public static final int TEORIA_CONTENIDO_ID = 5;
+	public static final int TEORIA_INDICADOR_ID = 6;
+	public static final int TEORIA_LORO_ID = 7;
+	public static final int TEORIA_TITULO_ID = 8;
+	
+	
+	//Evaluacion
+	public ITextureRegion[] texturasEvaluacion;
 	
 	
 	//---------------------------------------------
@@ -88,135 +120,136 @@ public class ResourcesManager{
     //---------------------------------------------
 	
     public void loadMenuResources() {
-    	loadMenuGraphics();
-    	//loadMenuFonts();
-    	//loadMenuAudio();
-    }
-    
-    public void unloadMenuResources() {
-    	/*
-    	mAtlasMenu.unload();
-    	texturaMenu = null;
-    	texturaBotonPlay = null;
-    	texturaBotonSalir = null;
-    	fuenteMenu.unload();
-    	fuenteMenu = null;
-    	*/
-    }
-    
-    
-    public void loadGameResources() {
-    	loadGameGraphics();
-    	loadGameFonts();
-    	//loadGameAudio();
-    }
-    
-    
-    public void unloadGameResources() {
-    	/*
-    	mAtlasGame.unload();
     	
-    	fuenteGame.unload();
-    	fuenteGame = null;
-    	texturaPersonaje = null;
-    	texturaCaritaResultado = null;
-    	texturaShareFacebook = null;
-    	texturaBotonMenu = null;
-    	texturaBotonSonido = null;
-    	texturaBotonRestart = null;
-    	texturaCoin = null;
-    	texturaVida = null;
- 
-    	sonidoCargar = null;
-    	sonidoSaltar = null;
-    	musica = null;
-    	*/
-    }
-    
-    
-    public void loadWorldResources() {
-    	 
+    	//--------------------------------------------------
+    	//LOAD GRAPHICS
+    	//--------------------------------------------------
     	
-    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-    	mAtlasWorldScene = new BitmapTextureAtlas(actividad.getTextureManager(),800, 500, TextureOptions.BILINEAR);
+    	//Parseo el fichero
+    	try {
+    		  texturePackMenu = new TexturePackLoader(actividad.getTextureManager(), "gfx/menu/")
+    		      	.loadFromAsset(actividad.getAssets(), "textura_menu.xml");
+    		  texturePackMenu.loadTexture();
+    		  texturePackLibraryMenu = texturePackMenu.getTexturePackTextureRegionLibrary();
+    	} catch (final TexturePackParseException e)  {
+    	      Debug.e(e);
+    	}
+
     	
-    	texturaBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "world.png", 0, 0);  //720x480
-    	texturaBotonAccesoNivel = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "nivel.png", 720, 0);  //32x32
-    	texturaJugador = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasWorldScene, actividad, "barco.png", 720, 32);  //16x16
+    	texturasMenu = new ITextureRegion[8];
+    	texturasMenu[MENU_BACKGROUND_ID] = texturePackLibraryMenu.get(MENU_BACKGROUND_ID);
+    	texturasMenu[MENU_MUNDO_MATE_ID] = texturePackLibraryMenu.get(MENU_MUNDO_MATE_ID);
+    	texturasMenu[MENU_MUNDO_LENGUA_ID] = texturePackLibraryMenu.get(MENU_MUNDO_LENGUA_ID);
+    	texturasMenu[MENU_MUNDO_NATU_ID] = texturePackLibraryMenu.get(MENU_MUNDO_NATU_ID);
+    	texturasMenu[MENU_SETTINGS_ID] = texturePackLibraryMenu.get(MENU_SETTINGS_ID);
+    	texturasMenu[MENU_REGISTRO_ID] = texturePackLibraryMenu.get(MENU_REGISTRO_ID);
+    	texturasMenu[MENU_INFO_ID] = texturePackLibraryMenu.get(MENU_INFO_ID);
+    	texturasMenu[MENU_CREDITOS_ID] = texturePackLibraryMenu.get(MENU_CREDITOS_ID);
     	
-    	mAtlasWorldScene.load();
-    	
-   
-    }
-    
-    public void unloadWorldResources() {
-    	
-    	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!IMPORTATNE!!!!!!!!!!!!!!!!!!!! DESCARGAR RECURSOS
-    }
-    
-    
-    public void loadEvaluacionResources() {
-    	
-    }
-    
-    
-    public void unloadEvaluacionResources() {
-    	
-    }
-    
-    
-    //-----------------------------------------------------
-    //PRIVATE METHODS
-    //-----------------------------------------------------
-    private void loadMenuGraphics() {
-    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
-    	mAtlasMenuScene = new BitmapTextureAtlas(actividad.getTextureManager(),192, 64, TextureOptions.BILINEAR);
-    	
-    	texturaMundo1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasMenuScene, actividad, "mundo1.png", 0, 0);  //64x64
-    	texturaMundo2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasMenuScene, actividad, "mundo2.png", 64, 0);  //64x64
-    	texturaMundo3 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasMenuScene, actividad, "mundo3.png", 128, 0);  //64x64
-    	
-    	mAtlasMenuScene.load();
-    }
-    
-    private void loadMenuFonts() {
+    	//--------------------------------------------------
+    	//LOAD FONTS
+    	//--------------------------------------------------
     	FontFactory.setAssetBasePath("fuentes/");  //Indicamos donde se encuentran
     	final ITexture fontTextureMenu = new BitmapTextureAtlas(actividad.getTextureManager(),
     			256,256,TextureOptions.BILINEAR);  //Textura en donde cargaremos fuente
     	fuenteMenu = FontFactory.createFromAsset(actividad.getFontManager(), fontTextureMenu,
     				actividad.getAssets(), "Droid.ttf", 40, true, Color.WHITE_ABGR_PACKED_INT); //Definimos fuente
     	fuenteMenu.load();  //La cargamos
+    	
+    	//--------------------------------------------------
+    	//LOAD AUDIO
+    	//--------------------------------------------------
+    
     }
     
-    private void loadMenuAudio() {
+    public void unloadMenuResources() {
+    	texturePackMenu.unloadTexture();
+    	texturePackLibraryMenu = null;
+    	for (int i=0 ; i<texturasMenu.length ; i++) {
+    		texturasMenu[i]= null; 
+    	}
+    	fuenteMenu.unload();
+    	fuenteMenu = null;
+    	
+    }
+    
+    public void loadWorldResources() {
+    	
+    	//--------------------------------------------------
+    	//LOAD GRAPHICS
+    	//--------------------------------------------------
+    	
+    	//Parseo el fichero
+    	try {
+    		  texturePackWorld = new TexturePackLoader(actividad.getTextureManager(), "gfx/world/")
+    		      	.loadFromAsset(actividad.getAssets(), "textura_world.xml");
+    		  texturePackWorld.loadTexture();
+    		  texturePackLibraryWorld = texturePackWorld.getTexturePackTextureRegionLibrary();
+    	} catch (final TexturePackParseException e)  {
+    	      Debug.e(e);
+    	}
 
+    	texturasWorld = new ITextureRegion[3];
+    	texturasWorld[WORLD_BARCO_ID] = texturePackLibraryWorld.get(WORLD_BARCO_ID);
+    	texturasWorld[WORLD_NIVEL_ID] = texturePackLibraryWorld.get(WORLD_NIVEL_ID);
+    	texturasWorld[WORLD_WORLD_ID] = texturePackLibraryWorld.get(WORLD_WORLD_ID);
     	
-    	//Cargamos la musica
+    	//--------------------------------------------------
+    	//LOAD FONTS
+    	//--------------------------------------------------
+    	
+    	
+    	//--------------------------------------------------
+    	//LOAD AUDIO
+    	//--------------------------------------------------
     	
     }
     
+    public void unloadWorldResources() {
+    	texturePackWorld.unloadTexture();
+    	texturePackLibraryWorld = null;
+    	for (int i=0 ; i<texturasWorld.length ; i++) {
+    		texturasWorld[i]= null; 
+    	}
+    }
     
-	private void loadGameGraphics() {
-		
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
-    	mAtlasGameScene = new BitmapTextureAtlas(actividad.getTextureManager(),1024, 1024, TextureOptions.BILINEAR);
-		
-    	texturaLoroGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "loro.png", 720, 0,2,1);  //300x230
-    	texturaBotonAtrasGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "botonAtras.png", 720, 230,1,2);  //165x110
-    	texturaBotonMenuGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "botonMenu.png", 720, 340,1,2);  //165x110
-    	texturaBotonJugarGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "botonJugar.png", 519, 480,1,2);  //165x110
-    	texturaBotonSiguienteGame = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mAtlasGameScene, actividad, "botonSiguiente.png", 519, 590,1,2);  //165x110
-    	texturaIndicadorGame = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasGameScene, actividad, "indicador.png", 519,700);  //165x91
-    	texturaBackgroundGame = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasGameScene, actividad, "background.png", 0, 0);  //720x480
-    	texturaContenidoGame = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasGameScene, actividad, "contenido.png", 0, 480);  //519x286
-    	texturaTituloGame = BitmapTextureAtlasTextureRegionFactory.createFromAsset(mAtlasGameScene, actividad, "titulo.png", 0, 766);  //519x91
-	
-    	mAtlasGameScene.load();
+    public void loadTeoriaResources() {
     	
-	}
-	
-	
-	private void loadGameFonts() {
+    	//--------------------------------------------------
+    	//LOAD GRAPHICS
+    	//--------------------------------------------------
+    	
+    	//Parseo el fichero
+    	try {
+    		  texturePackTeoria = new TexturePackLoader(actividad.getTextureManager(), "gfx/teoria/")
+    		      	.loadFromAsset(actividad.getAssets(), "textura_teoria.xml");
+    		  texturePackTeoria.loadTexture();
+    		  texturePackLibraryTeoria = texturePackTeoria.getTexturePackTextureRegionLibrary();
+    	} catch (final TexturePackParseException e)  {
+    	      Debug.e(e);
+    	}
+    			
+		
+    	texturasTeoria = new ITextureRegion[9];
+    	texturasTiledTeoria = new ITiledTextureRegion[9];
+    	
+    	//Animados
+    	texturasTiledTeoria[TEORIA_LORO_ID] = texturePackLibraryTeoria.get(TEORIA_LORO_ID, 2, 1);
+    	texturasTiledTeoria[TEORIA_BOTONATRAS_ID] = texturePackLibraryTeoria.get(TEORIA_BOTONATRAS_ID, 1, 2);
+    	texturasTiledTeoria[TEORIA_BOTONMENU_ID] = texturePackLibraryTeoria.get(TEORIA_BOTONMENU_ID, 1, 2);
+    	texturasTiledTeoria[TEORIA_BOTONJUGAR_ID] = texturePackLibraryTeoria.get(TEORIA_BOTONJUGAR_ID, 1, 2);
+    	texturasTiledTeoria[TEORIA_BOTONSIGUIENTE_ID] = texturePackLibraryTeoria.get(TEORIA_BOTONSIGUIENTE_ID, 1, 2);
+
+    	//Estaticos
+    	texturasTeoria[TEORIA_INDICADOR_ID] = texturePackLibraryTeoria.get(TEORIA_INDICADOR_ID);
+    	texturasTeoria[TEORIA_BACKGROUND_ID] = texturePackLibraryTeoria.get(TEORIA_BACKGROUND_ID);
+    	texturasTeoria[TEORIA_CONTENIDO_ID] = texturePackLibraryTeoria.get(TEORIA_CONTENIDO_ID);
+    	texturasTeoria[TEORIA_TITULO_ID] = texturePackLibraryTeoria.get(TEORIA_TITULO_ID);
+    	
+    	
+    	//--------------------------------------------------
+    	//LOAD FONTS
+    	//--------------------------------------------------
 		FontFactory.setAssetBasePath("fuentes/");  //Indicamos donde se encuentran
 		//Cargamos la fuente del game
     	final ITexture fontTextureGame = new BitmapTextureAtlas(actividad.getTextureManager(),
@@ -224,10 +257,10 @@ public class ResourcesManager{
     	fuenteGame = FontFactory.createFromAsset(actividad.getFontManager(), fontTextureGame,
     				actividad.getAssets(), "Droid.ttf", 25, true, Color.WHITE_ABGR_PACKED_INT); //Definimos fuente
     	fuenteGame.load();  //La cargamos
-	}
-
-    
-    private void loadGameAudio() {
+    	
+    	//--------------------------------------------------
+    	//LOAD AUDIO
+    	//--------------------------------------------------
     	//Cargamos los sonidos
     	try {
     		sonidoSaltar = SoundFactory.createSoundFromAsset(actividad.getEngine().getSoundManager(), 
@@ -249,8 +282,40 @@ public class ResourcesManager{
     	} catch (IOException e) {
     		e.printStackTrace();
     	}	
-	}
+    }
     
+    
+    public void unloadTeoriaResources() {
+    	texturePackTeoria.unloadTexture();
+    	texturePackLibraryTeoria = null;
+    	for (int i=0 ; i<texturasTeoria.length ; i++) {
+    		texturasTeoria[i]= null; 
+    	}
+  
+    	
+    	fuenteGame.unload();
+    	fuenteGame = null;
+ 
+    	sonidoCargar = null;
+    	sonidoSaltar = null;
+    	musica = null;
+    	
+    }
+    
+    
+    
+    
+    
+    public void loadEvaluacionResources() {
+    	
+    }
+    
+    
+    public void unloadEvaluacionResources() {
+    	
+    }
+    
+
     
     
     //Incia el manejador

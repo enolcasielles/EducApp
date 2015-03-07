@@ -8,6 +8,7 @@ import org.andengine.entity.sprite.Sprite;
 
 import android.util.Log;
 
+import com.enolcasielles.educados.ResourcesManager;
 import com.enolcasielles.educados.objetos.NivelObjeto;
 import com.enolcasielles.educados.scenes.BaseScene;
 
@@ -33,7 +34,7 @@ public class Jugador extends Sprite {
 	 * @param scene La escena en la que lo incluira
 	 */
 	public Jugador(NivelObjeto posicionActual, BaseScene scene) {
-		super(0.0f, 0.0f, scene.resourcesManager.texturaJugador, scene.vbom);
+		super(0.0f, 0.0f, scene.resourcesManager.texturasWorld[ResourcesManager.WORLD_BARCO_ID], scene.vbom);
 		this.setPosition(posicionActual.getEntidad().getX(), posicionActual.getEntidad().getY());
 		this.posicionActual = posicionActual;
 		scene.camera.setChaseEntity(this);   //Indico a la camara que ha de seguir al jugador
@@ -58,6 +59,10 @@ public class Jugador extends Sprite {
 	public void mover(NivelObjeto o) {
 		//Apunto la nueva posicion
 		posicionActual = o;
-		this.registerEntityModifier(new MoveModifier(1.5f, this.getX(), this.getY(), o.getEntidad().getX(), o.getEntidad().getY()));
+		this.registerEntityModifier(new MoveModifier(1.5f, this.getX(),  o.getEntidad().getX(), this.getY(), o.getEntidad().getY()));
+		Log.i("Jugador", "Posicion X inicial jugador: " + this.getX());
+		Log.i("Jugador", "Posicion Y inicial jugador: " + this.getY());
+		Log.i("Jugador", "Posicion X final jugador: " + o.getEntidad().getX());
+		Log.i("Jugador", "Posicion Y final jugador: " + o.getEntidad().getY());
 	}
 }

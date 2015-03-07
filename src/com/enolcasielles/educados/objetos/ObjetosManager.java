@@ -2,15 +2,20 @@ package com.enolcasielles.educados.objetos;
 
 import java.util.ArrayList;
 
+import org.andengine.entity.Entity;
+import org.andengine.entity.IEntity;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.debug.Debug;
-import org.andengine.util.texturepack.TexturePack;
-import org.andengine.util.texturepack.TexturePackLoader;
-import org.andengine.util.texturepack.TexturePackTextureRegionLibrary;
-import org.andengine.util.texturepack.exception.TexturePackParseException;
+
+import android.R.integer;
+import android.util.Log;
 
 import com.enolcasielles.educados.scenes.BaseScene;
 
@@ -26,26 +31,34 @@ import com.enolcasielles.educados.scenes.BaseScene;
  */
 public class ObjetosManager {
 	
-	private ArrayList<Objeto> contenedor;
-	private int iterador;
+	private ArrayList<ArrayList<Objeto>> contenedorObjetos;
+	private ArrayList<Objeto> objetosPagina;
+	private int iterador, iteradorPaginas, maxPagina;
+	private IEntity paginaActual;
 	private Objeto objetoActual;
 	private BaseScene scene;
-	private boolean puedeActualizar;
+	private boolean puedeActualizar, teoriaFinalizada;
 	
 	private TexturePackTextureRegionLibrary texturePackLibrary;
-	private TexturePackLoader texturePack;
-	private ITextureRegion[] texturas;
+	private TexturePack texturePack;
+	private static ArrayList<ITextureRegion> texturas;
+	
+	private OnLoadFinished olf;
 	
 	
 	/**
 	 * Contructor
 	 * @param scene La escena que tendra que manejar
 	 */
-	public ObjetosManager(BaseScene scene) {
+	public ObjetosManager(BaseScene scene, OnLoadFinished olf) {
 		this.scene = scene;
-		this.contenedor = new ArrayList<Objeto>();
+		this.contenedorObjetos = new ArrayList<ArrayList<Objeto>>();
 		iterador = 0;
+		iteradorPaginas = 0;
+		maxPagina = 0;
 		puedeActualizar = false;
+		teoriaFinalizada = false;
+		this.olf = olf;
 	}
 	
 	
@@ -55,7 +68,20 @@ public class ObjetosManager {
 	 */
 	public void addObjeto(Objeto o) {
 		o.getEntidad().setVisible(false);   //De momento la entidad no sera visible
-		contenedor.add(o);
+		contenedorObjetos.get(contenedorObjetos.size()-1).add(o);
+	}
+	
+	
+	/**
+	 * Añade una nueva pagina
+	 * @return  La entidad que representa esta pagina
+	 */
+	public IEntity addPagina() {
+		ArrayList<Objeto> tmp = new ArrayList<Objeto>();
+		contenedorObjetos.add(tmp);
+		IEntity pagina = new Entity();
+		pagina.setVisible(false);  //En principio no sera visible
+		return pagina;
 	}
 	
 	
@@ -63,11 +89,55 @@ public class ObjetosManager {
 	 * Apunta el objeto actual al primero del contenedor
 	 */
 	public void init() {
-		objetoActual = contenedor.get(iterador);  //Marco el primero objeto como el actual
+		objetosPagina = contenedorObjetos.get(iteradorPaginas);
+		objetoActual = objetosPagina.get(iterador);  //Marco el primero objeto como el actual
+		paginaActual = objetoActual.getEntidad().getParent();
+		paginaActual.setVisible(true);
 		objetoActual.getEntidad().setVisible(true);  //Hago el primero visible
 		puedeActualizar = true;
 	}
 	
+	
+	
+	/**
+	 * Carga las texturas correspondientes al nivel
+	 * @param texturasId Un String con los identificadores de las texturas separados por comas
+	 */
+	public void loadTexturas(String texturasString, String ficheroTextura) {
+		//Transformo el String en un array
+		String[] texturasId = texturasString.split(",");
+		
+		ObjetosManager.texturas = new ArrayList<ITextureRegion>();
+	    
+		//Parseo el fichero
+		try 
+	    {
+	        texturePack = new TexturePackLoader(scene.resourcesManager.actividad.getTextureManager(), "gfx/imagenes/")
+	        	.loadFromAsset(scene.resourcesManager.actividad.getAssets(), ficheroTextura);
+	        texturePack.loadTexture();
+	        texturePackLibrary = texturePack.getTexturePackTextureRegionLibrary();
+	    } 
+	    catch (final TexturePackParseException e) 
+	    {
+	        Debug.e(e);
+	    }
+		
+		//Finalmente obtengo las texturas
+		for (int i=0 ; i<texturasId.length ; i++) {
+			ITextureRegion tmp = texturePackLibrary.get(Integer.parseInt(texturasId[i]));
+			ObjetosManager.texturas.add(tmp);  
+		}
+	}
+	
+	
+	/**
+	 * Recupera una textura a partir de su id, que sera a su vez la posicion en el array
+	 * @param id  El id de la textura a recuperar. Sera su posicion en el array
+	 * @return  La textura correspondiente
+	 */
+	public static ITextureRegion getTextureRegion(int id) {
+		return ObjetosManager.texturas.get(id);
+	}
 	
 	
 	/**
@@ -76,84 +146,80 @@ public class ObjetosManager {
 	 * de ir llamando al metodo update del objeto que corresponda en cada momento
 	 */
 	public void update() {
-		if (puedeActualizar) {
+		if (puedeActualizar && teoriaFinalizada == false) {
 			//Actualizo el objeto y devuelve si se ha de pasar al siguiente
-			if (objetoActual.update()) {
+			if (objetoActual.update()) {  //Si devuelve true sera que ha finalizado y puede pasar al siguiente
 				iterador++;
-				if(iterador < contenedor.size()) {
-					objetoActual = contenedor.get(iterador);
+				if(iterador < contenedorObjetos.get(iteradorPaginas).size()) {
+					objetoActual = contenedorObjetos.get(iteradorPaginas).get(iterador);
 					objetoActual.getEntidad().setVisible(true);   //Hago visible la nueva entidad
 				}
-				else puedeActualizar = false;  //Ya no hay mas objetos que actualizar
+				else { //Pagina finalizada
+					iterador=0;
+					puedeActualizar = false;  //Para esperar que el usuario de a siguiente
+					
+					//Compruebo que no fuese ya la ultima
+					if (iteradorPaginas >= contenedorObjetos.size()-1) {
+						teoriaFinalizada = true;
+						olf.teoriaFinalizada();
+					}
+					else { 
+						boolean primera = (iteradorPaginas == 0) ? true : false;
+						boolean ultima = (iteradorPaginas == contenedorObjetos.size()-1) ? true : false;
+						olf.paginaCargada(primera,ultima);
+					}
+					
+				}
 			}
 		}
 	}
 	
 	
+	
+	
 	/**
-	 * Devuelve el atlas en el que se debe almacenar las imagenes
-	 * @return El objeto que define el atlas
+	 * Metodo que se ha de llamar para pasar de pagina
 	 */
-	public static BitmapTextureAtlas getAtlas() {
-		return atlasImagenes;
+	public void aumentaPagina() {
+		iteradorPaginas++;  //Paso a la siguiente pagina
+		objetoActual = contenedorObjetos.get(iteradorPaginas).get(iterador);  //Actualizo el objeto actual
+		int paginaNum = iteradorPaginas+1;
+		int paginasTotales = contenedorObjetos.size();
+		olf.setIndicadorPagina("" + paginaNum + "/" + paginasTotales);
+		paginaActual.setVisible(false);
+		paginaActual = objetoActual.getEntidad().getParent();
+		paginaActual.setVisible(true);
+		puedeActualizar = true;
 	}
 	
 	
 	/**
-	 * Inicial el atlas en el que guardar las imagenes
+	 * 
 	 */
-	public void initAtlas(final int ancho, final int alto) {
-		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/imagenes/");
-		atlasImagenes = new BitmapTextureAtlas(scene.resourcesManager.actividad.getTextureManager(),ancho, alto, TextureOptions.BILINEAR);
-	}
-	
-	
-	
-	/**
-	 * Carga el atlas en memoria
-	 */
-	public void loadAtlas() throws NoAtlasSizeException{
-		if (atlasImagenes == null) throw new NoAtlasSizeException("No se ha iniciado el atlas");
-		atlasImagenes.load();
-	}
-	
-	
-	/**
-	 * Excepcion que se formara cuando se trate de iniciar este objeto sin haber definido previamente el tamaño del atlas 
-	 * que albergara las imagenes
-	 * @author Enol Casielles
-	 *
-	 */
-	public class NoAtlasSizeException extends Exception {
-		public NoAtlasSizeException(String msg) {
-			super(msg);
+	public void disminuyePagina() {
+		if (iteradorPaginas > 0) {
+			iteradorPaginas--;
+			objetoActual = contenedorObjetos.get(iteradorPaginas).get(iterador);  //Actualizo el objeto actual
+			int paginaNum = iteradorPaginas+1;
+			int paginasTotales = contenedorObjetos.size();
+			olf.setIndicadorPagina("" + paginaNum + "/" + paginasTotales);
+			paginaActual.setVisible(false);
+			paginaActual = objetoActual.getEntidad().getParent();
+			paginaActual.setVisible(true);
+			puedeActualizar = true;
 		}
 	}
 	
 	
 	
 	
-	/*
-	 * Metodo privado que 
-	 */
-	private void loadGraphics()
-	{
-	    try 
-	    {
-	    	texturePack = new TexturePackLoader(scene.resourcesManager.actividad.getAssets(), scene.resourcesManager.actividad.getTextureManager());
-	        texturePack.loadTexture();
-	        texturePackLibrary = texturePack.getTexturePackTextureRegionLibrary();
-	    } 
-	    catch (final TexturePackParseException e) 
-	    {
-	        Debug.e(e);
-	    }
-	    
-	    textureRegion_0 = texturePackLibrary.get(OurTexture.SPRITE0_ID);
-	    textureRegion_1 = texturePackLibrary.get(OurTexture.SPRITE1_ID);
-	    textureRegion_2 = texturePackLibrary.get(OurTexture.SPRITE2_ID);
-	    textureRegion_3 = texturePackLibrary.get(OurTexture.SPRITE3_ID);
+	public interface OnLoadFinished {
+		public abstract void paginaCargada(boolean primera, boolean ultima);
+		public abstract void teoriaFinalizada();
+		public abstract void setTitle(String title);
+		public abstract void setIndicadorPagina(String indicador);
 	}
+
 	
 
 }

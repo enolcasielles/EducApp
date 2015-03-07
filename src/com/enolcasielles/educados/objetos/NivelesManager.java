@@ -50,7 +50,7 @@ public class NivelesManager {
 		//Si es el objeto en el que se encuentra el jugador entro al nivel
 		if (jugador.getId() == objeto.getId()) {
 			scene.camera.setZoomFactor(1.0f);   //Devuelvo la camara a su zoom inicial
-			SceneManager.getInstance().worldScene_to_gameScene(objeto.getMundo(), jugador.getId());
+			SceneManager.getInstance().worldScene_to_teoriaScene(objeto.getMundo(), jugador.getId());
 		}
 		
 		//Si es el objeto anterior o siguiente muevo el jugador a su posicion

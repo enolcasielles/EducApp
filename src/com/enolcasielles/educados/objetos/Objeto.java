@@ -42,6 +42,7 @@ public abstract class Objeto {
 	protected final ResourcesManager rm;
 	protected final BaseScene scene;
 	private final Sprite continente;
+	protected boolean firstUpdate;
 	
 	
 	/**
@@ -56,6 +57,7 @@ public abstract class Objeto {
 		this.rm = scene.resourcesManager;
 		this.continente = continente;
 		this.scene = scene;
+		firstUpdate = true;
 		setAtributosComunes();
 		entidad = setEntidad();
 	}
@@ -124,5 +126,6 @@ public abstract class Objeto {
 		entidad.dispose();
 		entidad = null;
 	}
+	
 
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texture version="1" file="textura_world.png" type="bitmap" width="758" height="484" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+    <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker -->
+    <!-- $TexturePacker:SmartUpdate:aeeebcfadd4d396c435f9d8e7b31afd8:b50465eae96e675fd20fc02ee762c773:a48140dba2cf5c58c37b9df76fcf2c2e$ -->
+    <textureregion id="0" src="barco.png" x="724" y="36" width="16" height="16" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="16" srcheight="16"/>
+    <textureregion id="1" src="nivel.png" x="724" y="2" width="32" height="32" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="32" srcheight="32"/>
+    <textureregion id="2" src="world.png" x="2" y="2" width="720" height="480" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="720" srcheight="480"/>
+</texture>

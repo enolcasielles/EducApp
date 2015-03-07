@@ -26,21 +26,14 @@ public class ImagenObjeto extends Objeto{
 	//Atriburos
 	private final String TAG_ATRIBUTO_ANCHO = "ancho";
 	private final String TAG_ATRIBUTO_ALTO = "alto";
-	private final String TAG_ATRIBUTO_RUTA = "ruta";
-	private final String TAG_ATRIBUTO_XATLAS = "xAtlas";
-	private final String TAG_ATRIBUTO_YATLAS = "yAtlas";
+	private final String TAG_ATRIBUTO_TEXTURA = "textura";
 	private final String TAG_ATRIBUTO_TIEMPO = "tiempo";
-	
-	//Atlas y textura
-	private ITextureRegion textura;
 	
 	
 	//Tiempo durante el que se ha de mostrar y tiempo referencia sobre el que se cuenta
 	private int tiempo;
 	private long tiempoIni;
-	
-	//Variable que almacena si es la primera vez que se actualiza al objeto
-	private boolean firstUpdate;
+
 	
 	
 	/**
@@ -62,16 +55,12 @@ public class ImagenObjeto extends Objeto{
 		//Recupero ancho, alto y ruta de la imagen
 		int ancho = SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_ANCHO);
 		int alto = SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_ALTO);
-		int xAtlas =  SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_XATLAS);
-		int yAtlas =  SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_YATLAS);
-		String ruta = SAXUtils.getAttributeOrThrow(attributes,TAG_ATRIBUTO_RUTA);
+		int texturaId = SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_TEXTURA);
 		tiempo = SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_TIEMPO);
 		
-		//Creo la textura
-		textura = BitmapTextureAtlasTextureRegionFactory.createFromAsset(ObjetosManager.getAtlas(), rm.actividad, ruta, xAtlas, yAtlas);  
-		
 		//Finalmente creo la entidad
-		return new Sprite(x, y, ancho, alto, textura, scene.vbom);
+		Sprite sprt = new Sprite(x, y, ancho, alto, ObjetosManager.getTextureRegion(texturaId), scene.vbom);
+		return sprt;
 	}
 	
 	
@@ -87,11 +76,4 @@ public class ImagenObjeto extends Objeto{
 		return false;
 	}
 	
-	
-	
-	@Override
-	public void dispose() {
-		super.dispose();  //Llamo a super para liberar la entidad
-		textura = null;
-	}
 }

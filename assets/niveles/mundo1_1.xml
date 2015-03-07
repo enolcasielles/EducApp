@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<level width="1000" height="780" ancho-atlas="1024" alto-atlas="1024" rutas="prueba.png,prueba2.png"> 
+<level width="1000" height="780" texturas="0,1,2" paginas="3" titulo="Divisiones"> 
+  <pagina id="1">
 	<texto x="20" y="50" valor="Probando los objetos //nde  tipo texto" />
-	<imagen x="10" y="100" ancho="100" alto="100" ruta="1" xAtlas="0" yAtlas="0" tiempo="2000"/>
-	<imagen x="150" y="100" ancho="100" alto="100" ruta="1" xAtlas="100" yAtlas="0" tiempo="2000"/>
+	<imagen x="10" y="100" ancho="100" alto="100" textura="1" tiempo="2000"/>
+	<imagen x="150" y="100" ancho="100" alto="100" textura="0" tiempo="2000"/>
+  </pagina>
+  <pagina id="2">
+	<texto x="20" y="50" valor="Las dividiones se haran asi //nde  lerim lorem" />
+	<imagen x="50" y="150" ancho="100" alto="100" textura="0" tiempo="500"/>
+	<imagen x="300" y="150" ancho="100" alto="100" textura="1" tiempo="500"/>
+  </pagina>
+  <pagina id="3">
+	<texto x="20" y="50" valor="Probando los objetos //nde  tipo texto" />
+	<imagen x="10" y="100" ancho="100" alto="100" textura="1" tiempo="2000"/>
+	<imagen x="150" y="100" ancho="100" alto="100" textura="0" tiempo="2000"/>
+  </pagina>
+  <pagina id="4">
+	<texto x="20" y="50" valor="Las dividiones se haran asi //nde  lerim lorem" />
+	<imagen x="50" y="150" ancho="100" alto="100" textura="0" tiempo="500"/>
+	<imagen x="200" y="150" ancho="100" alto="100" textura="1" tiempo="500"/>
+	<imagen x="300" y="150" ancho="100" alto="100" textura="0" tiempo="500"/>
+  </pagina>
+  <pagina id="5">
+	<texto x="20" y="50" valor="Probando los objetos //nde  tipo texto" />
+	<imagen x="10" y="100" ancho="100" alto="100" textura="0" tiempo="2000"/>
+	<imagen x="150" y="100" ancho="100" alto="100" textura="1" tiempo="2000"/>
+  </pagina>
 </level>

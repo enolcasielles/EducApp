@@ -6,6 +6,7 @@ import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 
 import com.enolcasielles.educados.GameActivity;
+import com.enolcasielles.educados.ResourcesManager;
 import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
 import com.enolcasielles.educados.niveles.ParseadoMundoXML;
@@ -81,7 +82,7 @@ public class WorldScene extends BaseScene {
 		//----------------------------
 		private void iniatalizeVariables() {
 			//background = new Sprite(GameActivity.ANCHO_CAMARA/2, GameActivity.ALTO_CAMARA/2,GameActivity.ANCHO_CAMARA,GameActivity.ALTO_CAMARA, resourcesManager.texturaBackground, vbom);
-			background = new Sprite(0,0, resourcesManager.texturaBackground, vbom);
+			background = new Sprite(0,0, resourcesManager.texturasWorld[ResourcesManager.WORLD_WORLD_ID], vbom);
 			this.camera.setZoomFactor(2.0f);   //Hago zoom
 		}
 		
