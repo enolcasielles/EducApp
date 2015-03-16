@@ -31,7 +31,7 @@ import com.enolcasielles.educados.scenes.BaseScene;
  */
 public class ObjetosManager {
 	
-	private ArrayList<ArrayList<Objeto>> contenedorObjetos;
+	private ArrayList<Pagina> paginas;
 	private ArrayList<Objeto> objetosPagina;
 	private int iterador, iteradorPaginas, maxPagina;
 	private IEntity paginaActual;
@@ -52,7 +52,7 @@ public class ObjetosManager {
 	 */
 	public ObjetosManager(BaseScene scene, OnLoadFinished olf) {
 		this.scene = scene;
-		this.contenedorObjetos = new ArrayList<ArrayList<Objeto>>();
+		this.paginas = new ArrayList<Pagina>();
 		iterador = 0;
 		iteradorPaginas = 0;
 		maxPagina = 0;

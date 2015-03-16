@@ -118,6 +118,13 @@ public abstract class Objeto {
 	public abstract boolean update();
 	
 	
+	
+	/**
+	 * Metodo encargado de hacer visible el objeto 
+	 */
+	public abstract void show();
+	
+	
 	/**
 	 * Libera la carga de recursos de este objeto
 	 */
