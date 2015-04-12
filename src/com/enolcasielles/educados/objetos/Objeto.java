@@ -42,7 +42,13 @@ public abstract class Objeto {
 	protected final ResourcesManager rm;
 	protected final BaseScene scene;
 	private final Sprite continente;
-	protected boolean firstUpdate;
+	
+	
+	protected enum ESTADO {
+		PRIMERA,
+		YA_MOSTRADO
+	};
+	protected ESTADO estado;
 	
 	
 	/**
@@ -57,7 +63,7 @@ public abstract class Objeto {
 		this.rm = scene.resourcesManager;
 		this.continente = continente;
 		this.scene = scene;
-		firstUpdate = true;
+		this.estado = ESTADO.PRIMERA;
 		setAtributosComunes();
 		entidad = setEntidad();
 	}
@@ -120,9 +126,20 @@ public abstract class Objeto {
 	
 	
 	/**
-	 * Metodo encargado de hacer visible el objeto 
+	 * Metodo encargado de reseter al objeto para especificar como ha de ser actualizado
 	 */
-	public abstract void show();
+	public void reset() {
+		this.estado = ESTADO.PRIMERA;
+		this.entidad.setVisible(false);
+	}
+	
+	
+	/**
+	 * Hace vidible el objeto
+	 */
+	protected void show() {
+		entidad.setVisible(true);
+	}
 	
 	
 	/**

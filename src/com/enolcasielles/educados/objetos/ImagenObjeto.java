@@ -45,7 +45,6 @@ public class ImagenObjeto extends Objeto{
 	 */
 	public ImagenObjeto(final Attributes pAttributes,  BaseScene scene, Sprite contenido) {
 		super (pAttributes, scene, contenido);
-		this.firstUpdate = true;
 	}
 
 	
@@ -66,9 +65,10 @@ public class ImagenObjeto extends Objeto{
 	
 	@Override
 	public boolean update() {
-		if (firstUpdate) {  //Inicio el tiempo
+		if (estado == ESTADO.PRIMERA) {  //Inicio el tiempo
 			tiempoIni = System.currentTimeMillis();
-			firstUpdate = false;  //Para que las siguientes veces no entre aqui
+			this.show();
+			estado = ESTADO.YA_MOSTRADO;  //Para que las siguientes veces no entre aqui
 			return false;
 		}
 		//Comprobamos si ya ha pasado el tiempo necesario

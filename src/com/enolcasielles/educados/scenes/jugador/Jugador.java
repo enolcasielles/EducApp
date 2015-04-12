@@ -2,6 +2,7 @@ package com.enolcasielles.educados.scenes.jugador;
 
 import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.ZoomCamera;
+import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.MoveByModifier;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.sprite.Sprite;
@@ -26,7 +27,11 @@ public class Jugador extends Sprite {
 
 	private NivelObjeto posicionActual;	//La entidad en la que se encuentra el jugador
 	
-	
+	private enum ESTADO {
+		PARADO,
+		MOVIENDO
+	};
+	private ESTADO estado;
 	
 	/**
 	 * Construye el jugador en la posicion de la entidad que recibe y lo ata a la escena que recibe
@@ -39,6 +44,7 @@ public class Jugador extends Sprite {
 		this.posicionActual = posicionActual;
 		scene.camera.setChaseEntity(this);   //Indico a la camara que ha de seguir al jugador
 		scene.attachChild(this);
+		this.estado = ESTADO.PARADO;
 	}
 	
 	
@@ -53,13 +59,34 @@ public class Jugador extends Sprite {
 	
 	
 	/**
+	 * Devuelve el estado del jugador
+	 * @return  True si se esta moviendo, false si esta parado
+	 */
+	public boolean isMoviendo() {
+		return (estado == ESTADO.MOVIENDO);
+	}
+	
+	/**
 	 * Mueve el jugador a la posicion del objeto que se le pasa
 	 * @param o
 	 */
 	public void mover(NivelObjeto o) {
 		//Apunto la nueva posicion
 		posicionActual = o;
-		this.registerEntityModifier(new MoveModifier(1.5f, this.getX(),  o.getEntidad().getX(), this.getY(), o.getEntidad().getY()));
+		this.registerEntityModifier(new MoveModifier(1.5f, this.getX(),  o.getEntidad().getX(), this.getY(), o.getEntidad().getY()){
+			@Override
+			protected void onModifierStarted(IEntity pItem) {
+				// TODO Auto-generated method stub
+				super.onModifierStarted(pItem);
+				Jugador.this.estado = ESTADO.MOVIENDO;
+			}
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				// TODO Auto-generated method stub
+				super.onModifierFinished(pItem);
+				Jugador.this.estado = ESTADO.PARADO;
+			}
+		});
 		Log.i("Jugador", "Posicion X inicial jugador: " + this.getX());
 		Log.i("Jugador", "Posicion Y inicial jugador: " + this.getY());
 		Log.i("Jugador", "Posicion X final jugador: " + o.getEntidad().getX());

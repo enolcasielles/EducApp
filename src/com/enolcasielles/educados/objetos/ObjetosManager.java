@@ -32,10 +32,8 @@ import com.enolcasielles.educados.scenes.BaseScene;
 public class ObjetosManager {
 	
 	private ArrayList<Pagina> paginas;
-	private ArrayList<Objeto> objetosPagina;
-	private int iterador, iteradorPaginas, maxPagina;
-	private IEntity paginaActual;
-	private Objeto objetoActual;
+	private int iterador;
+	private Pagina paginaActual;
 	private BaseScene scene;
 	private boolean puedeActualizar, teoriaFinalizada;
 	
@@ -51,11 +49,9 @@ public class ObjetosManager {
 	 * @param scene La escena que tendra que manejar
 	 */
 	public ObjetosManager(BaseScene scene, OnLoadFinished olf) {
-		this.scene = scene;
-		this.paginas = new ArrayList<Pagina>();
-		iterador = 0;
-		iteradorPaginas = 0;
-		maxPagina = 0;
+		this.scene = scene;  //Almaceno la escena
+		this.paginas = new ArrayList<Pagina>();  //Inicio el contenedor de paginas
+		iterador = -1;   //Apunto al primer elemento del contenedor, primera pagina
 		puedeActualizar = false;
 		teoriaFinalizada = false;
 		this.olf = olf;
@@ -67,8 +63,7 @@ public class ObjetosManager {
 	 * @param o El objeto a añadir
 	 */
 	public void addObjeto(Objeto o) {
-		o.getEntidad().setVisible(false);   //De momento la entidad no sera visible
-		contenedorObjetos.get(contenedorObjetos.size()-1).add(o);
+		paginas.get(iterador).addObjeto(o);
 	}
 	
 	
@@ -77,11 +72,10 @@ public class ObjetosManager {
 	 * @return  La entidad que representa esta pagina
 	 */
 	public IEntity addPagina() {
-		ArrayList<Objeto> tmp = new ArrayList<Objeto>();
-		contenedorObjetos.add(tmp);
-		IEntity pagina = new Entity();
-		pagina.setVisible(false);  //En principio no sera visible
-		return pagina;
+		Pagina p = new Pagina(scene);
+		paginas.add(p);  //Añado un nueva pagina
+		iterador++;
+		return p.getEntidad();
 	}
 	
 	
@@ -89,14 +83,43 @@ public class ObjetosManager {
 	 * Apunta el objeto actual al primero del contenedor
 	 */
 	public void init() {
-		objetosPagina = contenedorObjetos.get(iteradorPaginas);
-		objetoActual = objetosPagina.get(iterador);  //Marco el primero objeto como el actual
-		paginaActual = objetoActual.getEntidad().getParent();
-		paginaActual.setVisible(true);
-		objetoActual.getEntidad().setVisible(true);  //Hago el primero visible
+		iterador=0;
+		paginaActual = paginas.get(iterador);    //Inicio la pagina actual
+		paginaActual.show();					 
+		puedeActualizar = true;   				 //Indico al update que puede actualiza
+		olf.setIndicadorPagina("" + (iterador+1) + "/" + paginas.size());
+	}
+	
+	
+	
+	
+	/**
+	 * Aumenta la pagina 
+	 */
+	public void aumentaPagina() {
+		iterador++;
+		cambiarPaginaA(iterador);
 		puedeActualizar = true;
 	}
 	
+	
+	
+	/**
+	 * Disminuye la pagina 
+	 */
+	public void disminuyePagina() {
+		iterador--;
+		cambiarPaginaA(iterador);
+		puedeActualizar = true;
+	}
+	
+	
+	private void cambiarPaginaA(int page) {
+		paginaActual.hide();
+		paginaActual = paginas.get(page);
+		olf.setIndicadorPagina("" + (iterador+1) + "/" + paginas.size());
+		paginaActual.show();
+	}
 	
 	
 	/**
@@ -104,8 +127,8 @@ public class ObjetosManager {
 	 * @param texturasId Un String con los identificadores de las texturas separados por comas
 	 */
 	public void loadTexturas(String texturasString, String ficheroTextura) {
-		//Transformo el String en un array
-		String[] texturasId = texturasString.split(",");
+		//Recupero el numero de texturas
+		int numTexturas = Integer.parseInt(texturasString);
 		
 		ObjetosManager.texturas = new ArrayList<ITextureRegion>();
 	    
@@ -123,8 +146,9 @@ public class ObjetosManager {
 	    }
 		
 		//Finalmente obtengo las texturas
-		for (int i=0 ; i<texturasId.length ; i++) {
-			ITextureRegion tmp = texturePackLibrary.get(Integer.parseInt(texturasId[i]));
+		for (int i=0 ; i<numTexturas ; i++) {
+			ITextureRegion tmp = texturePackLibrary.get(i);
+			
 			ObjetosManager.texturas.add(tmp);  
 		}
 	}
@@ -146,69 +170,18 @@ public class ObjetosManager {
 	 * de ir llamando al metodo update del objeto que corresponda en cada momento
 	 */
 	public void update() {
-		if (puedeActualizar && teoriaFinalizada == false) {
-			//Actualizo el objeto y devuelve si se ha de pasar al siguiente
-			if (objetoActual.update()) {  //Si devuelve true sera que ha finalizado y puede pasar al siguiente
-				iterador++;
-				if(iterador < contenedorObjetos.get(iteradorPaginas).size()) {
-					objetoActual = contenedorObjetos.get(iteradorPaginas).get(iterador);
-					objetoActual.getEntidad().setVisible(true);   //Hago visible la nueva entidad
-				}
-				else { //Pagina finalizada
-					iterador=0;
-					puedeActualizar = false;  //Para esperar que el usuario de a siguiente
-					
-					//Compruebo que no fuese ya la ultima
-					if (iteradorPaginas >= contenedorObjetos.size()-1) {
-						teoriaFinalizada = true;
-						olf.teoriaFinalizada();
-					}
-					else { 
-						boolean primera = (iteradorPaginas == 0) ? true : false;
-						boolean ultima = (iteradorPaginas == contenedorObjetos.size()-1) ? true : false;
-						olf.paginaCargada(primera,ultima);
-					}
-					
-				}
+		if (puedeActualizar) {
+			if(paginaActual.update()) {   //La pagina ha finalizado
+				boolean primera = iterador == 0;
+				boolean ultima = iterador==paginas.size()-1;
+				if (ultima) olf.teoriaFinalizada();
+				olf.paginaCargada(primera, ultima);
+				puedeActualizar = false;
 			}
 		}
 	}
 	
-	
-	
-	
-	/**
-	 * Metodo que se ha de llamar para pasar de pagina
-	 */
-	public void aumentaPagina() {
-		iteradorPaginas++;  //Paso a la siguiente pagina
-		objetoActual = contenedorObjetos.get(iteradorPaginas).get(iterador);  //Actualizo el objeto actual
-		int paginaNum = iteradorPaginas+1;
-		int paginasTotales = contenedorObjetos.size();
-		olf.setIndicadorPagina("" + paginaNum + "/" + paginasTotales);
-		paginaActual.setVisible(false);
-		paginaActual = objetoActual.getEntidad().getParent();
-		paginaActual.setVisible(true);
-		puedeActualizar = true;
-	}
-	
-	
-	/**
-	 * 
-	 */
-	public void disminuyePagina() {
-		if (iteradorPaginas > 0) {
-			iteradorPaginas--;
-			objetoActual = contenedorObjetos.get(iteradorPaginas).get(iterador);  //Actualizo el objeto actual
-			int paginaNum = iteradorPaginas+1;
-			int paginasTotales = contenedorObjetos.size();
-			olf.setIndicadorPagina("" + paginaNum + "/" + paginasTotales);
-			paginaActual.setVisible(false);
-			paginaActual = objetoActual.getEntidad().getParent();
-			paginaActual.setVisible(true);
-			puedeActualizar = true;
-		}
-	}
+
 	
 	
 	

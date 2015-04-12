@@ -14,6 +14,7 @@ import com.enolcasielles.educados.niveles.InfoNiveles;
 import com.enolcasielles.educados.niveles.ParseadorNivelXML;
 import com.enolcasielles.educados.objetos.ObjetosManager;
 import com.enolcasielles.educados.objetos.ObjetosManager.OnLoadFinished;
+import com.enolcasielles.educados.utiles.SpeechAnimatedSprite;
 
 
 /**
@@ -91,7 +92,8 @@ public class TeoriaScene extends BaseScene {
     	private static int nivel;
     	
     	private Sprite background, titulo, contenido, indicador;
-    	private AnimatedSprite loro, botonAtras, botonMenu, botonEvaluacion, botonSiguiente;
+    	private AnimatedSprite botonAtras, botonMenu, botonEvaluacion, botonSiguiente;
+    	private SpeechAnimatedSprite loro;
     	
     	private boolean puedeAvanzar, puedeRetroceder, puedeEvaluar;
     	
@@ -225,9 +227,8 @@ public class TeoriaScene extends BaseScene {
 				}
 			};
 			botonSiguiente.setVisible(false);
-			loro = new AnimatedSprite(LORO_X, LORO_Y,LORO_ANCHO,LORO_ALTO,
+			loro = new SpeechAnimatedSprite(activity, LORO_X, LORO_Y,this,
 					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_LORO_ID], vbom);
-			loro.animate(200);
 			background = new Sprite(0, 0, resourcesManager.texturasTeoria[ResourcesManager.TEORIA_BACKGROUND_ID], vbom);
 			contenido = new Sprite(CONTENIDO_X, CONTENIDO_Y,CONTENIDO_ANCHO,CONTENIDO_ALTO, resourcesManager.texturasTeoria[ResourcesManager.TEORIA_CONTENIDO_ID],vbom);
 			titulo = new Sprite(TITULO_X, TITULO_Y, TITULO_ANCHO, TITULO_ALTO, resourcesManager.texturasTeoria[ResourcesManager.TEORIA_TITULO_ID], vbom);
@@ -308,6 +309,15 @@ public class TeoriaScene extends BaseScene {
 			return TeoriaScene.mundo;
 		}
 		
+		
+		
+		/**
+		 * Indica al loro que hable el texto que se le pasa
+		 * @param text  El texto que ha de decir
+		 */
+		public void speakLoro(String text) {
+			loro.speakText(text);
+		}
 		
 		
 }

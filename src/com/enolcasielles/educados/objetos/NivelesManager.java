@@ -47,6 +47,8 @@ public class NivelesManager {
 	 */
 	public void onTouchIn(NivelObjeto objeto) {
 		
+		if (jugador.isMoviendo()) return;  //Impedimos que mientras se este moviendo se cambie el destino
+		
 		//Si es el objeto en el que se encuentra el jugador entro al nivel
 		if (jugador.getId() == objeto.getId()) {
 			scene.camera.setZoomFactor(1.0f);   //Devuelvo la camara a su zoom inicial

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<texture version="1" file="textura_1_1.png" type="bitmap" width="138" height="104" pixelformat="RGBA_4444" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+<texture version="1" file="textura_1_1.png" type="bitmap" width="276" height="453" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
     <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker -->
-    <!-- $TexturePacker:SmartUpdate:2ce8182a73b9801c4f26de3fa786c89e:b44f3a45d8e3cb83222a317848c9ad24:2516f844bb9c6109342ee83cad5bf36a$ -->
-    <textureregion id="0" src="barco.png" x="104" y="36" width="16" height="16" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="16" srcheight="16"/>
-    <textureregion id="1" src="nivel.png" x="104" y="2" width="32" height="32" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="32" srcheight="32"/>
-    <textureregion id="2" src="prueba.png" x="2" y="2" width="100" height="100" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="100" srcheight="100"/>
+    <!-- $TexturePacker:SmartUpdate:767fa7f355212f8dd9daf1fe7e24fc71:ff00acd4146eb8bd9860e0e1cbff1bcd:2516f844bb9c6109342ee83cad5bf36a$ -->
+    <textureregion id="0" src="1.png" x="2" y="2" width="232" height="160" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="232" srcheight="160"/>
+    <textureregion id="1" src="2.png" x="2" y="164" width="258" height="55" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="258" srcheight="55"/>
+    <textureregion id="2" src="3.png" x="2" y="221" width="258" height="66" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="258" srcheight="66"/>
+    <textureregion id="3" src="4.png" x="2" y="289" width="272" height="162" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="272" srcheight="162"/>
 </texture>

@@ -22,15 +22,27 @@ public class Pagina {
 	private ArrayList<Objeto> objetos;   //Objetos que se añadiran a la pagina
 	private Objeto objetoActual;    //Objeto que se esta controlando en cada momento
 	private int iterador;           //Variable que almacena el elemento del contenedor
-	private ArrayList<CallbackPaginaEstado> oyentes;
 	
 	
+	
+	public enum ESTADO {
+		PRIMERA,
+		YA_MOSTRADA
+	}
+	private ESTADO estado;
 	
 	
 	public Pagina(BaseScene scene) {
-		// TODO Auto-generated constructor stub
+		this.estado = ESTADO.PRIMERA;
+		objetos = new ArrayList<Objeto>();
+		this.entidad = new Entity();
+		entidad.setVisible(false);
 	}
 	
+	
+	public void addObjeto(Objeto o) {
+		objetos.add(o);
+	}
 	
 	/**
 	 * Activa esta pagina como visible
@@ -39,39 +51,51 @@ public class Pagina {
 		entidad.setVisible(true);   //Hago visible la capa
 		iterador = 0;
 		objetoActual = objetos.get(iterador);    //Apunto al primer objeto
+		if (estado == ESTADO.PRIMERA) {
+			for (Objeto o : objetos) o.reset();  //Si hay que mostrarla dinamicamente preparo los objetos
+		}
 	}
 	
+	
+	/**
+	 * Hace invisible la pagina
+	 */
+	public void hide() {
+		entidad.setVisible(false);
+	}
 	
 	/**
 	 * Se encarga de actualizar todos los objetos del contendeor.
 	 * Esta funcion ha de ser llamada desde el update de la escena. Sera la que se encargue
 	 * de ir llamando al metodo update del objeto que corresponda en cada momento
+	 * @return true si la pagina ha finalizado de cargar, false si aun no finaliza
 	 */
-	public void update() {
+	public boolean update() {
+			//Si la pagina ya ha sido mostrada devuelvo true
+			if (estado == ESTADO.YA_MOSTRADA) return true;
 			//Actualizo el objeto y devuelve si se ha de pasar al siguiente
 			if (objetoActual.update()) {  //Si devuelve true sera que ha finalizado y puede pasar al siguiente
 				iterador++;
 				if (iterador >= objetos.size()) {  //Todos los objetos han sido actualizados
-					//Aviso a los oyentes de que ha sido finalizada
-					for (CallbackPaginaEstado oyente : oyentes) {
-						oyente.paginaFinalizada();
-					}
-					return;   //Me salogo del metodo para evitar apuntar a un objeto no existente
+					this.estado = ESTADO.YA_MOSTRADA;  //La proxima vez que se muestre no sera la primera vez
+					return true;   //Me salogo del metodo para evitar apuntar a un objeto no existente
 				}
 				objetoActual = objetos.get(iterador);
-				objetoActual.show();
 			}
+			return false;
 	}
 	
 	
 	
-	public interface CallbackPaginaEstado {
-		/**
-		 * Se llamara cuando la pagina haya sido finalizada de cargar
-		 */
-		public abstract void paginaFinalizada();
+	//-------------------------------------------
+	//	GETTERS AND SETTERS
+	//-------------------------------------------
+	
+	public Entity getEntidad() {
+		return entidad;
 	}
-
+	
+	
 
 	
 

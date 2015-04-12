@@ -1,16 +1,18 @@
 package com.enolcasielles.educados.scenes;
 
+import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.AlphaModifier;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 
-import com.enolcasielles.educados.GameActivity;
+import android.provider.SyncStateContract.Constants;
+
 import com.enolcasielles.educados.ResourcesManager;
 import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
+import com.enolcasielles.educados.menus.BaseMenu;
 import com.enolcasielles.educados.niveles.InfoNiveles;
 
 public class MainMenuScene extends BaseScene {
@@ -66,6 +68,7 @@ public class MainMenuScene extends BaseScene {
 		private Sprite botonMundoMate, botonMundoLengua, botonMundoNatu, botonAjustes, botonRegistro, 
 					botonInfo, botonCreditos, background;
    
+		private BaseMenu ventanaAjustes;
         
         // ===========================================================
         // Methods for Superclass
@@ -166,6 +169,7 @@ public class MainMenuScene extends BaseScene {
 					}
 					if(pSceneTouchEvent.isActionUp()) {
 						this.setScale(1.0f);
+						ventanaAjustes.show();
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
@@ -179,6 +183,7 @@ public class MainMenuScene extends BaseScene {
 					}
 					if(pSceneTouchEvent.isActionUp()) {
 						this.setScale(1.0f);
+						ventanaAjustes.show();
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
@@ -192,6 +197,7 @@ public class MainMenuScene extends BaseScene {
 					}
 					if(pSceneTouchEvent.isActionUp()) {
 						this.setScale(1.0f);
+						ventanaAjustes.show();
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
@@ -205,13 +211,14 @@ public class MainMenuScene extends BaseScene {
 					}
 					if(pSceneTouchEvent.isActionUp()) {
 						this.setScale(1.0f);
+						ventanaAjustes.show();
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
 			};
 			
 			background = new Sprite(0, 0, resourcesManager.texturasMenu[ResourcesManager.MENU_BACKGROUND_ID], vbom);
-
+			ventanaAjustes = new BaseMenu(this, 60, 500, 60, 40, 600, 400);
 		}
 		
 
@@ -248,6 +255,17 @@ public class MainMenuScene extends BaseScene {
 			this.registerTouchArea(botonMundoMate);
 			this.registerTouchArea(botonMundoLengua);
 			this.registerTouchArea(botonMundoNatu);
+			this.registerTouchArea(botonAjustes);
+			this.registerTouchArea(botonCreditos);
+			this.registerTouchArea(botonInfo);
+			this.registerTouchArea(botonRegistro);
+			
+			
+			
+			//Creo una nueva capa para las ventanas desplegables
+			Entity capaVentanas = new Entity();
+			this.attachChild(capaVentanas);
+			capaVentanas.attachChild(ventanaAjustes);
 		}
 
 

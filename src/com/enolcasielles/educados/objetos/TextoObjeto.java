@@ -74,7 +74,7 @@ public class TextoObjeto extends Objeto {
 		text = new TickerText(x, y, scene.resourcesManager.fuenteGame, t,
 				new TickerText.TickerTextOptions(HorizontalAlign.LEFT, CARACTERES_POR_SEC),scene.vbom);
         text.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		
+
 		return text;
 	}
 	
@@ -86,8 +86,8 @@ public class TextoObjeto extends Objeto {
 	 */
 	@Override
 	public boolean update() {
-		if (firstUpdate) {
-			firstUpdate = false;
+		if (estado == ESTADO.PRIMERA) {
+			estado = ESTADO.YA_MOSTRADO;
 			text.reset();
 		}
 		if (text.getCharactersVisible() >= this.numCaracteres){
@@ -95,5 +95,6 @@ public class TextoObjeto extends Objeto {
 		}
 		return false;
 	}
+	
 
 }
