@@ -53,7 +53,7 @@ public class ParseadoMundoXML {
 	
 	
 	
-	private void parseWorld(final int mundo) {
+	private void parseWorld(final String mundo) {
 	    //Objeto para realizar el parseado
 		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(scene.vbom);
 		
@@ -87,7 +87,8 @@ public class ParseadoMundoXML {
 	    });
 
 	    //Cargo el nivel
-	    String xml = InfoNiveles.getMundo(mundo);
+	    //String xml = InfoNiveles.getMundo(mundo);
+	    String xml = "niveles/mundo" + mundo + "/mundo.xml";
 	    levelLoader.loadLevelFromAsset(scene.activity.getAssets(), xml);
 	}
 	

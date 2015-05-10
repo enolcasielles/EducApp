@@ -5,21 +5,28 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
+import org.andengine.entity.text.Text;
+import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackerTextureRegion;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
 import org.andengine.opengl.texture.region.ITextureRegion;
+import org.andengine.util.HorizontalAlign;
+import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
 import android.graphics.Rect;
 
+import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
 import com.enolcasielles.educados.games.ArrastraGame;
 import com.enolcasielles.educados.games.Game;
+import com.enolcasielles.educados.games.OpcionCorrectaGame;
 import com.enolcasielles.educados.games.RelacionaGame;
-import com.enolcasielles.educados.niveles.InfoNiveles;
 import com.enolcasielles.educados.utiles.ParseadorXML;
 
 
@@ -41,26 +48,33 @@ import com.enolcasielles.educados.utiles.ParseadorXML;
  */
 public class EvaluacionScene extends BaseScene {
 	
+	private final String FICHERO_DATOS = "datosEvaluacion.xml";
+	private final String FICHERO_TEXTURA = "texturaEvaluacion.xml";
+	
 	private final String TAG_PREGUNTAS = "preguntas";
 	private final String TAG_PREGUNTA = "pregunta";
 	private final String TAG_RESPUESTAS = "respuestas";
 	private final String TAG_RESPUESTA = "respuesta";
 	private final String TAG_IZQUIERDA = "izquierda";
 	private final String TAG_DERECHA = "derecha";
+	private final String TAG_ENUNCIADO = "enunciado";
+	private final String TAG_OPCION = "opcion";
 	private final String TAG_JUEGO_RELACIONA = "juegoRelaciona";
 	private final String TAG_JUEGO_ARRASTRA = "juegoArrastra";
+	private final String TAG_JUEGO_OPCIONCORRECTA = "juegoOpcionCorrecta";
 	
 	private final String TAG_LEVEL = "level";
 	private final String TAG_ATRIBUTO_XMLTEXTURAS = "xmlTexturas";
 	
 	//CONTENIDO
-	private final int CONTENIDO_X = 189;
+	private final int CONTENIDO_X = 100;
 	private final int CONTENIDO_Y = 115;
 	private final int CONTENIDO_ANCHO = 519;
 	private final int CONTENIDO_ALTO = 300;
-	private final Rect contenido = new Rect();
+	private Rect contenido;
+	 
 
-	private static int mundo, nivel;
+	private static String mundo, nivel;
 	
 	//Objeto para parsear el xml y albergar su estructura de datos
 	ParseadorXML parser;
@@ -74,13 +88,23 @@ public class EvaluacionScene extends BaseScene {
 	//Variables para gestionar la puntacion
 	private final int PUNTUACION_INICIAL = 100;
 	private int puntuacion;
+	private Text textoPuntuacion, textoPuntuacionTotal;
 	
 	//Definicion de los objetos que representaran cada juego en el nivel
 	private Game juego;
 	private int juegoActual;
-	private final int JUEGO_ARRASTRA = 1;    //Establece el orden en que se mostraran los juegos. Poner 1 siempre en el primero
-	private final int JUEGO_RELACIONA = 2;
-	private final int JUEGO_ACIERTA_CORRECTA = 3;
+	private final int JUEGO_ARRASTRA = 2;    //Establece el orden en que se mostraran los juegos. Poner 1 siempre en el primero
+	private final int JUEGO_RELACIONA = 3;
+	private final int JUEGO_ACIERTA_CORRECTA = 1;
+	
+	
+	
+	//Variables para definir el estado en el que se encuentra
+	public enum ESTADO {
+		CAMBIANDO_JUEGO,
+		JUGANDO
+	};
+	private ESTADO estado;
 	
     /**
      * Configura el nivle a generar
@@ -92,32 +116,31 @@ public class EvaluacionScene extends BaseScene {
      * @param mundo El mundo al que pertence el nivel
      * @param nivel El nivel a generar
      */
-    public static void setNivel(int mundo, int nivel) {
+    public static void setNivel(String mundo, String nivel) {
     	EvaluacionScene.mundo = mundo;
     	EvaluacionScene.nivel = nivel;
     }
 	
-	public EvaluacionScene(int mundo, int nivel) {
-		super();
-	}
 	
 	
 	@Override
 	public void createScene() {
-		//Obtengo el archivo con el nivel que he de formar
-		String fichero = InfoNiveles.getEvaluacionNivel(mundo, nivel);
+		//Obtengo la ruta del fichero en el que se almacenanl los datos de este nivel
+		String rutaFicheros = "niveles/mundo" + mundo + "/nivel" + nivel+"/";
+		String fichero = rutaFicheros + FICHERO_DATOS;
 		
 		//Genero el parseador para obtener la estructura de datos del fichero
 		parser = new ParseadorXML(this, fichero, defineDatos());
 		parser.parsear();
 		
 		//Cargo los recursos necesarios y definidos ya en esta estrucutra de datos
-		loadResources();
+		loadResources(rutaFicheros);
 		
 		//Defino los contenidos comunes a todos los juegos
 		iniciaObjetos();
 		
 		//Inicio el juego Arrastra (************HACER QUE SEA UN BUCLE POR TODOS LOS JUEGOS)************)
+		contenido = new Rect();
 		contenido.left=CONTENIDO_X;
 		contenido.top=CONTENIDO_Y;
 		contenido.bottom = CONTENIDO_Y + CONTENIDO_ALTO;
@@ -136,6 +159,12 @@ public class EvaluacionScene extends BaseScene {
 		texturePackLibrary = null;
 		texturas.clear();
 		texturas=null;
+		
+		//Elimino objetos comunes de la escena
+		textoPuntuacion.detachSelf();
+		textoPuntuacion.dispose();
+		textoPuntuacionTotal.detachSelf();
+		textoPuntuacionTotal.dispose();
 	}
 	
 	@Override
@@ -151,10 +180,28 @@ public class EvaluacionScene extends BaseScene {
 	}
 	
 	
+	@Override
+	protected void onManagedUpdate(float pSecondsElapsed) {
+		super.onManagedUpdate(pSecondsElapsed);
+		
+		if (estado == ESTADO.CAMBIANDO_JUEGO) {
+			//Compruebo si el juego ha terminado de destruirse e inicio el siguiente
+			if (juego.puedeFinalizar()) {
+				//Destruyo el juego y avanzo al siguiente
+				juego.dispose();
+				juegoActual++;
+				iniciaJuego();
+			}
+		}
+		
+	}
+	
+	
+	
 	/**
 	 * Devuelve la textura almacenada con el nombre pasado
 	 * @param src  El nombre de la textura que se quiere recuperar
-	 * @return
+	 * @return  La textura con ese nombre
 	 */
 	public static ITextureRegion getTextura(String src) {
 		return EvaluacionScene.texturas.get(src);
@@ -168,11 +215,11 @@ public class EvaluacionScene extends BaseScene {
 	 */
 	public void juegoFinalizado(int puntosPerdidos) {
 		puntuacion-=puntosPerdidos;
+		textoPuntuacionTotal.setText("Puntuacion total: " + puntuacion);
 		//Destruyo el juego
-		juego.dispose();
-		//Avanzo al siguiente
-		juegoActual++;
-		iniciaJuego();
+		juego.finalizar();
+		//Cambio de estado la escena
+		estado = ESTADO.CAMBIANDO_JUEGO;
 	}
 	
 	
@@ -180,13 +227,21 @@ public class EvaluacionScene extends BaseScene {
 	 * Los juegos han de llamar a este metodo si la partida ha finalizado, es decir el usuario ha hecho game over
 	 */
 	public void partidaFinalizada() {
-		
+		SceneManager.getInstance().evluacionScene_to_worldScene(mundo);
+	}
+	
+	
+	public void setPuntuacion(int puntuacion) {
+		textoPuntuacion.setText("Puntuacion juego: " + puntuacion);
 	}
 	
 	/**
 	 * Este metodo se encargara de ir cargando y descargnado progresivamente los distintos juegos
 	 */
 	private void iniciaJuego() {
+		
+		//Cambio el estado
+		estado = ESTADO.JUGANDO;
 
 		switch(juegoActual) {
 		case JUEGO_ARRASTRA:
@@ -198,8 +253,10 @@ public class EvaluacionScene extends BaseScene {
 			break;
 			
 		case JUEGO_ACIERTA_CORRECTA:
-			
+			juego = new OpcionCorrectaGame(parser, this, contenido);
 			break;
+		default:
+			SceneManager.getInstance().evluacionScene_to_worldScene(mundo);
 			
 		}
 		
@@ -225,22 +282,36 @@ public class EvaluacionScene extends BaseScene {
 		datos.put(TAG_IZQUIERDA, null);
 		datos.put(TAG_JUEGO_RELACIONA, null);
 		datos.put(TAG_JUEGO_ARRASTRA,null);
+		datos.put(TAG_JUEGO_OPCIONCORRECTA, null);
+		datos.put(TAG_ENUNCIADO, null);
+		datos.put(TAG_OPCION, null);
 		return datos;
 	}
 	
 	
 	
 	private void iniciaObjetos() {
+		//Texto con la puntuacion
+		textoPuntuacion = new Text(10, 40, resourcesManager.fuenteEvaluacion, 
+				"Puntuacion partida:0123456789", 30, new TextOptions(HorizontalAlign.LEFT),vbom);
+		textoPuntuacion.setColor(Color.RED);
+		this.attachChild(textoPuntuacion);
+		
+		textoPuntuacionTotal = new Text(10, 10, resourcesManager.fuenteEvaluacion, 
+				"Puntuacion total:0123456789", 30, new TextOptions(HorizontalAlign.LEFT), vbom);
+		textoPuntuacionTotal.setText("Puntuacion total: " + PUNTUACION_INICIAL);
+		textoPuntuacionTotal.setColor(Color.WHITE);
+		this.attachChild(textoPuntuacionTotal);
 		
 	}
 	
 	
-	private void loadResources() {
+	private void loadResources(String rutaFicheros) {
 		//Parseo el fichero con las texturas
 		try 
 	    {
-	        texturePack = new TexturePackLoader(this.resourcesManager.actividad.getTextureManager(), "gfx/imagenes/")
-	        	.loadFromAsset(this.resourcesManager.actividad.getAssets(), parser.getElementos("level").get(0).get(TAG_ATRIBUTO_XMLTEXTURAS));
+	        texturePack = new TexturePackLoader(this.resourcesManager.actividad.getTextureManager(), rutaFicheros)
+	        	.loadFromAsset(this.resourcesManager.actividad.getAssets(), FICHERO_TEXTURA);
 	        texturePack.loadTexture();
 	        texturePackLibrary = texturePack.getTexturePackTextureRegionLibrary();
 	    } 
@@ -252,10 +323,11 @@ public class EvaluacionScene extends BaseScene {
 		//Recupero las texturas con su String asociado y las almaceno en el hashmap
 		HashMap<String, TexturePackerTextureRegion> tmp = texturePackLibrary.getSourceMapping();
 		EvaluacionScene.texturas = new HashMap<String, ITextureRegion>();
-		Iterator it = texturas.entrySet().iterator();
+		Iterator it = tmp.entrySet().iterator();
 		while(it.hasNext()) {
-			String src = (String) ((Map.Entry)it.next()).getKey();
-			ITextureRegion textura = (ITextureRegion) ((Map.Entry)it.next()).getValue();
+			Map.Entry elemento = (Map.Entry)it.next();
+			String src = (String) elemento.getKey();
+			ITextureRegion textura = (ITextureRegion) elemento.getValue();
 			EvaluacionScene.texturas.put(src, textura);
 		}
 	}

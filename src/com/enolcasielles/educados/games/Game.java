@@ -54,6 +54,19 @@ public abstract class Game {
 	public abstract void dispose();
 	
 	
+	/**
+	 * Define la logica a ejecutar para preparar el juego para ser destruido
+	 */
+	public abstract void finalizar();
+	
+	
+	/**
+	 * Definira la logica que dara respuesta a si un juego ya ha acabado de destruirse o no
+	 * @return  true si el juego ha terminado de destruirse o false si no
+	 */
+	public abstract boolean puedeFinalizar();
+	
+	
 	
 	private void definePuntuaciones() {
 		//Por ultimo recupero la puntuacion maxima posible para este uego y los puntos que se restan cuando falla

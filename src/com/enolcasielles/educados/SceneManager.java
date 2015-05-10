@@ -116,7 +116,7 @@ public class SceneManager {
      * Efectua el cambio de escena de menu a world
      * @param mundo El mundo que ha de cargar
      */
-    public void menuScene_to_worldScene(int mundo) {
+    public void menuScene_to_worldScene(String mundo) {
     	ResourcesManager.getInstance().loadWorldResources();
     	WorldScene.setMundo(mundo);
     	worldScene = new WorldScene();
@@ -145,7 +145,7 @@ public class SceneManager {
      * @param mundo El mundo desde el que se esta efectuando el cambio, el mundo que se quiere cargar
      * @param nivel El nivel a cargar
      */
-    public void worldScene_to_teoriaScene(int mundo, int nivel) {
+    public void worldScene_to_teoriaScene(String mundo, String nivel) {
     	ResourcesManager.getInstance().loadTeoriaResources();
     	TeoriaScene.setNivel(mundo, nivel);
     	teoriaScene = new TeoriaScene();
@@ -160,7 +160,7 @@ public class SceneManager {
      * Efectua el cambio de escena de game a world
      * @param mundo El mundo en el que se esta para poder formarlo
      */
-    public void teoriaScene_to_worldScene(int mundo) {
+    public void teoriaScene_to_worldScene(String mundo) {
     	ResourcesManager.getInstance().loadWorldResources();
     	WorldScene.setMundo(mundo);
     	worldScene = new WorldScene();
@@ -176,9 +176,10 @@ public class SceneManager {
      * @param mundo El mundo en el que se esta para poder formarlo
      * @param nivel El nivel que se quiere formar su evaluacion dentro del mundo
      */
-    public void teoriaScene_to_evaluacionScene(int mundo, int nivel) {
+    public void teoriaScene_to_evaluacionScene(String mundo, String nivel) {
     	ResourcesManager.getInstance().loadEvaluacionResources();
-    	evaluacionScene = new EvaluacionScene(mundo, nivel);
+    	EvaluacionScene.setNivel(mundo, nivel);
+    	evaluacionScene = new EvaluacionScene();
     	cambiar_a_escena(evaluacionScene);
     	ResourcesManager.getInstance().unloadTeoriaResources();
     	teoriaScene.disposeScene();
@@ -190,8 +191,14 @@ public class SceneManager {
      * Efectual el cambio desde evaluacion a world
      * @param mundo El mundo que ha de cargar
      */
-    public void evluacionScene_to_worldScene(int mundo) {
-    	
+    public void evluacionScene_to_worldScene(String mundo) {
+    	ResourcesManager.getInstance().loadWorldResources();
+    	WorldScene.setMundo(mundo);
+    	worldScene = new WorldScene();
+    	cambiar_a_escena(worldScene);
+    	ResourcesManager.getInstance().unloadEvaluacionResources();
+    	evaluacionScene.disposeScene();
+    	evaluacionScene = null;
     }
     
     

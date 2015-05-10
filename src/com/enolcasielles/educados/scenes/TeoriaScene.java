@@ -88,8 +88,8 @@ public class TeoriaScene extends BaseScene {
     	// ===========================================================
     	// Fields
     	// ===========================================================
-    	private static int mundo;
-    	private static int nivel;
+    	private static String mundo;
+    	private static String nivel;
     	
     	private Sprite background, titulo, contenido, indicador;
     	private AnimatedSprite botonAtras, botonMenu, botonEvaluacion, botonSiguiente;
@@ -110,10 +110,11 @@ public class TeoriaScene extends BaseScene {
          * llamar a super y al llamar a super se llevaran a cabo operaciones que precisan de esta informacion
          * Para este caso nos sirve hacerlo de este modo ya que nunca se crearan dos objetos GameScene a la vez.
          * Por tanto el flujo de trabajo sera ir cambiando el valor de estas variables de clase y luego generar el objeto.
+         * 
          * @param mundo El mundo al que pertence el nivel
          * @param nivel El nivel a generar
          */
-        public static void setNivel(int mundo, int nivel) {
+        public static void setNivel(String mundo, String nivel) {
         	TeoriaScene.mundo = mundo;
         	TeoriaScene.nivel = nivel;
         }
@@ -130,8 +131,8 @@ public class TeoriaScene extends BaseScene {
 		public void createScene() {
 			iniatalizeVariables();
 			createBackground();
-			ParseadorNivelXML parser = new ParseadorNivelXML(this,contenido);   //Configuro la parte dinamica definida en su XML
-			om = parser.parseNivel(InfoNiveles.getNivel(this.getMundo(), this.getNivel()),olf);
+			ParseadorNivelXML parser = new ParseadorNivelXML(this,contenido);   
+			om = parser.parseNivel("niveles/mundo"+this.getMundo()+"/nivel"+this.getNivel()+"/", olf); //Configuro la parte dinamica definida en su XML
 		}
 
 
@@ -142,8 +143,29 @@ public class TeoriaScene extends BaseScene {
 
 		@Override
 		public void disposeScene() {
-			// TODO Auto-generated method stub
-			
+			background.detachSelf();
+			background.dispose();
+			titulo.detachSelf();
+			titulo.dispose();
+			contenido.detachSelf();
+			contenido.dispose();
+			indicador.detachSelf();
+			indicador.dispose();
+			botonAtras.detachSelf();
+			botonAtras.dispose();
+			botonMenu.detachSelf();
+			botonMenu.dispose();
+			botonEvaluacion.detachSelf();
+			botonEvaluacion.dispose();
+			botonSiguiente.detachSelf();
+			botonSiguiente.dispose();
+			loro.detachSelf();
+			loro.dispose();
+			tituloTexto.detachSelf();
+			tituloTexto.dispose();
+			indicadorTexto.detachSelf();
+			indicadorTexto.dispose();
+			om.dispose();
 		}
 
 		@Override
@@ -186,7 +208,8 @@ public class TeoriaScene extends BaseScene {
 						}
 						if (pSceneTouchEvent.isActionUp()) {
 							this.setCurrentTileIndex(NO_PULSADO);
-							SceneManager.getInstance().teoriaScene_to_worldScene(mundo);
+							//SceneManager.getInstance().teoriaScene_to_worldScene(mundo);
+							SceneManager.getInstance().teoriaScene_to_evaluacionScene(mundo, nivel);
 						}
 						return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
@@ -294,7 +317,7 @@ public class TeoriaScene extends BaseScene {
 		 * 
 		 * @return El nivel asociado a esta escena
 		 */
-		public int getNivel() {
+		public String getNivel() {
 			return TeoriaScene.nivel;
 		}
 		
@@ -305,7 +328,7 @@ public class TeoriaScene extends BaseScene {
 		 * 
 		 * @return El mundo de esta escena
 		 */
-		public int getMundo() {
+		public String getMundo() {
 			return TeoriaScene.mundo;
 		}
 		

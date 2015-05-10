@@ -7,8 +7,7 @@ import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 
-import android.provider.SyncStateContract.Constants;
-
+import com.enolcasielles.educados.Constants;
 import com.enolcasielles.educados.ResourcesManager;
 import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
@@ -127,7 +126,7 @@ public class MainMenuScene extends BaseScene {
 					}
 					if(pSceneTouchEvent.isActionUp()) {
 						this.setScale(1.0f);
-						SceneManager.getInstance().menuScene_to_worldScene(InfoNiveles.MUNDO_1);
+						SceneManager.getInstance().menuScene_to_worldScene(Constants.MUNDO_LENGUA);
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
@@ -141,7 +140,7 @@ public class MainMenuScene extends BaseScene {
 					}
 					if(pSceneTouchEvent.isActionUp()) {
 						this.setScale(1.0f);
-						SceneManager.getInstance().menuScene_to_worldScene(InfoNiveles.MUNDO_2);
+						SceneManager.getInstance().menuScene_to_worldScene(Constants.MUNDO_MATE);
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
@@ -155,7 +154,7 @@ public class MainMenuScene extends BaseScene {
 					}
 					if(pSceneTouchEvent.isActionUp()) {
 						this.setScale(1.0f);
-						SceneManager.getInstance().menuScene_to_worldScene(InfoNiveles.MUNDO_3);
+						SceneManager.getInstance().menuScene_to_worldScene(Constants.MUNDO_NATU);
 					}
 					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}

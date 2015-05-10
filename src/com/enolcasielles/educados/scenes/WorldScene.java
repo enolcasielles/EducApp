@@ -24,7 +24,7 @@ public class WorldScene extends BaseScene {
         // Fields
         // ===========================================================
 		private Sprite background;
-		private static int mundo;
+		private static String mundo;
 		
 		
 		/**
@@ -36,7 +36,7 @@ public class WorldScene extends BaseScene {
          * Por tanto el flujo de trabajo sera ir cambiando el valor de esta variable de clase y luego generar el objeto.
          * @param mundo El mundo al que pertence el nivel
          */
-        public static void setMundo(int mundo) {
+        public static void setMundo(String mundo) {
         	WorldScene.mundo = mundo;
         }
 		
@@ -97,7 +97,7 @@ public class WorldScene extends BaseScene {
 		 * 
 		 * @return El mundo de esta escena
 		 */
-		public int getMundo() { 
+		public String getMundo() { 
 			return mundo;
 		}
 		

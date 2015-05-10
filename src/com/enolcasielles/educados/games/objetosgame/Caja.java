@@ -1,18 +1,24 @@
 package com.enolcasielles.educados.games.objetosgame;
 
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
+import org.andengine.entity.primitive.Rectangle;
+
+import com.enolcasielles.educados.scenes.BaseScene;
+
 
 /**
  * Clase que representa cada una de las zonas en las que estaran las cajas donde se podra soltar las respuestas
  * @author Enol Casielles
  *
  */
-public class Caja {
+public class Caja extends Rectangle{
 	
 	private float x,y,ancho,alto;
 	
 	private String idRespuestaCorrecta;
 	
-	private boolean estaMarcada;
+	private boolean estaMarcada, estaDestruida;
 	
 	
 	/**
@@ -23,13 +29,48 @@ public class Caja {
 	 * @param alto Alto de la caja
 	 * @param idRespuestaCorrecta   String con el id que tenga la respuesta que se ha de soltar en esta caja
 	 */
-	public Caja(float x, float y, float ancho, float alto, String idRespuestaCorrecta) {
+	public Caja(float x, float y, float ancho, float alto, BaseScene scene, String idRespuestaCorrecta) {
+		super(x, y, ancho, alto, scene.vbom);
+		this.setColor(1.0f, 0.0f, 0.0f);
 		this.x = x;
 		this.y = y;
 		this.alto = alto;
 		this.ancho = ancho;
 		this.idRespuestaCorrecta = idRespuestaCorrecta;
 		this.estaMarcada = false;
+		this.estaDestruida=false;
+		scene.attachChild(this);
+	}
+	
+	
+	/**
+	 * Elimina el objeto
+	 */
+	public void dispose() {
+		this.detachSelf();
+		super.dispose();
+	}
+	
+	
+	/**
+	 * Finaliza la caja
+	 */
+	public void finaliza() {
+		this.registerEntityModifier(new AlphaModifier(1.0f, this.getAlpha(), 0.0f){
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				Caja.this.estaDestruida=true;
+			}
+		});
+	}
+	
+	
+	/**
+	 * Desvuelve el estado de destruccion del objeto
+	 * @return true si ya ha sido destruida o false sino
+	 */
+	public boolean estaDestruida() {
+		return estaDestruida;
 	}
 	
 	

@@ -113,6 +113,7 @@ public class ResourcesManager{
 	public Font fuenteGame;
 	public Font fuenteMenu;
 	public Font fuenteLoading;
+	public Font fuenteEvaluacion;
 	
     
     //---------------------------------------------
@@ -307,12 +308,22 @@ public class ResourcesManager{
     
     
     public void loadEvaluacionResources() {
-    	
+    	//--------------------------------------------------
+    	//LOAD FONTS
+    	//--------------------------------------------------
+		FontFactory.setAssetBasePath("fuentes/");  //Indicamos donde se encuentran
+		//Cargamos la fuente del game
+    	final ITexture fontTextureGame = new BitmapTextureAtlas(actividad.getTextureManager(),
+    			256,256,TextureOptions.BILINEAR);  //Textura en donde cargaremos fuente
+    	fuenteEvaluacion = FontFactory.createFromAsset(actividad.getFontManager(), fontTextureGame,
+    				actividad.getAssets(), "Droid.ttf", 25, true, Color.WHITE_ABGR_PACKED_INT); //Definimos fuente
+    	fuenteEvaluacion.load();  //La cargamos
     }
     
     
     public void unloadEvaluacionResources() {
-    	
+    	fuenteEvaluacion.unload();
+    	fuenteEvaluacion = null;
     }
     
 

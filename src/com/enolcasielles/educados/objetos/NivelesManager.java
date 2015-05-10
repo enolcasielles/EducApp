@@ -35,7 +35,7 @@ public class NivelesManager {
 	 */
 	public void addNivel(NivelObjeto o) {
 		objetos.add(o);			
-		if (o.getId() == 1) jugador = new Jugador(o, this.scene);   //!!!!CAMBIAR ESTO!!!! NO TIENE POR QUE IR AL PRIMERO
+		if (o.getId().equals("1")) jugador = new Jugador(o, this.scene);   //!!!!CAMBIAR ESTO!!!! NO TIENE POR QUE IR AL PRIMERO
 	}
 
 	
@@ -50,13 +50,13 @@ public class NivelesManager {
 		if (jugador.isMoviendo()) return;  //Impedimos que mientras se este moviendo se cambie el destino
 		
 		//Si es el objeto en el que se encuentra el jugador entro al nivel
-		if (jugador.getId() == objeto.getId()) {
+		if (jugador.getId().equals(objeto.getId())) {
 			scene.camera.setZoomFactor(1.0f);   //Devuelvo la camara a su zoom inicial
 			SceneManager.getInstance().worldScene_to_teoriaScene(objeto.getMundo(), jugador.getId());
 		}
 		
 		//Si es el objeto anterior o siguiente muevo el jugador a su posicion
-		if (jugador.getId() == objeto.getId() - 1  || jugador.getId() == objeto.getId() + 1 ) {
+		if (Integer.parseInt(jugador.getId()) == Integer.parseInt(objeto.getId()) - 1  || Integer.parseInt(jugador.getId()) == Integer.parseInt(objeto.getId()) + 1 ) {
 			jugador.mover(objeto);
 		}
 	}

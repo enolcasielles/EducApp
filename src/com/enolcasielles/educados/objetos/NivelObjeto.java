@@ -21,7 +21,7 @@ public class NivelObjeto extends Objeto {
 	
 	
 	//VARIABLES
-	private int mundo, nivel;
+	private String mundo, nivel;
 	private NivelesManager controlador;   //Una referencia al objeto que precede a este
 	
 	
@@ -32,7 +32,7 @@ public class NivelObjeto extends Objeto {
 	 * @param mundo  El mundo al que se corresponde
 	 * @param nm El controlador de los objetos de este tipo
 	 */
-	public NivelObjeto(final Attributes pAttributes, final BaseScene scene, int mundo, NivelesManager nm) {
+	public NivelObjeto(final Attributes pAttributes, final BaseScene scene, String mundo, NivelesManager nm) {
 		super(pAttributes, scene);
 		this.mundo = mundo;
 		this.controlador = nm;
@@ -44,7 +44,7 @@ public class NivelObjeto extends Objeto {
 	public IEntity setEntidad() {
 		
 		//Recupero atributos de este objeto
-		final int nivel = SAXUtils.getIntAttributeOrThrow(attributes, TAG_ATRIBUTO_ID);
+		final String nivel = SAXUtils.getAttributeOrThrow(attributes, TAG_ATRIBUTO_ID);
 		this.nivel = nivel;
 		
 		//Configuro el sprite
@@ -80,7 +80,7 @@ public class NivelObjeto extends Objeto {
 	 * Devuelve el id del objeto, es decir, el nivel al que se corresponde
 	 * @return El id del nivel
 	 */
-	public int getId() {
+	public String getId() {
 		return nivel;
 	}
 	
@@ -90,7 +90,7 @@ public class NivelObjeto extends Objeto {
 	 * Devuelve el mundo en el que se esta
 	 * @return El mundo
 	 */
-	public int getMundo() {
+	public String getMundo() {
 		return this.mundo;
 	}
 

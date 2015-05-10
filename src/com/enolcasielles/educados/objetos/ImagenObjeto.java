@@ -54,11 +54,11 @@ public class ImagenObjeto extends Objeto{
 		//Recupero ancho, alto y ruta de la imagen
 		int ancho = SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_ANCHO);
 		int alto = SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_ALTO);
-		int texturaId = SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_TEXTURA);
+		String texturaSrc = SAXUtils.getAttributeOrThrow(attributes,TAG_ATRIBUTO_TEXTURA);
 		tiempo = SAXUtils.getIntAttributeOrThrow(attributes,TAG_ATRIBUTO_TIEMPO);
 		
 		//Finalmente creo la entidad
-		Sprite sprt = new Sprite(x, y, ancho, alto, ObjetosManager.getTextureRegion(texturaId), scene.vbom);
+		Sprite sprt = new Sprite(x, y, ancho, alto, ObjetosManager.getTextureRegion(texturaSrc), scene.vbom);
 		return sprt;
 	}
 	

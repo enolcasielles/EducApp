@@ -53,7 +53,7 @@ public class Jugador extends Sprite {
 	 * Devuelve el id del objeto en el que esta el jugador
 	 * @return
 	 */
-	public int getId() {
+	public String getId() {
 		return posicionActual.getId();
 	}
 	
@@ -87,9 +87,5 @@ public class Jugador extends Sprite {
 				Jugador.this.estado = ESTADO.PARADO;
 			}
 		});
-		Log.i("Jugador", "Posicion X inicial jugador: " + this.getX());
-		Log.i("Jugador", "Posicion Y inicial jugador: " + this.getY());
-		Log.i("Jugador", "Posicion X final jugador: " + o.getEntidad().getX());
-		Log.i("Jugador", "Posicion Y final jugador: " + o.getEntidad().getY());
 	}
 }

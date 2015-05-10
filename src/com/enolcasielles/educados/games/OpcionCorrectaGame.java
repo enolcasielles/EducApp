@@ -58,13 +58,31 @@ public class OpcionCorrectaGame extends Game {
 		for (OpcionObjeto objeto : opciones) {
 			objeto.dispose();
 		}
-		enunciado = null;
-		opciones.clear();
+	}
+	
+	@Override
+	public void finalizar() {
+		enunciado.finaliza();
+		for (OpcionObjeto objeto : opciones) {
+			objeto.finaliza();
+		}
+	}
+	
+	
+	@Override
+	public boolean puedeFinalizar() {
+		if (!enunciado.estaDestruido()) return false;
+		for (OpcionObjeto objeto : opciones) {
+			if (!objeto.estaDestruido()) return false;
+		}
+		return true;
 	}
 	
 	
 	@Override
 	protected void iniciaObjetos() {
+		
+		scene.setPuntuacion(puntuacion);
 
 		//Recupero los datos necesairo para formar este juego
 		
@@ -93,6 +111,7 @@ public class OpcionCorrectaGame extends Game {
 		ArrayList<HashMap<String, String>> opcionesElementos = parser.getElementos(TAG_OPCION);
 		
 		//Objetos para las opciones
+		opciones = new ArrayList<OpcionObjeto>();
 		float yActual = yOpciones;
 		for (HashMap<String, String> opcionAtributos : opcionesElementos) {
 			id = opcionAtributos.get(TAG_ATRIBUTO_ID);
@@ -120,6 +139,7 @@ public class OpcionCorrectaGame extends Game {
 	 */
 	public void respuestaIncorrecta() {
 		puntuacion-=puntosFalla;
+		scene.setPuntuacion(puntuacion);
 		if (puntuacion <= 0) scene.partidaFinalizada();
 	}
 }

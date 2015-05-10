@@ -11,6 +11,7 @@ import com.enolcasielles.educados.scenes.BaseScene;
  * Clase que gestiona cada pagina en la escena teoria
  * Sera un contenedor de los objetos que pertenezcan a la pagina 
  * Manejara el comportamiento de la pagina cuando esta este activa
+ * 
  * @author Enol Casielles
  *
  */
@@ -39,6 +40,19 @@ public class Pagina {
 		entidad.setVisible(false);
 	}
 	
+	
+	/**
+	 * Destruye todos los objetos de la pagina
+	 */
+	public void dispose() {
+		for (Objeto objeto : objetos) {
+			objeto.dispose();
+		}
+		objetos.clear();
+		entidad.detachSelf();
+		entidad.dispose();
+		entidad=null;
+	}
 	
 	public void addObjeto(Objeto o) {
 		objetos.add(o);

@@ -3,10 +3,11 @@ package com.enolcasielles.educados.games;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.andengine.entity.primitive.Line;
 import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.ITouchArea;
 import org.andengine.entity.scene.Scene;
 import org.andengine.input.touch.TouchEvent;
+import org.andengine.util.color.Color;
 
 import android.graphics.Rect;
 
@@ -41,6 +42,10 @@ public class RelacionaGame extends Game implements IOnSceneTouchListener {
 	private ArrayList<RelacionaObjeto> objetos;
 	private RelacionaObjeto objetoSeleccionado;
 	
+	//Variable para dibujar la linea de union
+	private Line linea;
+	private float xIni, yIni;
+	
 	
 	/**
 	 * Constructor
@@ -59,10 +64,29 @@ public class RelacionaGame extends Game implements IOnSceneTouchListener {
 			objeto.dispose();
 		}
 		objetos.clear();
+		linea.dispose();
+	}
+	
+	
+	@Override
+	public void finalizar() {
+		for (RelacionaObjeto objeto : objetos) {
+			objeto.finaliza();
+		}
+	}
+	
+	@Override
+	public boolean puedeFinalizar() {
+		for (RelacionaObjeto objeto : objetos) {
+			if(!objeto.estaDestruido()) return false;
+		}
+		return true;
 	}
 	
 	@Override
 	protected void iniciaObjetos() {
+		
+		scene.setPuntuacion(puntuacion);
 		
 		//Recuèrp los elementos necesarios
 		ArrayList<HashMap<String, String>> izquierdaElementos = parser.getElementos(TAG_IZQUIERDA);
@@ -95,6 +119,12 @@ public class RelacionaGame extends Game implements IOnSceneTouchListener {
 		}
 		
 		
+		//Inicio la linea
+		linea = new Line(0, 0, 0, 0, scene.vbom);
+		linea.setColor(Color.RED);
+		linea.setVisible(false);
+		scene.attachChild(linea);
+		
 		scene.setOnSceneTouchListener(this);
 
 		
@@ -111,8 +141,12 @@ public class RelacionaGame extends Game implements IOnSceneTouchListener {
 			if(espacio.contains((int)x, (int)y)) {
 				//Ahora compruebo si se ha pulsado sobre algun objeto
 				for (RelacionaObjeto objeto : objetos) {
-					if (objeto.contains(x, y)) {
+					if (objeto.contains(x, y) && !objeto.getMarcado()) {
 						objetoSeleccionado = objeto;
+						xIni = pSceneTouchEvent.getX();
+						yIni = pSceneTouchEvent.getY();
+						linea.setPosition(xIni, yIni, xIni, yIni);
+						linea.setVisible(true);
 						return true;
 					}
 				}
@@ -139,13 +173,23 @@ public class RelacionaGame extends Game implements IOnSceneTouchListener {
 							else {
 								//El usuario no ha acertado. Resto puntuacion
 								puntuacion-=puntosFalla;
+								scene.setPuntuacion(puntuacion);
 								if(puntuacion<=0) scene.partidaFinalizada();
-								return true;
 							}
 						}
+						objetoSeleccionado = null; //Restablezco para preparar siguiente evento
+						linea.setVisible(false);
+						return true;
 					}
 				}
 				objetoSeleccionado = null; //Restablezco para preparar siguiente evento
+				linea.setVisible(false);
+			}
+		}
+		
+		if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_MOVE) {
+			if (objetoSeleccionado != null) {
+				linea.setPosition(xIni, yIni, pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
 			}
 		}
 		

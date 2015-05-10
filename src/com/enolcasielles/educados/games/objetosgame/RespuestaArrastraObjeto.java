@@ -1,11 +1,10 @@
 package com.enolcasielles.educados.games.objetosgame;
 
-import java.util.ArrayList;
-
 import org.andengine.entity.modifier.MoveModifier;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
+
+import android.util.Log;
 
 import com.enolcasielles.educados.games.ArrastraGame;
 import com.enolcasielles.educados.scenes.BaseScene;
@@ -62,9 +61,10 @@ public class RespuestaArrastraObjeto extends GameObjeto {
 	 * @param caja
 	 */
 	public void centrarEnCaja(Caja caja) {
-		float x = caja.getX() + caja.getAncho()/2;
-		float y = caja.getY() + caja.getAlto()/2;
+		float x = caja.getX() + caja.getAncho()/2 - this.getWidth()/2;
+		float y = caja.getY() + caja.getAlto()/2 - this.getHeight()/2;
 		this.registerEntityModifier(new MoveModifier(0.5f, this.getX(), x, this.getY(), y));
+		scene.unregisterTouchArea(this);
 	}
 	
 	
@@ -78,13 +78,13 @@ public class RespuestaArrastraObjeto extends GameObjeto {
 		
 		if (pSceneTouchEvent.isActionUp()) {
 			estaPulsada = false;
-			juego.respuestaSoltada(pTouchAreaLocalX, pTouchAreaLocalY, RespuestaArrastraObjeto.this);
+			juego.respuestaSoltada(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(), RespuestaArrastraObjeto.this);
 			return true;
 		}
 		
 		if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_MOVE) {
 			if (estaPulsada) {
-				RespuestaArrastraObjeto.this.setPosition(pTouchAreaLocalX-RespuestaArrastraObjeto.this.getWidth()/2, pTouchAreaLocalY-RespuestaArrastraObjeto.this.getHeight()/2);
+				RespuestaArrastraObjeto.this.setPosition(pSceneTouchEvent.getX()-RespuestaArrastraObjeto.this.getWidth()/2, pSceneTouchEvent.getY()-RespuestaArrastraObjeto.this.getHeight()/2);
 				return true;
 			}
 		}

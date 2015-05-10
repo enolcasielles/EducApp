@@ -1,9 +1,11 @@
 package com.enolcasielles.educados.games.objetosgame;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.graphics.Rect;
+
+import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.utiles.ParseadorXML;
 
 
@@ -50,7 +52,7 @@ public class CajasRespuestas {
 	 * Contructor. Define la estructura de las cajas
 	 * @param parser  La estructura de datos que le permitira recuperar la informacion para formar esta estructura
 	 */
-	public CajasRespuestas(ParseadorXML parser) {
+	public CajasRespuestas(ParseadorXML parser, BaseScene scene, Rect espacio) {
 		
 		//Recupero el elemento preguntas del parser
 		HashMap<String, String> preguntas = parser.getElementos(TAG_PREGUNTAS).get(0);
@@ -58,23 +60,52 @@ public class CajasRespuestas {
 		//Recupero los datos necesarios para formar las cajas
 		float yIni = Float.parseFloat(preguntas.get(TAG_ATRIBUTO_YINI));
 		float xIni = Float.parseFloat(preguntas.get(TAG_ATRIBUTO_XINI)) + Integer.parseInt(preguntas.get(TAG_ATRIBUTO_ANCHO)) + Integer.parseInt(preguntas.get(TAG_ATRIBUTO_SEPARACIONHOR));
-		float ancho = Float.parseFloat(preguntas.get(TAG_ATRIBUTO_ANCHO));
-		float alto = Float.parseFloat(preguntas.get(TAG_ATRIBUTO_ALTO));
+		float ancho = Float.parseFloat(preguntas.get(TAG_ATRIBUTO_ANCHOCONTESTACION));
+		float alto = Float.parseFloat(preguntas.get(TAG_ATRIBUTO_ALTOCONTESTACION));
+		float sepVer = Float.parseFloat(preguntas.get(TAG_ATRIBUTO_SEPARACIONVERTICAL));
 		
 		//Recupero las preguntas para obtener la respuesta que tiene asociada
 		ArrayList<HashMap<String, String>> preguntaArray = parser.getElementos(TAG_PREGUNTA);
 		
 		//Creo las cajas
 		cajas = new ArrayList<Caja>();
-		float yNueva = yIni;
+		xIni += espacio.left;
+		float yNueva = yIni + espacio.top;
 		for (int i=0 ; i<preguntaArray.size() ; i++) {
-			Caja c = new Caja(xIni, yNueva, ancho, alto, preguntaArray.get(i).get(TAG_ATRIBUTO_RESPUESTA));
+			Caja c = new Caja(xIni, yNueva, ancho, alto,scene, preguntaArray.get(i).get(TAG_ATRIBUTO_RESPUESTA));
 			cajas.add(c);
+			yNueva += (alto+sepVer);
 		}
 		
 		
 	}
 	
+	/**
+	 * Elimina las cajas
+	 */
+	public void dispose() {
+		for(Caja caja : cajas) {
+			caja.dispose();
+		}
+	}
+	
+	
+	/**
+	 * Finaliza las cajas
+	 * 
+	 */
+	public void finalizar() {
+		for(Caja caja : cajas) {
+			caja.finaliza();
+		}
+	}
+	
+	public boolean estanDestruidas() {
+		for(Caja caja : cajas) {
+			if (!caja.estaDestruida()) return false;
+		}
+		return true;
+	}
 	
 	/**
 	 * Recupera una caja a partir del resultado correcto que tenga asociado

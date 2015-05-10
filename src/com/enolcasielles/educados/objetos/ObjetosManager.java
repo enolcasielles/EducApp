@@ -1,12 +1,16 @@
 package com.enolcasielles.educados.objetos;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.IEntity;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackLoader;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackTextureRegionLibrary;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePackerTextureRegion;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
@@ -18,6 +22,7 @@ import android.R.integer;
 import android.util.Log;
 
 import com.enolcasielles.educados.scenes.BaseScene;
+import com.enolcasielles.educados.scenes.EvaluacionScene;
 
 
 /**
@@ -31,6 +36,9 @@ import com.enolcasielles.educados.scenes.BaseScene;
  */
 public class ObjetosManager {
 	
+	//Constants
+	private final String FICHERO_TEXTURA = "texturaTeoria"; 
+	
 	private ArrayList<Pagina> paginas;
 	private int iterador;
 	private Pagina paginaActual;
@@ -38,8 +46,8 @@ public class ObjetosManager {
 	private boolean puedeActualizar, teoriaFinalizada;
 	
 	private TexturePackTextureRegionLibrary texturePackLibrary;
-	private TexturePack texturePack;
-	private static ArrayList<ITextureRegion> texturas;
+	private ArrayList<TexturePack> texturePack;
+	private static HashMap<String, ITextureRegion> texturasMap;
 	
 	private OnLoadFinished olf;
 	
@@ -55,6 +63,22 @@ public class ObjetosManager {
 		puedeActualizar = false;
 		teoriaFinalizada = false;
 		this.olf = olf;
+	}
+	
+	
+	
+	/**
+	 * Destruye todos los objetos
+	 */
+	public void dispose() {
+		for (TexturePack texture : texturePack) {
+			texture.unloadTexture();
+		}
+		texturePackLibrary=null;
+		texturasMap.clear();
+		for (Pagina pagina : paginas) {
+			pagina.dispose();
+		}
 	}
 	
 	
@@ -126,41 +150,54 @@ public class ObjetosManager {
 	 * Carga las texturas correspondientes al nivel
 	 * @param texturasId Un String con los identificadores de las texturas separados por comas
 	 */
-	public void loadTexturas(String texturasString, String ficheroTextura) {
+	public void loadTexturas(String texturasString, String rutaFicheroTextura) {
 		//Recupero el numero de texturas
 		int numTexturas = Integer.parseInt(texturasString);
 		
-		ObjetosManager.texturas = new ArrayList<ITextureRegion>();
+		ObjetosManager.texturasMap = new HashMap<String, ITextureRegion>();
+		texturePack = new ArrayList<TexturePack>();
 	    
-		//Parseo el fichero
-		try 
-	    {
-	        texturePack = new TexturePackLoader(scene.resourcesManager.actividad.getTextureManager(), "gfx/imagenes/")
-	        	.loadFromAsset(scene.resourcesManager.actividad.getAssets(), ficheroTextura);
-	        texturePack.loadTexture();
-	        texturePackLibrary = texturePack.getTexturePackTextureRegionLibrary();
-	    } 
-	    catch (final TexturePackParseException e) 
-	    {
-	        Debug.e(e);
-	    }
+		//Parseo los ficheros con las texturas
+		for (int j=0 ; j<numTexturas ; j++) {
+
+			TexturePack tp;
+			try 
+			{
+				tp = new TexturePackLoader(scene.resourcesManager.actividad.getTextureManager(), rutaFicheroTextura)
+					.loadFromAsset(scene.resourcesManager.actividad.getAssets(), FICHERO_TEXTURA + j + ".xml"); 
+				tp.loadTexture();
+				texturePack.add(tp);
+				texturePackLibrary = tp.getTexturePackTextureRegionLibrary();
+			} 
+			catch (final TexturePackParseException e) 
+			{
+				Debug.e(e);
+			}
+
+
+			//Recupero las texturas con su String asociado y las almaceno en el hashmap
+			HashMap<String, TexturePackerTextureRegion> tmp = texturePackLibrary.getSourceMapping();
+			Iterator it = tmp.entrySet().iterator();
+			while(it.hasNext()) {
+				Map.Entry elemento = (Map.Entry)it.next();
+				String src = (String) elemento.getKey();
+				ITextureRegion textura = (ITextureRegion) elemento.getValue();
+				ObjetosManager.texturasMap.put(src, textura);
+			}
 		
-		//Finalmente obtengo las texturas
-		for (int i=0 ; i<numTexturas ; i++) {
-			ITextureRegion tmp = texturePackLibrary.get(i);
-			
-			ObjetosManager.texturas.add(tmp);  
 		}
 	}
 	
+
+	
 	
 	/**
-	 * Recupera una textura a partir de su id, que sera a su vez la posicion en el array
-	 * @param id  El id de la textura a recuperar. Sera su posicion en el array
+	 * Recupera una textura a partir de su nombre
+	 * @param src  El nombre asociado a la textura
 	 * @return  La textura correspondiente
 	 */
-	public static ITextureRegion getTextureRegion(int id) {
-		return ObjetosManager.texturas.get(id);
+	public static ITextureRegion getTextureRegion(String src) {
+		return ObjetosManager.texturasMap.get(src);
 	}
 	
 	

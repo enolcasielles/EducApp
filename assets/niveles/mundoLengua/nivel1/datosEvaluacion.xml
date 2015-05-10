@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level width="519" height="300" numTexturas="11"> 
+
+  <juegoArrastra puntuacionMax="10" puntosFalla="1">
+
+	<preguntas xIni="0" yIni="100" ancho="320" alto="40" separacionVertical="5" separacionHor="50" anchoContestacion="200" altoContestacion="40" >
+		<pregunta id="pregunta1.png" respuesta="respuesta3.png"/>
+		<pregunta id="pregunta2.png" respuesta="respuesta2.png"/>
+		<pregunta id="pregunta3.png" respuesta="respuesta4.png"/>
+		<pregunta id="pregunta4.png" respuesta="respuesta8.png"/>
+	</preguntas>
+
+	<respuestas xIni="0" yIni="10" ancho="100" alto="40" separacionVertical="5" separacionHor="5" >
+		<respuesta id="respuesta1.png"/>
+		<respuesta id="respuesta2.png"/>
+		<respuesta id="respuesta3.png"/>
+		<respuesta id="respuesta4.png"/>
+		<respuesta id="respuesta5.png"/>
+		<respuesta id="respuesta6.png"/>
+		<respuesta id="respuesta7.png"/>
+    <respuesta id="respuesta8.png"/>
+	</respuestas>
+
+  </juegoArrastra>
+
+
+  <juegoRelaciona xIni="50" yIni="100" ancho="200" alto="40" separacionVertical="5" separacionHor="50" puntuacionMax="10" puntosFalla="1">
+
+  	<izquierda id="izquierda1.png" respuesta="derecha2.png" />
+  	<izquierda id="izquierda2.png" respuesta="derecha1.png" />
+  	<izquierda id="izquierda3.png" respuesta="derecha4.png" />
+  	<izquierda id="izquierda4.png" respuesta="derecha3.png" />
+
+  	<derecha id="derecha1.png" />
+  	<derecha id="derecha2.png" />
+  	<derecha id="derecha3.png" />
+  	<derecha id="derecha4.png" />
+
+  </juegoRelaciona>
+
+
+  <juegoOpcionCorrecta xEnunciado="50" yEnunciado="100" anchoEnunciado="400" altoEnunciado="40" xOpciones="150" yOpciones="150" anchoOpciones="200" altoOpciones="40" separacionVertical="5" puntuacionMax="10" puntosFalla="5">
+
+  	<enunciado id="enunciado1.png" opcionCorrecta="opcion3.png" />
+  	
+  	<opcion id="opcion1.png" />
+  	<opcion id="opcion2.png" />
+  	<opcion id="opcion3.png" />
+  	<opcion id="opcion4.png" />
+
+  </juegoOpcionCorrecta>
+
+
+
+  
+</level>

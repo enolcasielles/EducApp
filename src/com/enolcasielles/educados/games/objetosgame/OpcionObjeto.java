@@ -36,6 +36,7 @@ public class OpcionObjeto extends GameObjeto {
 		this.esCorrecta = correcta;
 		this.juego = juego;
 		this.marcada = false;
+		scene.registerTouchArea(this);
 	}
 	
 	

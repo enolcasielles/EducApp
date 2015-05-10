@@ -76,6 +76,7 @@ public class ArrastraGame extends Game {
 		else if (resultado == RESULTADO.INCORRECTA) {
 			respuesta.moveOrigin();
 			puntuacion-=puntosFalla;
+			scene.setPuntuacion(puntuacion);
 			//Compruebo si he llegado a 0 puntos, en ese caso finalizar ale juego por haber perdido
 			if (puntuacion <= 0) {
 				scene.partidaFinalizada();
@@ -97,11 +98,40 @@ public class ArrastraGame extends Game {
 		for (RespuestaArrastraObjeto respuesta : respuestas) {
 			respuesta.dispose();
 		}
+		cajas.dispose();
 	}
 	
 	
+	@Override
+	public void finalizar() {
+		for (GameObjeto pregunta : preguntas) {
+			pregunta.finaliza();
+		}
+		for (RespuestaArrastraObjeto respuesta : respuestas) {
+			respuesta.finaliza();
+		}
+		cajas.finalizar();
+	}
+	
+	
+	@Override
+	public boolean puedeFinalizar() {
+		for (GameObjeto pregunta : preguntas) {
+			if (!pregunta.estaDestruido()) return false;
+		}
+		for (RespuestaArrastraObjeto respuesta : respuestas) {
+			if(!respuesta.estaDestruido()) return false;
+		}
+		if (!cajas.estanDestruidas()) return false;
+		return true;
+	}
+	
 	
 	protected void iniciaObjetos() {
+		
+		//Fijo la puntuacion inicial
+		scene.setPuntuacion(puntuacion);
+		
 		//Recupero las preguntas y las respuestas con sus datos (etiqueta pregunta y respuesta)
 		ArrayList<HashMap<String, String>> preguntaArray = parser.getElementos(TAG_PREGUNTA);
 		ArrayList<HashMap<String, String>> respuestaArray = parser.getElementos(TAG_RESPUESTA);
@@ -113,7 +143,7 @@ public class ArrastraGame extends Game {
 		//A partir de estos datos podemos generar los objetos necesarios
 		
 		//Creo las cajas  donde se ha de colocar las respuestas
-		cajas = new CajasRespuestas(parser);
+		cajas = new CajasRespuestas(parser,scene,espacio);
 		
 		//Genero los objetos pregunta
 		preguntas = new ArrayList<GameObjeto>();

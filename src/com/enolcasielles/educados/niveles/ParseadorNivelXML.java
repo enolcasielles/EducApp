@@ -33,6 +33,8 @@ import com.enolcasielles.educados.scenes.TeoriaScene;
  */
 public class ParseadorNivelXML {
 	
+	private final String FICHERO_DATOS = "datosTeoria.xml";
+	
 	
 	//Etiquetas texto
 	private final String TAG_TEXTO = "texto";
@@ -40,7 +42,6 @@ public class ParseadorNivelXML {
 	private final String TAG_CONSEJOS = "consejo";
 	private final String TAG_PAGINA = "pagina";
 	private final String TAG_ATRIBUTO_TEXTURAS = "texturas";
-	private final String TAG_ATRIBUTO_XMLTEXTURAS = "xmltexturas";
 	private final String TAG_ATRIBUTO_PAGINAS = "paginas";
 	private final String TAG_ATRIBUTO_TITULO = "titulo";
 	
@@ -64,7 +65,7 @@ public class ParseadorNivelXML {
 	
 	
 	
-	public ObjetosManager parseNivel(String xml, final OnLoadFinished olf) {
+	public ObjetosManager parseNivel(final String rutaFicheros, final OnLoadFinished olf) {
 		//Objeto para realizar el parseado
 		final SimpleLevelLoader levelLoader = new SimpleLevelLoader(scene.vbom);
 		
@@ -80,7 +81,6 @@ public class ParseadorNivelXML {
 		            final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_WIDTH);
 		            final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, LevelConstants.TAG_LEVEL_ATTRIBUTE_HEIGHT);
 		            final String texturas = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ATRIBUTO_TEXTURAS);  	
-		            final String xmltexturas = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ATRIBUTO_XMLTEXTURAS); 
 		            final int paginas =  SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_ATRIBUTO_PAGINAS);
 		            final String titulo = SAXUtils.getAttributeOrThrow(pAttributes, TAG_ATRIBUTO_TITULO); 
 		            
@@ -91,7 +91,7 @@ public class ParseadorNivelXML {
 		            olf.setIndicadorPagina("1/"+paginas);
 		            
 		            //Cargo las texturas ahora que ya tengo identificados sus ids en el String texturas
-		            om.loadTexturas(texturas, xmltexturas);
+		            om.loadTexturas(texturas, rutaFicheros);
 		            
 		            return scene;
 		        }
@@ -148,7 +148,7 @@ public class ParseadorNivelXML {
         }));
 		
 		//Cargo el nivel
-	    levelLoader.loadLevelFromAsset(scene.activity.getAssets(), xml);
+	    levelLoader.loadLevelFromAsset(scene.activity.getAssets(), rutaFicheros + FICHERO_DATOS);
 	    
 	    //Inicio el manejador de objetos apuntando a su primer objeto
 	    om.init();

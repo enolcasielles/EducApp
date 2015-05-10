@@ -1,5 +1,7 @@
 package com.enolcasielles.educados.games.objetosgame;
 
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.AlphaModifier;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.texture.region.ITextureRegion;
 
@@ -14,6 +16,7 @@ import com.enolcasielles.educados.scenes.BaseScene;
  */
 public class GameObjeto extends Sprite{
 	
+	private boolean estaDestruido;
 	
 	protected BaseScene scene;
 	protected String id;
@@ -29,6 +32,7 @@ public class GameObjeto extends Sprite{
 		super(x,y,ancho,alto,textura,scene.vbom);
 		this.scene = scene;
 		this.id = id;
+		this.estaDestruido = false;
 		scene.attachChild(this);
 	}
 
@@ -38,10 +42,22 @@ public class GameObjeto extends Sprite{
 	 * Elimina el objeto de la escena y lo destruye
 	 */
 	public void dispose() {
-		this.detachSelf();
-		this.dispose();
+		super.detachSelf();
+		super.dispose();
 	}
 	
+	
+	/**
+	 * Oculta el objeto y cuando finaliza avisa de que el objeto ya puede ser destruido
+	 */
+	public void finaliza() {
+		this.registerEntityModifier(new AlphaModifier(1.0f, this.getAlpha(), 0.0f) {
+			@Override
+			protected void onModifierFinished(IEntity pItem) {
+				GameObjeto.this.estaDestruido=true;
+			}
+		});
+	}
 	
 	
 	/**
@@ -50,6 +66,15 @@ public class GameObjeto extends Sprite{
 	 */
 	public String getId() {
 		return id;
+	}
+	
+	
+	/**
+	 * Devuelve el estado de destruccion del objeto
+	 * @return  true si el objeto ya ha finalizado de destruirse, false si no
+	 */
+	public boolean estaDestruido() {
+		return estaDestruido;
 	}
 
 
