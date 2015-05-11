@@ -4,10 +4,10 @@
   <juegoArrastra puntuacionMax="10" puntosFalla="1">
 
 	<preguntas xIni="0" yIni="100" ancho="320" alto="40" separacionVertical="5" separacionHor="50" anchoContestacion="200" altoContestacion="40" >
-		<pregunta id="pregunta1.png" respuesta="respuesta3.png"/>
-		<pregunta id="pregunta2.png" respuesta="respuesta2.png"/>
-		<pregunta id="pregunta3.png" respuesta="respuesta4.png"/>
-		<pregunta id="pregunta4.png" respuesta="respuesta8.png"/>
+		<pregunta id="Pregunta1.png" respuesta="respuesta3.png"/>
+		<pregunta id="Pregunta2.png" respuesta="respuesta2.png"/>
+		<pregunta id="Pregunta3.png" respuesta="respuesta4.png"/>
+		<pregunta id="Pregunta4.png" respuesta="respuesta8.png"/>
 	</preguntas>
 
 	<respuestas xIni="0" yIni="10" ancho="100" alto="40" separacionVertical="5" separacionHor="5" >
@@ -49,6 +49,23 @@
   	<opcion id="opcion4.png" />
 
   </juegoOpcionCorrecta>
+
+
+  <juegoAciertaRapido xEnunciado="50" yEnunciado="100" anchoEnunciado="320" altoEnunciado="70" anchoOpciones="140" altoOpciones="70" puntuacionMax="10" puntosFalla="5">
+
+    <definicion id="Definicion.png" opcionCorrecta="Posibilidad3.png" />
+    
+    <opcion id="Posibilidad1.png" />
+    <opcion id="Posibilidad2.png" />
+    <opcion id="Posibilidad3.png" />
+    <opcion id="Posibilidad4.png" />
+
+  </juegoAciertaRapido>
+
+
+  <juegoHuecos >
+
+  </juegoHuecos>
 
 
 

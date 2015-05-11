@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.text.TextOptions;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.TexturePack;
@@ -23,8 +21,10 @@ import android.graphics.Rect;
 
 import com.enolcasielles.educados.SceneManager;
 import com.enolcasielles.educados.SceneManager.SceneType;
+import com.enolcasielles.educados.games.AciertaRapidoGame;
 import com.enolcasielles.educados.games.ArrastraGame;
 import com.enolcasielles.educados.games.Game;
+import com.enolcasielles.educados.games.HuecosGame;
 import com.enolcasielles.educados.games.OpcionCorrectaGame;
 import com.enolcasielles.educados.games.RelacionaGame;
 import com.enolcasielles.educados.utiles.ParseadorXML;
@@ -38,8 +38,8 @@ import com.enolcasielles.educados.utiles.ParseadorXML;
  * 
  *  ->  Iniciara y cargara en la escena todos aquellos objetos que sean comunes a todos los juegos.
  *  
- *  ->  Ira llamando a los sucesivos tipos de juegos secuencialmente segun se vayan finalizando cada uno. A cada juego se le enviara la
- *     	la escena en la que ha de actuar y elobjeto Parseador para que obtenga los datos que precise para formarse. 
+ *  ->  Ira llamando a los sucesivos tipos de juegos secuencialmente segun se vayan finalizando cada uno. A cada juego se le enviara
+ *     	la escena en la que ha de actuar y el objeto Parseador para que obtenga los datos que precise para formarse. 
  *      Cada juego definira los objetos que necesite para su desarrollo y los añadira a la escena. Cuando finalice los elimira y enviara
  *      de nuevo el control a esta clase, que iniciara el siguiente tipo de juego.
  *      
@@ -93,9 +93,11 @@ public class EvaluacionScene extends BaseScene {
 	//Definicion de los objetos que representaran cada juego en el nivel
 	private Game juego;
 	private int juegoActual;
+	private final int JUEGO_ACIERTA_CORRECTA = 1;
 	private final int JUEGO_ARRASTRA = 2;    //Establece el orden en que se mostraran los juegos. Poner 1 siempre en el primero
 	private final int JUEGO_RELACIONA = 3;
-	private final int JUEGO_ACIERTA_CORRECTA = 1;
+	private final int JUEGO_ACIERTA_RAPIDO = 4;
+	private final int JUEGO_HUECOS = 5;
 	
 	
 	
@@ -244,6 +246,7 @@ public class EvaluacionScene extends BaseScene {
 		estado = ESTADO.JUGANDO;
 
 		switch(juegoActual) {
+		
 		case JUEGO_ARRASTRA:
 			juego = new ArrastraGame(parser, this, contenido);
 			break;
@@ -255,6 +258,15 @@ public class EvaluacionScene extends BaseScene {
 		case JUEGO_ACIERTA_CORRECTA:
 			juego = new OpcionCorrectaGame(parser, this, contenido);
 			break;
+			
+		case JUEGO_HUECOS:
+			juego = new HuecosGame(parser, this, contenido);
+			break;
+			
+		case JUEGO_ACIERTA_RAPIDO:
+			juego = new AciertaRapidoGame(parser, this, contenido);
+			break;
+			
 		default:
 			SceneManager.getInstance().evluacionScene_to_worldScene(mundo);
 			
