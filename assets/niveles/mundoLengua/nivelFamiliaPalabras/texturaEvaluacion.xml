@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texture version="1" file="texturaEvaluacion.png" type="bitmap" width="512" height="512" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+    <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker -->
+    <!-- $TexturePacker:SmartUpdate:a71d0d9bb50b5691e8f8267170a37294:1/1$ -->
+    <textureregion id="0" src="Definicion.png" x="2" y="2" width="320" height="70" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="320" srcheight="70"/>
+    <textureregion id="1" src="Derecha1.png" x="354" y="74" width="130" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="2" src="Derecha2.png" x="212" y="218" width="130" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="3" src="Derecha3.png" x="396" y="74" width="130" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="4" src="Derecha4.png" x="212" y="260" width="130" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="5" src="Enunciado1.png" x="2" y="74" width="340" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="340" srcheight="40"/>
+    <textureregion id="6" src="Izquierda1.png" x="212" y="302" width="130" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="7" src="Izquierda2.png" x="212" y="344" width="130" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="8" src="Izquierda3.png" x="212" y="386" width="130" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="9" src="Izquierda4.png" x="438" y="74" width="130" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="10" src="Posibilidad1.png" x="324" y="2" width="140" height="70" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="140" srcheight="70"/>
+    <textureregion id="11" src="Posibilidad2.png" x="2" y="416" width="140" height="70" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="140" srcheight="70"/>
+    <textureregion id="12" src="Posibilidad3.png" x="212" y="74" width="140" height="70" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="140" srcheight="70"/>
+    <textureregion id="13" src="Posibilidad4.png" x="212" y="146" width="140" height="70" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="140" srcheight="70"/>
+    <textureregion id="14" src="Pregunta1.png" x="44" y="74" width="340" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="340" srcheight="40"/>
+    <textureregion id="15" src="Pregunta2.png" x="86" y="74" width="340" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="340" srcheight="40"/>
+    <textureregion id="16" src="Pregunta3.png" x="128" y="74" width="340" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="340" srcheight="40"/>
+    <textureregion id="17" src="Pregunta4.png" x="170" y="74" width="340" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="340" srcheight="40"/>
+    <textureregion id="18" src="opcion1.png" x="344" y="218" width="130" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="19" src="opcion2.png" x="386" y="206" width="130" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="20" src="opcion3.png" x="428" y="206" width="130" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="21" src="opcion4.png" x="470" y="206" width="130" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="130" srcheight="40"/>
+    <textureregion id="22" src="respuesta1.png" x="386" y="338" width="110" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="110" srcheight="40"/>
+    <textureregion id="23" src="respuesta2.png" x="344" y="350" width="110" height="40" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="110" srcheight="40"/>
+    <textureregion id="24" src="respuesta3.png" x="386" y="380" width="110" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="110" srcheight="40"/>
+    <textureregion id="25" src="respuesta4.png" x="386" y="422" width="110" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="110" srcheight="40"/>
+    <textureregion id="26" src="respuesta5.png" x="144" y="428" width="110" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="110" srcheight="40"/>
+    <textureregion id="27" src="respuesta6.png" x="144" y="470" width="110" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="110" srcheight="40"/>
+    <textureregion id="28" src="respuesta7.png" x="256" y="462" width="110" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="110" srcheight="40"/>
+    <textureregion id="29" src="respuesta8.png" x="368" y="464" width="110" height="40" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="110" srcheight="40"/>
+</texture>

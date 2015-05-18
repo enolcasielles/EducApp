@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texture version="1" file="texturaTeoria0.png" type="bitmap" width="1024" height="1024" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+    <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker -->
+    <!-- $TexturePacker:SmartUpdate:f4030c35493afcc51096260de378ba4d:1/2$ -->
+    <textureregion id="0" src="pagina2.png" x="2" y="2" width="519" height="286" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="519" srcheight="286"/>
+    <textureregion id="1" src="pagina3.png" x="523" y="2" width="519" height="286" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="519" srcheight="286"/>
+    <textureregion id="2" src="pagina4.png" x="2" y="290" width="519" height="286" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="519" srcheight="286"/>
+    <textureregion id="3" src="pagina5.png" x="2" y="578" width="519" height="286" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="519" srcheight="286"/>
+</texture>

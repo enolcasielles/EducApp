@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level width="519" height="300" numTexturas="11"> 
+
+  <juegoArrastra puntuacionMax="10" puntosFalla="1">
+
+	<preguntas xIni="0" yIni="100" ancho="320" alto="40" separacionVertical="5" separacionHor="50" anchoContestacion="200" altoContestacion="40" >
+		<pregunta id="Pregunta1.png" respuesta="respuesta3.png"/>
+		<pregunta id="Pregunta2.png" respuesta="respuesta2.png"/>
+		<pregunta id="Pregunta3.png" respuesta="respuesta4.png"/>
+		<pregunta id="Pregunta4.png" respuesta="respuesta8.png"/>
+	</preguntas>
+
+	<respuestas xIni="0" yIni="10" ancho="100" alto="40" separacionVertical="5" separacionHor="5" >
+		<respuesta id="respuesta1.png"/>
+		<respuesta id="respuesta2.png"/>
+		<respuesta id="respuesta3.png"/>
+		<respuesta id="respuesta4.png"/>
+		<respuesta id="respuesta5.png"/>
+		<respuesta id="respuesta6.png"/>
+		<respuesta id="respuesta7.png"/>
+    <respuesta id="respuesta8.png"/>
+	</respuestas>
+
+  </juegoArrastra>
+
+
+  <juegoRelaciona xIni="50" yIni="100" ancho="200" alto="40" separacionVertical="5" separacionHor="50" puntuacionMax="10" puntosFalla="1">
+
+  	<izquierda id="Izquierda1.png" respuesta="Derecha2.png" />
+  	<izquierda id="Izquierda2.png" respuesta="Derecha1.png" />
+  	<izquierda id="Izquierda3.png" respuesta="Derecha4.png" />
+  	<izquierda id="Izquierda4.png" respuesta="Derecha3.png" />
+
+  	<derecha id="Derecha1.png" />
+  	<derecha id="Derecha2.png" />
+  	<derecha id="Derecha3.png" />
+  	<derecha id="Derecha4.png" />
+
+  </juegoRelaciona>
+
+
+  <juegoOpcionCorrecta xEnunciado="50" yEnunciado="100" anchoEnunciado="400" altoEnunciado="40" xOpciones="150" yOpciones="150" anchoOpciones="200" altoOpciones="40" separacionVertical="5" puntuacionMax="10" puntosFalla="5">
+
+  	<enunciado id="Enunciado1.png" opcionCorrecta="opcion3.png" />
+  	
+  	<opcion id="opcion1.png" />
+  	<opcion id="opcion2.png" />
+  	<opcion id="opcion3.png" />
+  	<opcion id="opcion4.png" />
+
+  </juegoOpcionCorrecta>
+
+
+  <juegoAciertaRapido xEnunciado="50" yEnunciado="100" anchoEnunciado="320" altoEnunciado="70" anchoOpciones="140" altoOpciones="70" puntuacionMax="10" puntosFalla="5">
+
+    <definicion id="Definicion.png" opcionCorrecta="Posibilidad3.png" />
+    
+    <posibilidad id="Posibilidad1.png" />
+    <posibilidad id="Posibilidad2.png" />
+    <posibilidad id="Posibilidad3.png" />
+    <posibilidad id="Posibilidad4.png" />
+
+  </juegoAciertaRapido>
+
+
+  <juegoHuecos xEnunciado="50" yEnunciado="100" anchoEnunciado="320" altoEnunciado="70" anchoSolucion="200" altoSolucion="70" anchoCaracteres="70" altoCaracteres="70" puntuacionMax="10" puntosFalla="5" solucion="ATE">
+
+  </juegoHuecos>
+
+
+
+  
+</level>

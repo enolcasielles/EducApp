@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.enolcasielles.educados.games.objetosgame.GameObjeto;
 import com.enolcasielles.educados.games.objetosgame.OpcionObjeto;
@@ -104,7 +105,7 @@ public class OpcionCorrectaGame extends Game {
 		
 		//Objeto para el enunciado
 		String id = enunciadoAtributos.get(TAG_ATRIBUTO_ID);
-		enunciado = new GameObjeto(xEnunciado, yEnunciado, anchoEnunciado, altoEnunciado, 
+		enunciado = new GameObjeto(xEnunciado+espacio.left, yEnunciado+espacio.top, anchoEnunciado, altoEnunciado, 
 				EvaluacionScene.getTextura(id), scene, id);
 		
 		//Datos para las opciones
@@ -116,7 +117,7 @@ public class OpcionCorrectaGame extends Game {
 		for (HashMap<String, String> opcionAtributos : opcionesElementos) {
 			id = opcionAtributos.get(TAG_ATRIBUTO_ID);
 			boolean correcta = id.equals(idOpcionCorrecta);
-			OpcionObjeto opcion = new OpcionObjeto(xOpciones, yActual, anchoOpciones, altoOpciones, 
+			OpcionObjeto opcion = new OpcionObjeto(xOpciones+espacio.left, yActual+espacio.top, anchoOpciones, altoOpciones, 
 						EvaluacionScene.getTextura(id), scene, id, correcta,this);
 			opciones.add(opcion);
 			//Actualizo la posicon para el siguiente elemento

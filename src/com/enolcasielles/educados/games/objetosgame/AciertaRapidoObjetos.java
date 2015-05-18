@@ -3,7 +3,8 @@ package com.enolcasielles.educados.games.objetosgame;
 import java.util.ArrayList;
 
 import org.andengine.engine.handler.IUpdateHandler;
-import org.andengine.opengl.texture.region.ITextureRegion;
+
+import android.util.Log;
 
 import com.enolcasielles.educados.scenes.BaseScene;
 
@@ -39,7 +40,7 @@ public class AciertaRapidoObjetos  {
 		this.objetos = objetos;
 		this.objetoVisible = 0;
 		this.timeInit = System.currentTimeMillis();
-		this.timeCambio = 1000;
+		this.timeCambio = 3000;
 		
 		this.xMax = xMax;
 		this.xMin = xMin;
@@ -92,9 +93,7 @@ public class AciertaRapidoObjetos  {
 	private void update() {
 		if (System.currentTimeMillis() - timeInit > timeCambio) {  //Cambia a otro objeto
 			timeInit = System.currentTimeMillis();
-			timeCambio -= 100;
-			//Comprobar si ha perdido por bajar mucho el tiempo de cambio
-			
+			timeCambio -= 50;
 			//Oculto e objeto visible y muestro otro
 			objetos.get(objetoVisible).setVisible(false);
 			objetoVisible++;

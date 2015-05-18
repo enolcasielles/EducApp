@@ -42,7 +42,6 @@ public class RespuestaArrastraObjeto extends GameObjeto {
 		this.estaPulsada = false;
 		this.xIni = x;
 		this.yIni = y;
-		scene.registerTouchArea(this);
 	}
 	
 	
@@ -67,29 +66,5 @@ public class RespuestaArrastraObjeto extends GameObjeto {
 		scene.unregisterTouchArea(this);
 	}
 	
-	
-	@Override
-	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		
-		if (pSceneTouchEvent.isActionDown()) {
-			estaPulsada = true;
-			return true;
-		}
-		
-		if (pSceneTouchEvent.isActionUp()) {
-			estaPulsada = false;
-			juego.respuestaSoltada(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(), RespuestaArrastraObjeto.this);
-			return true;
-		}
-		
-		if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_MOVE) {
-			if (estaPulsada) {
-				RespuestaArrastraObjeto.this.setPosition(pSceneTouchEvent.getX()-RespuestaArrastraObjeto.this.getWidth()/2, pSceneTouchEvent.getY()-RespuestaArrastraObjeto.this.getHeight()/2);
-				return true;
-			}
-		}
-		
-		return false;
-	}
 
 }

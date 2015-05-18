@@ -3,10 +3,10 @@ package com.enolcasielles.educados.games;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.input.touch.TouchEvent;
 
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.enolcasielles.educados.games.objetosgame.AciertaRapidoObjetos;
 import com.enolcasielles.educados.games.objetosgame.GameObjeto;
@@ -89,21 +89,23 @@ public class AciertaRapidoGame extends Game {
 						EvaluacionScene.getTextura(id), scene, id) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-					if (pSceneTouchEvent.isActionUp()) {
-						if (this.id.equals(idPosibilidadCorrecta)) {
-							//Ha pinchado en la correcta
-							respuestaCorrecta();
-						}
-						else {
-							//Ha pinchado en una incorrecta
-							respuestaIncorrecta();
-						}
-						return true;
+					if (this.isVisible()) {
+						if (pSceneTouchEvent.isActionUp()) {
+							if (this.id.equals(idPosibilidadCorrecta)) {
+								//Ha pinchado en la correcta
+								respuestaCorrecta();
+							}
+							else {
+								//Ha pinchado en una incorrecta
+								respuestaIncorrecta();
+							}
+							return true;
+						}	
 					}
 					return false;
 				}
 			};
-			scene.attachChild(posibilidad);
+			scene.registerTouchArea(posibilidad);
 			posibilidades.add(posibilidad);
 		}
 		
@@ -120,6 +122,7 @@ public class AciertaRapidoGame extends Game {
 	public void dispose() {
 		definicion.dispose();
 		for (GameObjeto objeto : posibilidades) {
+			scene.unregisterTouchArea(objeto);
 			objeto.dispose();
 		}
 		objetosHandler.dispose();

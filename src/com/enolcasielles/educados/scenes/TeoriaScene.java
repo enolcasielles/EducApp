@@ -132,7 +132,7 @@ public class TeoriaScene extends BaseScene {
 			iniatalizeVariables();
 			createBackground();
 			ParseadorNivelXML parser = new ParseadorNivelXML(this,contenido);   
-			om = parser.parseNivel("niveles/mundo"+this.getMundo()+"/nivel"+this.getNivel()+"/", olf); //Configuro la parte dinamica definida en su XML
+			om = parser.parseNivel("niveles/mundo"+this.getMundo()+"/"+this.getNivel()+"/", olf); //Configuro la parte dinamica definida en su XML
 		}
 
 
@@ -184,7 +184,7 @@ public class TeoriaScene extends BaseScene {
 					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_BOTONATRAS_ID], vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent,float pTouchAreaLocalX, float pTouchAreaLocalY) {
-					if (puedeRetroceder) {
+					if (puedeRetroceder && this.isVisible()) {
 						if (pSceneTouchEvent.isActionDown()) {
 							this.setCurrentTileIndex(PULSADO);
 						}
@@ -203,6 +203,7 @@ public class TeoriaScene extends BaseScene {
 					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_BOTONMENU_ID], vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent,float pTouchAreaLocalX, float pTouchAreaLocalY) {
+					if (this.isVisible()) {
 						if (pSceneTouchEvent.isActionDown()) {
 							this.setCurrentTileIndex(PULSADO);
 						}
@@ -211,14 +212,15 @@ public class TeoriaScene extends BaseScene {
 							//SceneManager.getInstance().teoriaScene_to_worldScene(mundo);
 							SceneManager.getInstance().teoriaScene_to_evaluacionScene(mundo, nivel);
 						}
-						return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+					}
+					return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 				}
 			};
 			botonEvaluacion = new AnimatedSprite(BOTON_EVALUACION_X, BOTON_EVALUACION_Y,BOTON_EVALUACION_ANCHO,BOTON_EVALUACION_ALTO,
 					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_BOTONJUGAR_ID], vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent,float pTouchAreaLocalX, float pTouchAreaLocalY) {
-					if (puedeEvaluar) {
+					if (puedeEvaluar && this.isVisible()) {
 						if (pSceneTouchEvent.isActionDown()) {
 							this.setCurrentTileIndex(PULSADO);
 						}
@@ -235,7 +237,7 @@ public class TeoriaScene extends BaseScene {
 					resourcesManager.texturasTiledTeoria[ResourcesManager.TEORIA_BOTONSIGUIENTE_ID], vbom) {
 				@Override
 				public boolean onAreaTouched(TouchEvent pSceneTouchEvent,float pTouchAreaLocalX, float pTouchAreaLocalY) {
-					if (puedeAvanzar) {
+					if (puedeAvanzar && this.isVisible()) {
 						if (pSceneTouchEvent.isActionDown()) {
 							this.setCurrentTileIndex(PULSADO);
 						}

@@ -1,7 +1,12 @@
 package com.enolcasielles.educados.games;
 
+import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.andengine.entity.scene.IOnSceneTouchListener;
+import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.TouchEvent;
 
 import android.graphics.Rect;
 
@@ -19,7 +24,7 @@ import com.enolcasielles.educados.utiles.ParseadorXML;
  * @author Enol Casielles
  *
  */
-public class ArrastraGame extends Game {
+public class ArrastraGame extends Game implements IOnSceneTouchListener{
 	
 	private final String TAG_PREGUNTAS = "preguntas";
 	private final String TAG_ATRIBUTO_XINI = "xIni";
@@ -44,6 +49,9 @@ public class ArrastraGame extends Game {
 	private ArrayList<RespuestaArrastraObjeto> respuestas;
 	private CajasRespuestas cajas;
 	
+	private boolean estaMoviendo;
+	private RespuestaArrastraObjeto respuestaMoviendose;
+	
 
 	
 	
@@ -55,6 +63,8 @@ public class ArrastraGame extends Game {
 	 */
 	public ArrastraGame(ParseadorXML parser, EvaluacionScene scene, Rect espacio) {
 		super(parser,"juegoArrastra",scene,espacio);
+		estaMoviendo = false;
+		respuestaMoviendose = null;
 	}
 	
 	
@@ -99,6 +109,7 @@ public class ArrastraGame extends Game {
 			respuesta.dispose();
 		}
 		cajas.dispose();
+		scene.setOnSceneTouchListener(null);
 	}
 	
 	
@@ -177,7 +188,42 @@ public class ArrastraGame extends Game {
 			}
 		}
 		
+		scene.setOnSceneTouchListener(this);
 		
+		
+	}
+	
+	
+	
+	//Interface Methods
+	@Override
+	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		
+		if (respuestaMoviendose != null) {
+			if (pSceneTouchEvent.isActionUp()) {
+				respuestaSoltada(pSceneTouchEvent.getX(), pSceneTouchEvent.getY(), respuestaMoviendose);
+				respuestaMoviendose = null;
+				return true;
+			}
+			if (pSceneTouchEvent.getAction() == TouchEvent.ACTION_MOVE) {
+				respuestaMoviendose.setPosition(pSceneTouchEvent.getX()-respuestaMoviendose.getWidth()/2, pSceneTouchEvent.getY()-respuestaMoviendose.getHeight()/2);
+				return true;
+			}
+		}
+		
+		else {
+			//Compruebo si se ha pulsado en un objeto
+			if (pSceneTouchEvent.isActionDown()) {
+				for (RespuestaArrastraObjeto respuesta : respuestas) {
+					if (respuesta.contains(pSceneTouchEvent.getX(), pSceneTouchEvent.getY())) {
+						respuestaMoviendose = respuesta;
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 
 }

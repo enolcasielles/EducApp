@@ -65,6 +65,7 @@ public class RelacionaGame extends Game implements IOnSceneTouchListener {
 		}
 		objetos.clear();
 		linea.dispose();
+		scene.setOnSceneTouchListener(null);
 	}
 	
 	
@@ -105,7 +106,7 @@ public class RelacionaGame extends Game implements IOnSceneTouchListener {
 		
 		float yActual = yIni;
 		for (HashMap<String, String> izquierdaAtributos : izquierdaElementos) {
-			objetos.add(new RelacionaObjeto(xIni, yActual, ancho, alto, EvaluacionScene.getTextura(izquierdaAtributos.get(TAG_ATRIBUTO_ID)),
+			objetos.add(new RelacionaObjeto(xIni+espacio.left, yActual+espacio.top, ancho, alto, EvaluacionScene.getTextura(izquierdaAtributos.get(TAG_ATRIBUTO_ID)),
 					scene, izquierdaAtributos.get(TAG_ATRIBUTO_ID),true, izquierdaAtributos.get(TAG_ATRIBUTO_RESPUESTA)));
 			yActual+=(alto+sepVer);
 		}
@@ -113,7 +114,7 @@ public class RelacionaGame extends Game implements IOnSceneTouchListener {
 		xIni+=(ancho+sepHor);
 		yActual = yIni;
 		for (HashMap<String, String> derechaAtributos : derechaElementos) {
-			objetos.add(new RelacionaObjeto(xIni, yActual, ancho, alto, EvaluacionScene.getTextura(derechaAtributos.get(TAG_ATRIBUTO_ID)),
+			objetos.add(new RelacionaObjeto(xIni+espacio.left, yActual+espacio.top, ancho, alto, EvaluacionScene.getTextura(derechaAtributos.get(TAG_ATRIBUTO_ID)),
 					scene, derechaAtributos.get(TAG_ATRIBUTO_ID),false, ""));
 			yActual+=(alto+sepVer);
 		}
@@ -133,6 +134,7 @@ public class RelacionaGame extends Game implements IOnSceneTouchListener {
 	
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		
 		
 		if (pSceneTouchEvent.isActionDown()) {
 			//Compruebo si esta dentro del contenido

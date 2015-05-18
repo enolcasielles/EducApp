@@ -35,7 +35,7 @@ public class SpeechAnimatedSprite extends AnimatedSprite  {
 			             tts.setLanguage(locSpanish);
 			             puedeSpeech = true;   //Cuando sea llamado y si no tiene ningun error se podra ejecutar el procesado
 			            }				
-			         }
+			      }
 		});
 		
 		puedeSpeech = false;
@@ -53,6 +53,11 @@ public class SpeechAnimatedSprite extends AnimatedSprite  {
 		});
 
 		
+	}
+	
+	
+	public void dispose() {
+		tts.shutdown();
 	}
 	
 	

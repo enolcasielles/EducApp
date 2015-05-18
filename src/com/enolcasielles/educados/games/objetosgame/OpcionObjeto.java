@@ -56,5 +56,13 @@ public class OpcionObjeto extends GameObjeto {
 		}
 		return false;
 	}
+	
+	
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		super.dispose();
+		scene.unregisterTouchArea(this);
+	}
 
 }

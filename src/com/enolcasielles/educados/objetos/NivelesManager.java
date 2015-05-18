@@ -56,7 +56,18 @@ public class NivelesManager {
 		}
 		
 		//Si es el objeto anterior o siguiente muevo el jugador a su posicion
-		if (Integer.parseInt(jugador.getId()) == Integer.parseInt(objeto.getId()) - 1  || Integer.parseInt(jugador.getId()) == Integer.parseInt(objeto.getId()) + 1 ) {
+		//Busco el id en el que esta el jugador actual en el array de objetos
+		String idSiguiente = null;
+		String idAnterior = null;
+		for (int i=0 ; i<objetos.size() ; i++) {
+			if (objetos.get(i)==objeto) {
+				if (i!=0) idAnterior = objetos.get(i-1).getId();
+				if (i!=objetos.size()-1) idSiguiente = objetos.get(i+1).getId();
+				break;
+			}
+		}
+		//Ahora compruebo si esta en alguno de ellos, en ese caso seria posible moverse
+		if(jugador.getId().equals(idSiguiente) || jugador.getId().equals(idAnterior)) {
 			jugador.mover(objeto);
 		}
 	}

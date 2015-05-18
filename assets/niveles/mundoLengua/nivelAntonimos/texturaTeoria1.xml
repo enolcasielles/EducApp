@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texture version="1" file="texturaTeoria1.png" type="bitmap" width="512" height="1024" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+    <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker -->
+    <!-- $TexturePacker:SmartUpdate:f4030c35493afcc51096260de378ba4d:2/2$ -->
+    <textureregion id="0" src="pagina1.png" x="2" y="2" width="519" height="286" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="519" srcheight="286"/>
+</texture>

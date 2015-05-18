@@ -59,9 +59,12 @@ public class EvaluacionScene extends BaseScene {
 	private final String TAG_DERECHA = "derecha";
 	private final String TAG_ENUNCIADO = "enunciado";
 	private final String TAG_OPCION = "opcion";
+	private final String TAG_DEFINICION = "definicion";
+	private final String TAG_POSIBILIDAD = "posibilidad";
 	private final String TAG_JUEGO_RELACIONA = "juegoRelaciona";
 	private final String TAG_JUEGO_ARRASTRA = "juegoArrastra";
 	private final String TAG_JUEGO_OPCIONCORRECTA = "juegoOpcionCorrecta";
+	private final String TAG_JUEGO_ACIERTARAPIDO = "juegoAciertaRapido";
 	
 	private final String TAG_LEVEL = "level";
 	private final String TAG_ATRIBUTO_XMLTEXTURAS = "xmlTexturas";
@@ -93,10 +96,10 @@ public class EvaluacionScene extends BaseScene {
 	//Definicion de los objetos que representaran cada juego en el nivel
 	private Game juego;
 	private int juegoActual;
-	private final int JUEGO_ACIERTA_CORRECTA = 1;
-	private final int JUEGO_ARRASTRA = 2;    //Establece el orden en que se mostraran los juegos. Poner 1 siempre en el primero
-	private final int JUEGO_RELACIONA = 3;
-	private final int JUEGO_ACIERTA_RAPIDO = 4;
+	private final int JUEGO_ACIERTA_CORRECTA = 2;
+	private final int JUEGO_ARRASTRA = 3;    //Establece el orden en que se mostraran los juegos. Poner 1 siempre en el primero
+	private final int JUEGO_RELACIONA = 4;
+	private final int JUEGO_ACIERTA_RAPIDO = 1;
 	private final int JUEGO_HUECOS = 5;
 	
 	
@@ -128,7 +131,7 @@ public class EvaluacionScene extends BaseScene {
 	@Override
 	public void createScene() {
 		//Obtengo la ruta del fichero en el que se almacenanl los datos de este nivel
-		String rutaFicheros = "niveles/mundo" + mundo + "/nivel" + nivel+"/";
+		String rutaFicheros = "niveles/mundo" + mundo + "/" + nivel+"/";
 		String fichero = rutaFicheros + FICHERO_DATOS;
 		
 		//Genero el parseador para obtener la estructura de datos del fichero
@@ -292,11 +295,15 @@ public class EvaluacionScene extends BaseScene {
 		datos.put(TAG_RESPUESTAS, null);
 		datos.put(TAG_DERECHA, null);
 		datos.put(TAG_IZQUIERDA, null);
+		datos.put(TAG_ENUNCIADO, null);
+		datos.put(TAG_OPCION, null);
+		datos.put(TAG_DEFINICION, null);
+		datos.put(TAG_POSIBILIDAD, null);
 		datos.put(TAG_JUEGO_RELACIONA, null);
 		datos.put(TAG_JUEGO_ARRASTRA,null);
 		datos.put(TAG_JUEGO_OPCIONCORRECTA, null);
-		datos.put(TAG_ENUNCIADO, null);
-		datos.put(TAG_OPCION, null);
+		datos.put(TAG_JUEGO_ACIERTARAPIDO,null);
+
 		return datos;
 	}
 	

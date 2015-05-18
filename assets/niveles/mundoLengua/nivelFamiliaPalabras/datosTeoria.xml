@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level width="1000" height="780" texturas="2" paginas="4" titulo="Divisiones"> 
+ 
+  <pagina id="1">
+	<imagen x="0" y="0" ancho="519" alto="286" textura="pagina1.png" tiempo="2000"/>
+	<consejo x="200" y="200" texto="Repasa bien los distintos terminos" />
+  </pagina>
+  
+  <pagina id="2">
+	<imagen x="0" y="0" ancho="519" alto="286"  textura="pagina2.png" tiempo="2000"/>
+  </pagina>
+  
+  <pagina id="3">
+	<imagen x="0" y="0" ancho="519" alto="286"  textura="pagina3.png" tiempo="2000"/>
+	<consejo x="200" y="200" texto="Repasa bien los distintos terminos" />
+  </pagina>
+  
+  <pagina id="4">
+	<imagen x="0" y="0" ancho="519" alto="286" textura="pagina4.png" tiempo="2000"/>
+  </pagina>
+
+</level>
