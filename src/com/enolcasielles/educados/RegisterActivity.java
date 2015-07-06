@@ -1,16 +1,26 @@
 package com.enolcasielles.educados;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.enolcasielles.educados.User.TIPOS_CUENTA;
+import com.enolcasielles.educados.utiles.Utiles;
+import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 public class RegisterActivity extends Activity {
@@ -23,29 +33,34 @@ public class RegisterActivity extends Activity {
 		
 		//Recupero controles
         Button registrar = (Button) this.findViewById(R.id.registrarBT_register);
+        final Button iniciaSesion = (Button)this.findViewById(R.id.iniciaSesionBT);
         
         
-        final EditText fechaNacimientoET = (EditText) this.findViewById(R.id.fechaNacimiento_register);
-        final EditText apellido2ET = (EditText) this.findViewById(R.id.segundoApellido_register);
-        final EditText apellido1ET = (EditText) this.findViewById(R.id.primerApellido_register);
+        final EditText apellidosET = (EditText) this.findViewById(R.id.primerApellido_register);
         final EditText nombreET = (EditText) this.findViewById(R.id.nombre_register);
         final EditText nombreUsuarioET = (EditText) this.findViewById(R.id.usernameET_register);
         final EditText passwordET = (EditText) this.findViewById(R.id.passwordET_register); 
         final EditText password2ET = (EditText) this.findViewById(R.id.password2ET_register); 
         
+        //Listerne a inicia Sesion
+        iniciaSesion.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(RegisterActivity.this,LoginActivity.class);
+				RegisterActivity.this.startActivity(i);
+			}
+		});
         
         //Listener para registrar
         registrar.setOnClickListener( new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
 				
-				final String usuario = nombreUsuarioET.getText().toString(); 
+				final String username = nombreUsuarioET.getText().toString(); 
 				final String pass = passwordET.getText().toString();
 				final String pass2 = password2ET.getText().toString();
 				final String nombre = nombreET.getText().toString();
-				final String fechaNacimiento = fechaNacimientoET.getText().toString();
-				final String apellido1 = apellido1ET.getText().toString();
-				final String apellido2 = apellido2ET.getText().toString();
+				final String apellidos = apellidosET.getText().toString();
 				
 				
 				//Verificamos validez de los datos
@@ -53,15 +68,12 @@ public class RegisterActivity extends Activity {
 					Toast.makeText(RegisterActivity.this, "Has de introducir un nombre", Toast.LENGTH_LONG).show();
 					return;
 				}
-				if (apellido1.equals("")) {
-					Toast.makeText(RegisterActivity.this, "Has de introducir el primer apellido", Toast.LENGTH_LONG).show();
+				if (apellidos.equals("")) {
+					Toast.makeText(RegisterActivity.this, "Has de introducir apellidos", Toast.LENGTH_LONG).show();
 					return;
 				}
-				if (fechaNacimiento.equals("")) {
-					Toast.makeText(RegisterActivity.this, "Has de introducir la fecha de nacimiento", Toast.LENGTH_LONG).show();
-					return;
-				}
-				if (usuario.equals("")) {
+				if (username.equals("")) {
+					// TODO Comprobar que el email sea un email
 					Toast.makeText(RegisterActivity.this, "Has de introducir un nombre de usuario", Toast.LENGTH_LONG).show();
 					return;
 				}
@@ -76,33 +88,72 @@ public class RegisterActivity extends Activity {
 				}
 				
 				
-				//Preparamos los datos para ser enviados
+				//Instancio user con los datos creados, null en los ultimos parametros para indicar que es nuevo
+			    User.getInstance().setUserWith(username, nombre, apellidos, TIPOS_CUENTA.FREE.toString(),null,null);   
+					
+				
+				//Generamos usuario en Parse
 				ParseUser user = new ParseUser();
-				user.setUsername(usuario);
+				user.setUsername(username);
+				user.setEmail(username);
 				user.setPassword(pass);
 				user.put("nombre", nombre);
-				user.put("apellido1", apellido1);
-				user.put("apellido2", apellido2);
-				user.put("fechanacimiento", fechaNacimiento);
+				user.put("apellidos", apellidos);
+				user.put("tipocuenta", TIPOS_CUENTA.FREE.toString());
+				user.put("jugadorActivo", User.getInstance().getJugadorActivo().getNombre());
+				user.put("jugadores", User.getInstance().getJugadoresDatos());
 				
-				
+				//Intento registrar al usuario
 				user.signUpInBackground(new SignUpCallback() {
-					  public void done(ParseException e) {
-					    if (e == null) {
-					       //Almaceno los datos del usuario
-					       User.getInstance().setUserWith(nombre, apellido1, apellido2, fechaNacimiento);
-					       //Inicio GameActivity y finalizo esta actividad
-					       Intent intent = new Intent(RegisterActivity.this, GameActivity.class);
-						   startActivity(intent);
-						   RegisterActivity.this.finish();
-					    } else {
-						   Toast.makeText(RegisterActivity.this, "Error:" +
-								   e.getMessage(), Toast.LENGTH_SHORT).show();
+					@Override
+					public void done(ParseException e) {
+						if (e==null) {  //No se ha producido ningun error
+							//Sincronizo datos en local
+							Utiles.updateLocal();
+							//Entro a GameActivity 
+						    Intent intent = new Intent(RegisterActivity.this, GameActivity.class);
+							startActivity(intent);
+							RegisterActivity.this.finish();
+						}
+						else {
+							 String str = null;
+					    	 switch (e.getCode()) {				 
+			                    case ParseException.USERNAME_TAKEN:
+			                    	str = "Este usuario ya ha sido registrado";
+			                        Log.d("Testing",str);
+			                        break;
+			                    case ParseException.USERNAME_MISSING:
+			                    	str = "Debes indicar un usuario";
+			                        Log.d("Testing",str);
+			                        break;
+			                    case ParseException.PASSWORD_MISSING:
+			                    	str = "Debes proveer una contraseña";
+			                        Log.d("Testing",str);
+			                        break;
+			                    case ParseException.OBJECT_NOT_FOUND:
+			                    	str = "Se ha producido un error. Datos no válidos";
+			                        Log.d("Testing",str);
+			                        break;
+			                    case ParseException.CONNECTION_FAILED:
+			                    	str = "No se ha podido establecer conexion con el servidor, inténtelo de nuevo";
+			                        Log.d("Testing",str);
+			                        break;
+			                    default:
+			                    	str = "Vaya...se ha producido un error inesperado";
+			                        Log.d("Testing",str);
+			                        break;
+					    	 }
+					    	 Toast.makeText(RegisterActivity.this, str, Toast.LENGTH_LONG).show();
+					    	 //Eliminamos datos de User
+					    	 User.getInstance().reiniciaDatos();
 					    }
-					  }
+					}
 				});
 			}
-		} );
+		});
+		
+        
 	}
-
+	
+	
 }

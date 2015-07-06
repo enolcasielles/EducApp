@@ -76,7 +76,6 @@ public class Jugador extends Sprite {
 		this.registerEntityModifier(new MoveModifier(1.5f, this.getX(),  o.getEntidad().getX(), this.getY(), o.getEntidad().getY()){
 			@Override
 			protected void onModifierStarted(IEntity pItem) {
-				// TODO Auto-generated method stub
 				super.onModifierStarted(pItem);
 				Jugador.this.estado = ESTADO.MOVIENDO;
 			}

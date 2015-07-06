@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
-import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
@@ -13,9 +12,11 @@ import org.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.andengine.entity.scene.Scene;
 import org.andengine.ui.activity.BaseGameActivity;
 
-import android.R.integer;
 import android.app.ProgressDialog;
 import android.view.KeyEvent;
+
+import com.enolcasielles.educados.utiles.Utiles;
+import com.parse.ParseUser;
 
 public class GameActivity extends BaseGameActivity {
 	
@@ -47,6 +48,7 @@ public class GameActivity extends BaseGameActivity {
 
 	@Override
 	public EngineOptions onCreateEngineOptions() {
+		
 		
 		//Inicio la camara
 		this.mCamera = new ZoomCamera(0,0, ANCHO_CAMARA,ALTO_CAMARA);
@@ -93,7 +95,7 @@ public class GameActivity extends BaseGameActivity {
 	@Override
 	public void onCreateScene(OnCreateSceneCallback pOnCreateSceneCallback) throws IOException {
 		//Inicio con escena del menu
-		SceneManager.getInstance().init_to_menuScene(pOnCreateSceneCallback);	
+		SceneManager.getInstance().init_to_mainMenuScene(pOnCreateSceneCallback);	
 	}
 
 
@@ -107,7 +109,7 @@ public class GameActivity extends BaseGameActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-	        System.exit(0);	
+	        System.exit(0);
 	}
 	
 	

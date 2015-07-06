@@ -65,9 +65,12 @@ public class EvaluacionScene extends BaseScene {
 	private final String TAG_JUEGO_ARRASTRA = "juegoArrastra";
 	private final String TAG_JUEGO_OPCIONCORRECTA = "juegoOpcionCorrecta";
 	private final String TAG_JUEGO_ACIERTARAPIDO = "juegoAciertaRapido";
+	private final String TAG_JUEGO_HUECOS = "juegoHuecos";
 	
 	private final String TAG_LEVEL = "level";
 	private final String TAG_ATRIBUTO_XMLTEXTURAS = "xmlTexturas";
+	
+	private final int NUM_JUEGOS=5;
 	
 	//CONTENIDO
 	private final int CONTENIDO_X = 100;
@@ -107,7 +110,8 @@ public class EvaluacionScene extends BaseScene {
 	//Variables para definir el estado en el que se encuentra
 	public enum ESTADO {
 		CAMBIANDO_JUEGO,
-		JUGANDO
+		JUGANDO,
+		EVALUACION_FINALIZADA
 	};
 	private ESTADO estado;
 	
@@ -195,7 +199,15 @@ public class EvaluacionScene extends BaseScene {
 				//Destruyo el juego y avanzo al siguiente
 				juego.dispose();
 				juegoActual++;
-				iniciaJuego();
+				if (juegoActual>NUM_JUEGOS) estado = ESTADO.EVALUACION_FINALIZADA;
+				else iniciaJuego();
+			}
+		}
+		
+		if (estado == ESTADO.EVALUACION_FINALIZADA) {
+			//Compruebo si el juego ha terminado de destruirse e inicio el siguiente
+			if (juego.puedeFinalizar()) {
+				SceneManager.getInstance().evluacionScene_to_worldScene(mundo);
 			}
 		}
 		
@@ -303,7 +315,8 @@ public class EvaluacionScene extends BaseScene {
 		datos.put(TAG_JUEGO_ARRASTRA,null);
 		datos.put(TAG_JUEGO_OPCIONCORRECTA, null);
 		datos.put(TAG_JUEGO_ACIERTARAPIDO,null);
-
+		datos.put((TAG_JUEGO_HUECOS), null);
+		
 		return datos;
 	}
 	

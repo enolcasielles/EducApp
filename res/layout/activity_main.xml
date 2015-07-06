@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.enolcasielles.educados.MainActivity" >
+    tools:context="com.enolcasielles.educados.LoginActivity" >
 
     <Button
         android:id="@+id/entrarBT"
@@ -16,7 +16,7 @@
         android:layout_centerVertical="true"
         android:text="Entrar" />
 
-    <EditText
+    <EditText 
         android:id="@+id/usernameET"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -48,5 +48,25 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="29dp"
         android:text="registrar" />
+
+    <Button
+        android:id="@+id/obtenResultadosBT"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Button" />
+
+    <TextView
+        android:id="@+id/jsonRespuestaTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/entrarBT"
+        android:layout_marginTop="44dp"
+        android:text="TextView" />
 
 </RelativeLayout>

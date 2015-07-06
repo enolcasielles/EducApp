@@ -1,16 +1,21 @@
 package com.enolcasielles.educados;
 
 import org.andengine.engine.Engine;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
+import org.andengine.entity.modifier.MoveByModifier;
+import org.andengine.entity.modifier.ParallelEntityModifier;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
-
-import android.R.integer;
+import org.andengine.util.modifier.IModifier;
 
 import com.enolcasielles.educados.niveles.InfoNiveles;
 import com.enolcasielles.educados.scenes.BaseScene;
 import com.enolcasielles.educados.scenes.EvaluacionScene;
-import com.enolcasielles.educados.scenes.TeoriaScene;
 import com.enolcasielles.educados.scenes.MainMenuScene;
+import com.enolcasielles.educados.scenes.SecondMenuScene;
+import com.enolcasielles.educados.scenes.TeoriaScene;
 import com.enolcasielles.educados.scenes.WorldScene;
+import com.enolcasielles.educados.scenes.ZoomModifier;
 
 
 
@@ -19,11 +24,13 @@ public class SceneManager {
     //---------------------------------------------
     // SCENES
     //---------------------------------------------
-    private BaseScene menuScene;
+    private BaseScene mainMenuScene;
+    public BaseScene secondMenuScene;
     private BaseScene teoriaScene;
     public BaseScene worldScene;
     public BaseScene evaluacionScene;
     public BaseScene resultadoScene;
+    
     
     //---------------------------------------------
     // VARIABLES
@@ -37,8 +44,7 @@ public class SceneManager {
     
     private Engine engine = ResourcesManager.getInstance().engine;
     
-    public enum SceneType
-    {
+    public enum SceneType {
         SCENE_MENU,
         SCENE_TEORIA,
         SCENE_WORLD,
@@ -59,41 +65,13 @@ public class SceneManager {
      * siguiendo el mismo criterio
      * @param scene La escena a la que se quiere cambiar
      */
-    public void cambiar_a_escena(BaseScene scene)
-    {
+    public void cambiar_a_escena(BaseScene scene) {
         engine.setScene(scene);
         escenaActual = scene;
         currentSceneType = scene.getSceneType();
     }
     
     
-    /**
-     * Equivalente al anterior pero inidciando la escena por su tipo
-     * @param sceneType La escena a la que se quiere cambiar definida por su tipo
-     */
-    public void cambiar_a_escena(SceneType sceneType)
-    {
-        switch (sceneType)
-        {
-            case SCENE_MENU:
-            	cambiar_a_escena(menuScene);
-                break;
-            case SCENE_TEORIA:
-            	cambiar_a_escena(teoriaScene);
-                break;
-            case SCENE_WORLD:
-            	cambiar_a_escena(worldScene);
-                break;
-            case SCENE_EVALUACION:
-            	cambiar_a_escena(evaluacionScene);
-                break;
-            case SCENE_RESULTADO:
-            	cambiar_a_escena(resultadoScene);
-            	break;
-            default:
-                break;
-        }
-    }
     
     
     
@@ -102,38 +80,81 @@ public class SceneManager {
      * Carga el menu la primera vez que se inicia la app
      * 
      */
-    public void init_to_menuScene(OnCreateSceneCallback pOnCreateSceneCallback)
-    {
-        ResourcesManager.getInstance().loadMenuResources();
+    public void init_to_mainMenuScene(OnCreateSceneCallback pOnCreateSceneCallback) {
+        ResourcesManager.getInstance().loadMainMenuResources();
         InfoNiveles.init();
-        menuScene = new MainMenuScene();
-        escenaActual = menuScene;
-        pOnCreateSceneCallback.onCreateSceneFinished(menuScene);
+        mainMenuScene = new MainMenuScene();
+        escenaActual = mainMenuScene;
+        pOnCreateSceneCallback.onCreateSceneFinished(mainMenuScene);
+    }
+    
+    
+    /**
+     * Cambia de main menu a second menu
+     * 
+     */
+    public void mainMenuScene_to_secondMenuScene() {
+    	ResourcesManager.getInstance().unloadMainMenuResources();
+        ResourcesManager.getInstance().loadSecondMenuResources();
+        secondMenuScene = new SecondMenuScene();
+        cambiar_a_escena(secondMenuScene);
+        mainMenuScene.disposeScene();
+        mainMenuScene = null;
+    }
+    
+    
+    /**
+     * Cambia de second menu a main menu
+     * 
+     */
+    public void secondMenuScene_to_mainMenuScene() {
+    	ResourcesManager.getInstance().unloadSecondMenuResources();
+        ResourcesManager.getInstance().loadMainMenuResources();
+        mainMenuScene = new MainMenuScene();
+        cambiar_a_escena(mainMenuScene);
+        secondMenuScene.disposeScene();
+        secondMenuScene = null;
     }
     
      
     /**
-     * Efectua el cambio de escena de menu a world
+     * Efectua el cambio de escena de second menu a world
      * @param mundo El mundo que ha de cargar
      */
-    public void menuScene_to_worldScene(String mundo) {
+    public void secondMenuScene_to_worldScene(String mundo) {
     	ResourcesManager.getInstance().loadWorldResources();
     	WorldScene.setMundo(mundo);
     	worldScene = new WorldScene();
-    	cambiar_a_escena(worldScene);
-    	ResourcesManager.getInstance().unloadMenuResources();
-    	menuScene.disposeScene();
-    	menuScene = null;
+    	secondMenuScene.registerEntityModifier(new ParallelEntityModifier(
+       			new ZoomModifier(3f, 1f, 5f,new IEntityModifierListener() {
+       	    		
+       	    	   @Override
+       	    	   public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+       	    	   }
+
+       	    	   @Override
+       	    	   public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+       	    	    	cambiar_a_escena(worldScene);
+       	    	    	ResourcesManager.getInstance().unloadSecondMenuResources();
+       	    	    	secondMenuScene.camera.setZoomFactor(2.0f);
+       	    	    	secondMenuScene.disposeScene();
+       	    	    	secondMenuScene = null;
+       	    	   }
+       	    	   
+       	    	},secondMenuScene.camera) ,
+       	    	
+       			new MoveByModifier(3f,0 , 10f)
+    	));
     }
     
     
     /**
-     * Efectua el cambio de escena de world a menu
+     * Efectua el cambio de escena de world a second menu
      */
-    public void worldScene_to_menuScene() {
-    	ResourcesManager.getInstance().loadMenuResources();
-    	menuScene = new MainMenuScene();
-    	cambiar_a_escena(menuScene);
+    public void worldScene_to_secondMenuScene() {
+    	ResourcesManager.getInstance().loadSecondMenuResources();
+    	secondMenuScene = new SecondMenuScene();
+    	cambiar_a_escena(secondMenuScene);
     	ResourcesManager.getInstance().unloadWorldResources();
     	worldScene.disposeScene();
     	worldScene = null;
@@ -201,22 +222,7 @@ public class SceneManager {
     	evaluacionScene = null;
     }
     
-    
-    /**
-     * Efectual el cambio entre evaluacion y resultado
-     */
-    public void evaluacionScene_to_resultadoScene() {
-    	
-    }
-    
-    
-    /**
-     * Efectua el cambio entre resultado y world
-     */
-    public void resultadoScene_to_worldScene() {
-    	
-    }
-    
+
 
     
     /**
@@ -233,19 +239,16 @@ public class SceneManager {
     // GETTERS AND SETTERS
     //---------------------------------------------
     
-    public static SceneManager getInstance()
-    {
+    public static SceneManager getInstance() {
         return INSTANCIA;
     }
 
     
-    public BaseScene getCurrentScene()
-    {
+    public BaseScene getCurrentScene() {
         return escenaActual;
     }
     
-    public SceneType getCurrentSceneType()
-    {
+    public SceneType getCurrentSceneType() {
         return currentSceneType;
     }
 }

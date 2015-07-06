@@ -1,6 +1,7 @@
 package com.enolcasielles.educados;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
@@ -18,13 +19,16 @@ import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.andengine.opengl.texture.atlas.bitmap.BuildableBitmapTextureAtlas;
+import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSource;
+import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 import org.andengine.util.debug.Debug;
 
-import android.R.integer;
+import android.util.Log;
 
 
 
@@ -55,19 +59,40 @@ public class ResourcesManager{
     // TEXTURES & TEXTURE REGIONS
     //---------------------------------------------
 
+    private BuildableBitmapTextureAtlas atlas;
+    private ArrayList<BuildableBitmapTextureAtlas> atlasContainer = new ArrayList<BuildableBitmapTextureAtlas>();
     
-    //Menu   
-    private TexturePackTextureRegionLibrary texturePackLibraryMenu;
-	private TexturePack texturePackMenu;
-	public ITextureRegion[] texturasMenu;
-	public static final int MENU_BACKGROUND_ID = 0;
-	public static final int MENU_CREDITOS_ID = 1;
-	public static final int MENU_INFO_ID = 2;
-	public static final int MENU_MUNDO_MATE_ID = 4;
-	public static final int MENU_MUNDO_LENGUA_ID = 3;
-	public static final int MENU_MUNDO_NATU_ID = 5;
-	public static final int MENU_REGISTRO_ID = 6;
-	public static final int MENU_SETTINGS_ID = 7;
+    //MainMenu   
+    private TexturePackTextureRegionLibrary texturePackLibraryMainMenu;
+	private TexturePack texturePackMainMenu;
+	public ITextureRegion[] texturasMainMenu;
+	public static final int MAIN_MENU_BACKGROUND_ID = 0;
+	public static final int MAIN_MENU_CREDITOS_ID = 1;
+	public static final int MAIN_MENU_AYUDA_ID = 2;
+	public static final int MAIN_MENU_REGISTRO_ID = 3;
+	public static final int MAIN_MENU_SETTINGS_ID = 4;
+	public static final int MAIN_MENU_ESTADISTICAS_ID = 5;
+	public static final int MAIN_MENU_BOTON_JUGAR_ID = 6;
+	public static final int MAIN_MENU_VENTANA_CERRAR_ID = 7;
+	public static final int MAIN_MENU_VENTANA_ADELANTE_ID = 8;
+	public static final int MAIN_MENU_VENTANA_ATRAS_ID = 9;
+	public static final int MAIN_MENU_CONTENIDO_AYUDA_IMAGEN_1_ID = 10;
+	public static final int MAIN_MENU_CONTENIDO_AYUDA_IMAGEN_2_ID = 11;
+	public static final int MAIN_MENU_CONTENIDO_CREDITOS_IMAGEN_1_ID = 12;
+	public static final int MAIN_MENU_CONTENIDO_CREDITOS_IMAGEN_2_ID = 13;
+	
+	
+    //SecondMenu   
+    private TexturePackTextureRegionLibrary texturePackLibrarySecondMenu;
+	private TexturePack texturePackSecondMenu;
+	public ITextureRegion[] texturasSecondMenu;
+	public static final int SECOND_MENU_BACKGROUND_ID = 0;
+	public static final int SECOND_MENU_MUNDO_NATU_ID = 1;
+	public static final int SECOND_MENU_MUNDO_LENGUA_ID = 2;
+	public static final int SECOND_MENU_MUNDO_MATE_ID = 3;
+	public static final int SECOND_MENU_BOTON_ATRAS_ID = 4;
+
+
     
 	//World 
     private TexturePackTextureRegionLibrary texturePackLibraryWorld;
@@ -91,6 +116,7 @@ public class ResourcesManager{
 	public static final int TEORIA_INDICADOR_ID = 6;
 	public static final int TEORIA_LORO_ID = 7;
 	public static final int TEORIA_TITULO_ID = 8;
+	public static final int MAIN_MENU_PRO_ID = 9;
 	
 	
 	//Evaluacion
@@ -119,33 +145,82 @@ public class ResourcesManager{
     //---------------------------------------------
     // CLASS LOGIC
     //---------------------------------------------
+	private void cargaAtlas() {
+    	//Cargo el anterior atlas
+		if (atlas!= null) {
+			try{ atlas.build(new BlackPawnTextureAtlasBuilder<IBitmapTextureAtlasSource, BitmapTextureAtlas>(0, 1, 1)); }
+	    	catch(Exception e){ 
+	    		Log.e("ResourcesManager","No se puede construir el atlas");
+	    		e.printStackTrace(); 
+	    	}
+	    	atlas.load();
+		}
+	}
 	
-    public void loadMenuResources() {
+	private void addNuevoAtlas() {
+		//Genero un nuevo atlas, apunto a el y lo almaceno en el container
+    	atlas = new BuildableBitmapTextureAtlas(actividad.getTextureManager(), 1024, 1024,TextureOptions.BILINEAR_PREMULTIPLYALPHA); 
+		atlasContainer.add(atlas);
+	}
+	
+    public void loadMainMenuResources() {
     	
     	//--------------------------------------------------
     	//LOAD GRAPHICS
     	//--------------------------------------------------
     	
     	//Parseo el fichero
+    	
+    	/*RELEASE
     	try {
-    		  texturePackMenu = new TexturePackLoader(actividad.getTextureManager(), "gfx/menu/")
-    		      	.loadFromAsset(actividad.getAssets(), "textura_menu.xml");
-    		  texturePackMenu.loadTexture();
-    		  texturePackLibraryMenu = texturePackMenu.getTexturePackTextureRegionLibrary();
+    		  texturePackMainMenu = new TexturePackLoader(actividad.getTextureManager(), "gfx/mainMenu/")
+    		      	.loadFromAsset(actividad.getAssets(), "textura_main_menu.xml");
+    		  texturePackMainMenu.loadTexture();
+    		  texturePackLibraryMainMenu = texturePackMainMenu.getTexturePackTextureRegionLibrary();
     	} catch (final TexturePackParseException e)  {
     	      Debug.e(e);
     	}
 
     	
-    	texturasMenu = new ITextureRegion[8];
-    	texturasMenu[MENU_BACKGROUND_ID] = texturePackLibraryMenu.get(MENU_BACKGROUND_ID);
-    	texturasMenu[MENU_MUNDO_MATE_ID] = texturePackLibraryMenu.get(MENU_MUNDO_MATE_ID);
-    	texturasMenu[MENU_MUNDO_LENGUA_ID] = texturePackLibraryMenu.get(MENU_MUNDO_LENGUA_ID);
-    	texturasMenu[MENU_MUNDO_NATU_ID] = texturePackLibraryMenu.get(MENU_MUNDO_NATU_ID);
-    	texturasMenu[MENU_SETTINGS_ID] = texturePackLibraryMenu.get(MENU_SETTINGS_ID);
-    	texturasMenu[MENU_REGISTRO_ID] = texturePackLibraryMenu.get(MENU_REGISTRO_ID);
-    	texturasMenu[MENU_INFO_ID] = texturePackLibraryMenu.get(MENU_INFO_ID);
-    	texturasMenu[MENU_CREDITOS_ID] = texturePackLibraryMenu.get(MENU_CREDITOS_ID);
+    	texturasMainMenu = new ITextureRegion[7];
+    	texturasMainMenu[MAIN_MENU_BACKGROUND_ID] = texturePackLibraryMainMenu.get(MAIN_MENU_BACKGROUND_ID);
+    	texturasMainMenu[MAIN_MENU_SETTINGS_ID] = texturePackLibraryMainMenu.get(MAIN_MENU_SETTINGS_ID);
+    	texturasMainMenu[MAIN_MENU_REGISTRO_ID] = texturePackLibraryMainMenu.get(MAIN_MENU_REGISTRO_ID);
+    	texturasMainMenu[MAIN_MENU_INFO_ID] = texturePackLibraryMainMenu.get(MAIN_MENU_INFO_ID);
+    	texturasMainMenu[MAIN_MENU_CREDITOS_ID] = texturePackLibraryMainMenu.get(MAIN_MENU_CREDITOS_ID);
+    	texturasMainMenu[MAIN_MENU_STATICS_ID] = texturePackLibraryMainMenu.get(MAIN_MENU_STATICS_ID);
+    	texturasMainMenu[MAIN_MENU_BOTON_JUGAR_ID] = texturePackLibraryMainMenu.get(MAIN_MENU_BOTON_JUGAR_ID);
+    	
+    	RELEASE*/
+    	
+    	/*DEBUG*/
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/mainMenu/");
+    	
+    	addNuevoAtlas();
+    	texturasMainMenu = new ITextureRegion[15];
+    	texturasMainMenu[MAIN_MENU_BOTON_JUGAR_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonJugar.png");
+    	texturasMainMenu[MAIN_MENU_CREDITOS_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonCreditos.png");
+    	texturasMainMenu[MAIN_MENU_AYUDA_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonAyuda.png");
+    	texturasMainMenu[MAIN_MENU_REGISTRO_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonSeleccionaCuenta.png");
+    	texturasMainMenu[MAIN_MENU_SETTINGS_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonAjustes.png");
+    	texturasMainMenu[MAIN_MENU_ESTADISTICAS_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonEstadisticas.png");
+    	texturasMainMenu[MAIN_MENU_PRO_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonPro.png");
+    	
+    	cargaAtlas();
+    	addNuevoAtlas();
+    	
+    	texturasMainMenu[MAIN_MENU_VENTANA_CERRAR_ID]  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "ventanaCerrar.png");
+    	texturasMainMenu[MAIN_MENU_VENTANA_ADELANTE_ID]  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "ventanaNavegaAdelante.png");
+    	texturasMainMenu[MAIN_MENU_VENTANA_ATRAS_ID]  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "ventanaNavegaAtras.png");
+    	texturasMainMenu[MAIN_MENU_CONTENIDO_AYUDA_IMAGEN_1_ID]  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "contenidoAyudaImagen1.png");
+    	texturasMainMenu[MAIN_MENU_CONTENIDO_AYUDA_IMAGEN_2_ID]  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "contenidoAyudaImagen2.png");
+    	texturasMainMenu[MAIN_MENU_CONTENIDO_CREDITOS_IMAGEN_1_ID]  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "contenidoCreditosImagen1.png");
+    	texturasMainMenu[MAIN_MENU_CONTENIDO_CREDITOS_IMAGEN_2_ID]  = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "contenidoCreditosImagen2.png");
+    	 
+    	
+    	cargaAtlas();
+    	
+    	/*DEBUG*/
     	
     	//--------------------------------------------------
     	//LOAD FONTS
@@ -163,14 +238,94 @@ public class ResourcesManager{
     
     }
     
-    public void unloadMenuResources() {
-    	texturePackMenu.unloadTexture();
-    	texturePackLibraryMenu = null;
-    	for (int i=0 ; i<texturasMenu.length ; i++) {
-    		texturasMenu[i]= null; 
+    public void unloadMainMenuResources() {
+    	/* RELEASE
+    	texturePackMainMenu.unloadTexture();
+    	texturePackLibraryMainMenu = null;
+    	for (int i=0 ; i<texturasMainMenu.length ; i++) {
+    		texturasMainMenu[i]= null; 
     	}
     	fuenteMenu.unload();
     	fuenteMenu = null;
+    	RELEASE */
+    	
+    	for (BuildableBitmapTextureAtlas atlas : atlasContainer) {
+    		atlas.unload();
+    	}
+    	atlasContainer.clear();
+    	
+    }
+    
+    
+    public void loadSecondMenuResources() {
+    	
+    	//--------------------------------------------------
+    	//LOAD GRAPHICS
+    	//--------------------------------------------------
+
+    	/*RELEASE
+    	//Parseo el fichero
+    	try {
+    		  texturePackSecondMenu = new TexturePackLoader(actividad.getTextureManager(), "gfx/secondMenu/")
+    		      	.loadFromAsset(actividad.getAssets(), "textura_second_menu.xml");
+    		  texturePackSecondMenu.loadTexture();
+    		  texturePackLibrarySecondMenu = texturePackSecondMenu.getTexturePackTextureRegionLibrary();
+    	} catch (final TexturePackParseException e)  {
+    	      Debug.e(e);
+    	}
+
+    	
+    	texturasSecondMenu = new ITextureRegion[5];
+    	texturasSecondMenu[SECOND_MENU_BACKGROUND_ID] = texturePackLibrarySecondMenu.get(SECOND_MENU_BACKGROUND_ID);
+    	texturasSecondMenu[SECOND_MENU_MUNDO_MATE_ID] = texturePackLibrarySecondMenu.get(SECOND_MENU_MUNDO_MATE_ID);
+    	texturasSecondMenu[SECOND_MENU_MUNDO_LENGUA_ID] = texturePackLibrarySecondMenu.get(SECOND_MENU_MUNDO_LENGUA_ID);
+    	texturasSecondMenu[SECOND_MENU_MUNDO_NATU_ID] = texturePackLibrarySecondMenu.get(SECOND_MENU_MUNDO_NATU_ID);
+    	texturasSecondMenu[SECOND_MENU_BOTON_ATRAS_ID] = texturePackLibrarySecondMenu.get(SECOND_MENU_BOTON_ATRAS_ID);
+    	RELEASE*/
+    	
+    	BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/secondMenu/");
+    	texturasSecondMenu = new ITextureRegion[5];
+    	addNuevoAtlas();
+    	
+    	//Defino regioens
+    	texturasSecondMenu[SECOND_MENU_BACKGROUND_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "background.png");
+    	texturasSecondMenu[SECOND_MENU_BOTON_ATRAS_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonAtras.png");
+    	texturasSecondMenu[SECOND_MENU_MUNDO_LENGUA_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonMundoLengua.png");
+    	texturasSecondMenu[SECOND_MENU_MUNDO_MATE_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonMundoMate.png");
+    	texturasSecondMenu[SECOND_MENU_MUNDO_NATU_ID] = BitmapTextureAtlasTextureRegionFactory.createFromAsset(atlas, actividad, "botonMundoNaturales.png");
+    	
+    	cargaAtlas();
+    	
+    	//--------------------------------------------------
+    	//LOAD FONTS
+    	//--------------------------------------------------
+    	FontFactory.setAssetBasePath("fuentes/");  //Indicamos donde se encuentran
+    	final ITexture fontTextureMenu = new BitmapTextureAtlas(actividad.getTextureManager(),
+    			256,256,TextureOptions.BILINEAR);  //Textura en donde cargaremos fuente
+    	fuenteMenu = FontFactory.createFromAsset(actividad.getFontManager(), fontTextureMenu,
+    				actividad.getAssets(), "Droid.ttf", 40, true, Color.WHITE_ABGR_PACKED_INT); //Definimos fuente
+    	fuenteMenu.load();  //La cargamos
+    	
+    	//--------------------------------------------------
+    	//LOAD AUDIO
+    	//--------------------------------------------------
+    
+    }
+    
+    public void unloadSecondMenuResources() {
+    	/**Release
+    	texturePackSecondMenu.unloadTexture();
+    	texturePackLibrarySecondMenu = null;
+    	for (int i=0 ; i<texturasSecondMenu.length ; i++) {
+    		texturasSecondMenu[i]= null; 
+    	}
+    	fuenteMenu.unload();
+    	fuenteMenu = null;  */
+    	
+    	for (BuildableBitmapTextureAtlas atlas : atlasContainer) {
+    		atlas.unload();
+    	}
+    	atlasContainer.clear();
     	
     }
     

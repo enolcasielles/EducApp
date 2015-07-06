@@ -148,7 +148,8 @@ public class ObjetosManager {
 	
 	/**
 	 * Carga las texturas correspondientes al nivel
-	 * @param texturasId Un String con los identificadores de las texturas separados por comas
+	 * @param texturasString Un string con el numero de texturas que contiene
+	 * @param rutaFicheroTextura Un String con la ruta en la que se encuentra el fichero
 	 */
 	public void loadTexturas(String texturasString, String rutaFicheroTextura) {
 		//Recupero el numero de texturas

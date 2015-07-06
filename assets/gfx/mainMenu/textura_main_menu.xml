@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<texture version="1" file="textura_main_menu.png" type="bitmap" width="946" height="608" pixelformat="RGBA_8888" minfilter="linear" magfilter="linear" wrapt="clamp" wraps="clamp" premultiplyalpha="false">
+    <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker -->
+    <!-- $TexturePacker:SmartUpdate:a5a4f26cbebcb65ae1d57455ff998c6e:7b627e9e1cff582d7b70aef6d55d361c:9ba5cc2b42e480a2190f3169ec60ac6c$ -->
+    <textureregion id="0" src="background.png" x="2" y="2" width="720" height="480" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="720" srcheight="480"/>
+    <textureregion id="1" src="creditos.png" x="2" y="484" width="81" height="80" rotated="true" trimmed="false" srcx="0" srcy="0" srcwidth="81" srcheight="80"/>
+    <textureregion id="2" src="info.png" x="84" y="484" width="80" height="80" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="80" srcheight="80"/>
+    <textureregion id="3" src="mundo1.png" x="724" y="2" width="220" height="200" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="220" srcheight="200"/>
+    <textureregion id="4" src="mundo2.png" x="724" y="204" width="220" height="200" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="220" srcheight="200"/>
+    <textureregion id="5" src="mundo3.png" x="724" y="406" width="220" height="200" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="220" srcheight="200"/>
+    <textureregion id="6" src="registro.png" x="166" y="484" width="80" height="80" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="80" srcheight="80"/>
+    <textureregion id="7" src="settings.png" x="248" y="484" width="80" height="80" rotated="false" trimmed="false" srcx="0" srcy="0" srcwidth="80" srcheight="80"/>
+</texture>

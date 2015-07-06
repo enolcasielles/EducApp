@@ -36,6 +36,9 @@ public abstract class BaseScene extends Scene
         this.vbom = resourcesManager.vbom;
         this.camera = resourcesManager.camara;
         createScene();
+        //Preparo escena para que sus TouchAreas sigan recibiendo eventos si se sale de ellos
+        this.setTouchAreaBindingOnActionDownEnabled(true);
+        this.setTouchAreaBindingOnActionMoveEnabled(true);
     }
     
     //---------------------------------------------

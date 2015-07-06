@@ -59,7 +59,7 @@ public class WorldScene extends BaseScene {
 		@Override
 		public void onBackKeyPressed() {
 			this.camera.setZoomFactor(1.0f);    //Quito zoom y cambio de escena
-			SceneManager.getInstance().worldScene_to_menuScene();
+			SceneManager.getInstance().worldScene_to_secondMenuScene();
 		}
 
 		@Override

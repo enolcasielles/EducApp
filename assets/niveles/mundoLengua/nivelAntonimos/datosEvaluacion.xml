@@ -63,7 +63,7 @@
   </juegoAciertaRapido>
 
 
-  <juegoHuecos xEnunciado="50" yEnunciado="100" anchoEnunciado="320" altoEnunciado="70" anchoSolucion="200" altoSolucion="70" anchoCaracteres="70" altoCaracteres="70" puntuacionMax="10" puntosFalla="5" solucion="ATE">
+  <juegoHuecos idEnunciado="Frase1.png" xEnunciado="50" yEnunciado="100" anchoEnunciado="320" altoEnunciado="70" idSolucion="Solucion.png" ySolucion="180" anchoSolucion="200" altoSolucion="70" anchoCaracteres="70" altoCaracteres="70" puntuacionMax="10" puntosFalla="5" solucion="ATE">
 
   </juegoHuecos>
 
